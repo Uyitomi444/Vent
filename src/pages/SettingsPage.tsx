@@ -1,12 +1,12 @@
 
-import { Bell, Moon, Download, Trash2, Shield, User, ChevronRight } from 'lucide-react';
+import { Bell, Download, Trash2, Shield, User, ChevronRight } from 'lucide-react';
 import { useJournalStore } from '../store/journalStore';
 import { useMoodStore } from '../store/moodStore';
 import { useChatStore } from '../store/chatStore';
 import { useSettingsStore } from '../store/settingsStore';
 
 export default function SettingsPage() {
-  const { darkMode, setDarkMode, notifications, setNotifications } = useSettingsStore();
+  const { notifications, setNotifications } = useSettingsStore();
   
   const clearJournal = useJournalStore(state => state.clearEntries);
   const clearMoods = useMoodStore(state => state.clearEntries);
@@ -55,7 +55,7 @@ export default function SettingsPage() {
         <h3 className="font-medium text-gray-400 px-4 uppercase tracking-wider text-sm">Preferences</h3>
         <div className="bg-white rounded-3xl overflow-hidden shadow-sm border border-itoura-beige/50">
           
-          <div className="flex items-center justify-between p-4 md:p-6 border-b border-gray-100">
+          <div className="flex items-center justify-between p-4 md:p-6">
             <div className="flex items-center gap-4">
               <div className="p-2 bg-indigo-50 text-indigo-500 rounded-xl">
                 <Bell className="w-5 h-5" />
@@ -70,24 +70,6 @@ export default function SettingsPage() {
               className={`w-12 h-6 rounded-full transition-colors relative ${notifications ? 'bg-itoura-primary' : 'bg-gray-200'}`}
             >
               <div className={`w-4 h-4 bg-white rounded-full absolute top-1 transition-transform ${notifications ? 'translate-x-7' : 'translate-x-1'}`} />
-            </button>
-          </div>
-
-          <div className="flex items-center justify-between p-4 md:p-6">
-            <div className="flex items-center gap-4">
-              <div className="p-2 bg-slate-50 text-slate-500 rounded-xl">
-                <Moon className="w-5 h-5" />
-              </div>
-              <div>
-                <p className="font-medium text-itoura-dark">Dark Mode</p>
-                <p className="text-xs text-gray-500">Easy on the eyes for night journaling.</p>
-              </div>
-            </div>
-            <button 
-              onClick={() => setDarkMode(!darkMode)}
-              className={`w-12 h-6 rounded-full transition-colors relative ${darkMode ? 'bg-itoura-primary' : 'bg-gray-200'}`}
-            >
-              <div className={`w-4 h-4 bg-white rounded-full absolute top-1 transition-transform ${darkMode ? 'translate-x-7' : 'translate-x-1'}`} />
             </button>
           </div>
 
