@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Sparkles, Coffee } from 'lucide-react';
 
 const BREAK_ACRONYM = [
-  { letter: 'B', title: 'reasthe', desc: 'Take 5 deep, slow breaths.' },
+  { letter: 'B', title: 'reathe', desc: 'Take 5 deep, slow breaths.' },
   { letter: 'R', title: 'est', desc: 'Close your eyes until your mind is clear.' },
   { letter: 'E', title: 'mpowering words', desc: 'Say 3 nice things about yourself.' },
   { letter: 'A', title: 'bsorb', desc: 'Check in with your senses. What do you see, feel, hear?' },
@@ -63,13 +63,13 @@ export default function BreakTool({ onClose }: { onClose: () => void }) {
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: i * 0.1 }}
-              className="flex items-start gap-3"
+              className="flex flex-col"
             >
-              <span className="text-2xl font-black text-itoura-primary">{item.letter}</span>
-              <div>
-                <h5 className="font-bold text-gray-700 tracking-wide">{item.title}</h5>
-                <p className="text-sm text-gray-500">{item.desc}</p>
+              <div className="flex items-baseline">
+                <span className="text-2xl font-black text-itoura-primary">{item.letter}</span>
+                <h5 className="text-lg font-bold text-gray-700 tracking-wide">{item.title}</h5>
               </div>
+              <p className="text-sm text-gray-500 ml-1">{item.desc}</p>
             </motion.div>
           ))}
         </div>

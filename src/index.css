@@ -13,24 +13,47 @@
   }
   
   html.dark body {
-    /* Sky-purple dark mode */
-    background: linear-gradient(145deg, #1E1B4B 0%, #2E1065 50%, #4B3B7A 100%);
-    @apply text-white;
+    @apply bg-gray-900 text-gray-100;
+    background: #111827; /* gray-900 */
+  }
+
+  html.dark .bg-itoura-surface {
+    @apply bg-gray-900;
   }
 
   html.dark .bg-white {
-    @apply bg-[#2E1065] border-white/10;
+    @apply bg-gray-800 border-gray-700;
   }
   
-  html.dark .text-itoura-dark {
-    @apply text-white;
+  html.dark .bg-itoura-light {
+    @apply bg-gray-800;
+  }
+
+  html.dark .bg-white\/40, html.dark .bg-white\/60 {
+    @apply bg-gray-800 border-gray-700;
+  }
+  
+  html.dark .bg-gray-50, html.dark .bg-gray-100, html.dark .bg-slate-50, html.dark .bg-indigo-50, html.dark .bg-blue-50, html.dark .bg-red-50 {
+    @apply bg-gray-700;
+  }
+  
+  html.dark .text-itoura-dark, html.dark .text-itoura-text {
+    @apply text-gray-100;
   }
   
   html.dark .bg-itoura-beige {
-    @apply bg-white/10;
+    @apply bg-gray-800;
   }
   
   html.dark .text-gray-500, html.dark .text-gray-600 {
-    @apply text-gray-300;
+    @apply text-gray-400;
+  }
+  
+  html.dark .text-gray-700, html.dark .text-gray-800, html.dark .text-gray-900 {
+    @apply text-gray-200;
+  }
+
+  html.dark .border-itoura-beige\/50, html.dark .border-gray-200, html.dark .border-gray-100 {
+    @apply border-gray-700;
   }
 }
