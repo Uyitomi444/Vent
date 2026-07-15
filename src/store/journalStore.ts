@@ -25,7 +25,7 @@ export const useJournalStore = create<JournalState>()(
       addEntry: (entryData) => set((state) => {
         const newEntry: JournalEntry = {
           ...entryData,
-          id: crypto.randomUUID(),
+          id: Date.now().toString() + Math.random().toString(36).substring(7),
           createdAt: Date.now(),
           updatedAt: Date.now(),
         };
@@ -44,7 +44,7 @@ export const useJournalStore = create<JournalState>()(
       clearEntries: () => set({ entries: [] }),
     }),
     {
-      name: 'vent-journal-storage',
+      name: 'itoura-journal-storage',
     }
   )
 );

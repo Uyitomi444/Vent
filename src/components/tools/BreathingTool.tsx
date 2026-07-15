@@ -66,7 +66,7 @@ export default function BreathingTool({ onClose }: { onClose: () => void }) {
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
-        className="bg-vent-dark text-white rounded-3xl p-8 relative overflow-hidden"
+        className="bg-itoura-dark text-white rounded-3xl p-8 relative overflow-hidden"
       >
         <button 
           onClick={onClose}
@@ -85,7 +85,7 @@ export default function BreathingTool({ onClose }: { onClose: () => void }) {
             {/* Background pulsating ring */}
             {isActive && (
               <motion.div
-                className="absolute inset-0 rounded-full border border-vent-primary/30"
+                className="absolute inset-0 rounded-full border border-itoura-primary/30"
                 animate={{ scale: [1, 2], opacity: [0.5, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
               />
@@ -93,7 +93,7 @@ export default function BreathingTool({ onClose }: { onClose: () => void }) {
             
             {/* The Breathing Circle */}
             <motion.div
-              className="absolute bg-gradient-to-tr from-vent-primary to-[#FF905A] rounded-full flex items-center justify-center shadow-[0_0_40px_rgba(255,115,71,0.3)]"
+              className="absolute bg-gradient-to-tr from-itoura-primary to-[#FF905A] rounded-full flex items-center justify-center shadow-[0_0_40px_rgba(255,115,71,0.3)]"
               initial={{ width: 120, height: 120 }}
               animate={{ 
                 scale: getScale(),

@@ -6,9 +6,31 @@
 
 @layer base {
   body {
-    @apply font-sans text-vent-text antialiased;
+    @apply font-sans text-itoura-text antialiased transition-colors duration-500;
     background: linear-gradient(145deg, #E9E3F5 0%, #D8CFEA 40%, #4B3B7A 100%);
     background-attachment: fixed;
     min-height: 100vh;
+  }
+  
+  html.dark body {
+    /* Sky-purple dark mode */
+    background: linear-gradient(145deg, #1E1B4B 0%, #2E1065 50%, #4B3B7A 100%);
+    @apply text-white;
+  }
+
+  html.dark .bg-white {
+    @apply bg-[#2E1065] border-white/10;
+  }
+  
+  html.dark .text-itoura-dark {
+    @apply text-white;
+  }
+  
+  html.dark .bg-itoura-beige {
+    @apply bg-white/10;
+  }
+  
+  html.dark .text-gray-500, html.dark .text-gray-600 {
+    @apply text-gray-300;
   }
 }

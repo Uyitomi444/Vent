@@ -22,7 +22,7 @@ export default function ChatInterface() {
     if (!input.trim() || isLoading) return;
     
     if (!apiKey) {
-      alert("Please add your VITE_GROQ_API_KEY to the .env file to talk to Ventila.");
+      alert("Please add your VITE_GROQ_API_KEY to the .env file to talk to Itoura.");
       return;
     }
 
@@ -32,7 +32,7 @@ export default function ChatInterface() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-vent-surface/50 rounded-3xl overflow-hidden shadow-sm border border-white/50 relative">
+    <div className="flex flex-col h-full bg-itoura-surface/50 rounded-3xl overflow-hidden shadow-sm border border-white/50 relative">
       {/* Chat Messages Area */}
       <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
         {messages.length === 1 && (
@@ -50,11 +50,11 @@ export default function ChatInterface() {
             {msg.role === 'assistant' && (
               <img 
                 src="/assets/illustrations/AI_companion_listening_pose_2K_202607141347.jpeg" 
-                alt="Ventila"
-                className="w-8 h-8 rounded-full object-cover mr-2 shrink-0 border border-vent-dark/10 shadow-sm"
+                alt="Itoura"
+                className="w-8 h-8 rounded-full object-cover mr-2 shrink-0 border border-itoura-dark/10 shadow-sm"
               />
             )}
-            <div className={`max-w-[75%] rounded-3xl p-4 ${msg.role === 'user' ? 'bg-vent-dark text-white rounded-br-sm' : 'bg-white shadow-sm border border-gray-100 rounded-bl-sm text-vent-text'}`}>
+            <div className={`max-w-[75%] rounded-3xl p-4 ${msg.role === 'user' ? 'bg-itoura-dark text-white rounded-br-sm' : 'bg-white shadow-sm border border-gray-100 rounded-bl-sm text-itoura-text'}`}>
               <p className="text-[15px] leading-relaxed whitespace-pre-wrap font-sans">{msg.content}</p>
             </div>
           </div>
@@ -64,13 +64,13 @@ export default function ChatInterface() {
           <div className="flex justify-start">
             <img 
               src="/assets/illustrations/AI_companion_idle_pose_2K_202607141345.jpeg" 
-              alt="Ventila thinking"
-              className="w-8 h-8 rounded-full object-cover mr-2 shrink-0 border border-vent-dark/10 shadow-sm"
+              alt="Itoura thinking"
+              className="w-8 h-8 rounded-full object-cover mr-2 shrink-0 border border-itoura-dark/10 shadow-sm"
             />
             <div className="bg-white shadow-sm border border-gray-100 rounded-3xl rounded-bl-sm p-4 flex gap-1 items-center h-[52px]">
-              <div className="w-2 h-2 bg-vent-dark/40 rounded-full animate-bounce"></div>
-              <div className="w-2 h-2 bg-vent-dark/40 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-              <div className="w-2 h-2 bg-vent-dark/40 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+              <div className="w-2 h-2 bg-itoura-dark/40 rounded-full animate-bounce"></div>
+              <div className="w-2 h-2 bg-itoura-dark/40 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+              <div className="w-2 h-2 bg-itoura-dark/40 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
             </div>
           </div>
         )}
@@ -86,11 +86,11 @@ export default function ChatInterface() {
 
       {/* Input Area */}
       <div className="p-4 bg-white/40 backdrop-blur-md border-t border-gray-100">
-        <form onSubmit={handleSend} className="relative flex items-end bg-white rounded-3xl shadow-sm border border-gray-200 focus-within:border-vent-dark focus-within:ring-2 focus-within:ring-vent-light transition-all">
+        <form onSubmit={handleSend} className="relative flex items-end bg-white rounded-3xl shadow-sm border border-gray-200 focus-within:border-itoura-dark focus-within:ring-2 focus-within:ring-itoura-light transition-all">
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Talk to Ventila..."
+            placeholder="Talk to Itoura..."
             className="flex-1 max-h-32 min-h-[56px] py-4 pl-6 pr-14 bg-transparent outline-none resize-none font-sans"
             onKeyDown={(e) => {
               if (e.key === 'Enter' && !e.shiftKey) {
@@ -102,7 +102,7 @@ export default function ChatInterface() {
           <button 
             type="submit" 
             disabled={!input.trim() || isLoading}
-            className="absolute right-2 bottom-2 p-2.5 bg-vent-dark text-white rounded-full disabled:opacity-30 disabled:bg-gray-400 transition-all hover:scale-105 active:scale-95 flex items-center justify-center"
+            className="absolute right-2 bottom-2 p-2.5 bg-itoura-dark text-white rounded-full disabled:opacity-30 disabled:bg-gray-400 transition-all hover:scale-105 active:scale-95 flex items-center justify-center"
           >
             <Send size={18} className="ml-0.5" />
           </button>

@@ -27,7 +27,7 @@ export const useMoodStore = create<MoodState>()(
           entries: [
             {
               ...entry,
-              id: crypto.randomUUID(),
+              id: Date.now().toString() + Math.random().toString(36).substring(7),
               timestamp: Date.now(),
             },
             ...state.entries,
@@ -40,7 +40,7 @@ export const useMoodStore = create<MoodState>()(
       clearEntries: () => set({ entries: [] }),
     }),
     {
-      name: 'vent-mood-storage',
+      name: 'itoura-mood-storage',
     }
   )
 );

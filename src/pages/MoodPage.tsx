@@ -37,15 +37,15 @@ export default function MoodPage() {
     <div className="p-4 md:p-8 max-w-4xl mx-auto space-y-12">
       {/* Header */}
       <header className="space-y-2">
-        <h1 className="font-serif text-3xl text-vent-dark">Mood Check-in</h1>
+        <h1 className="font-serif text-3xl text-itoura-dark">Mood Check-in</h1>
         <p className="text-gray-500 text-sm md:text-base">Take a moment to reflect on how you're feeling right now.</p>
       </header>
 
       {/* Check-in Form */}
-      <section className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-vent-beige/50 space-y-8">
+      <section className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-itoura-beige/50 space-y-8">
         {/* Mood Selection */}
         <div className="space-y-4">
-          <label className="block text-sm font-medium text-vent-dark">How are you feeling?</label>
+          <label className="block text-sm font-medium text-itoura-dark">How are you feeling?</label>
           <div className="grid grid-cols-5 gap-2 md:gap-4">
             {MOODS.map(({ type, spriteIndex, label }) => {
               const isSelected = selectedMood === type;
@@ -55,7 +55,7 @@ export default function MoodPage() {
                   onClick={() => setSelectedMood(type)}
                   className={`flex flex-col items-center justify-center p-3 md:p-4 rounded-3xl transition-all duration-300 ${
                     isSelected 
-                      ? 'bg-vent-beige/50 border-2 border-vent-primary/20 scale-105 shadow-sm' 
+                      ? 'bg-itoura-beige/50 border-2 border-itoura-primary/20 scale-105 shadow-sm' 
                       : 'bg-transparent border-2 border-transparent opacity-60 hover:opacity-100 hover:bg-gray-50/50'
                   }`}
                 >
@@ -69,7 +69,7 @@ export default function MoodPage() {
                     />
                   </motion.div>
                   {/* Optional label if the user wants text, otherwise we can keep it subtle */}
-                  <span className={`text-xs md:text-sm font-medium mt-2 transition-colors ${isSelected ? 'text-vent-dark' : 'text-gray-400'}`}>
+                  <span className={`text-xs md:text-sm font-medium mt-2 transition-colors ${isSelected ? 'text-itoura-dark' : 'text-gray-400'}`}>
                     {label}
                   </span>
                 </button>
@@ -81,8 +81,8 @@ export default function MoodPage() {
         {/* Energy Slider */}
         <div className="space-y-4">
           <div className="flex justify-between items-center">
-            <label className="block text-sm font-medium text-vent-dark">Energy Level</label>
-            <span className="text-sm font-medium text-vent-primary bg-vent-beige px-3 py-1 rounded-full">{energy}/10</span>
+            <label className="block text-sm font-medium text-itoura-dark">Energy Level</label>
+            <span className="text-sm font-medium text-itoura-primary bg-itoura-beige px-3 py-1 rounded-full">{energy}/10</span>
           </div>
           <input
             type="range"
@@ -90,7 +90,7 @@ export default function MoodPage() {
             max="10"
             value={energy}
             onChange={(e) => setEnergy(Number(e.target.value))}
-            className="w-full h-2 bg-gray-100 rounded-lg appearance-none cursor-pointer accent-vent-primary"
+            className="w-full h-2 bg-gray-100 rounded-lg appearance-none cursor-pointer accent-itoura-primary"
           />
           <div className="flex justify-between text-xs text-gray-400">
             <span>Exhausted</span>
@@ -100,12 +100,12 @@ export default function MoodPage() {
 
         {/* Optional Note */}
         <div className="space-y-4">
-          <label className="block text-sm font-medium text-vent-dark">Add a note (optional)</label>
+          <label className="block text-sm font-medium text-itoura-dark">Add a note (optional)</label>
           <textarea
             value={note}
             onChange={(e) => setNote(e.target.value)}
             placeholder="What's making you feel this way?"
-            className="w-full p-4 bg-gray-50 border-none rounded-2xl resize-none focus:ring-2 focus:ring-vent-primary focus:bg-white transition-colors h-24 text-sm"
+            className="w-full p-4 bg-gray-50 border-none rounded-2xl resize-none focus:ring-2 focus:ring-itoura-primary focus:bg-white transition-colors h-24 text-sm"
           />
         </div>
 
@@ -113,7 +113,7 @@ export default function MoodPage() {
         <button
           onClick={handleSave}
           disabled={!selectedMood}
-          className="w-full py-4 rounded-2xl bg-vent-dark text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-vent-primary transition-colors"
+          className="w-full py-4 rounded-2xl bg-itoura-dark text-white font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-itoura-primary transition-colors"
         >
           Save Check-in
         </button>
@@ -121,7 +121,7 @@ export default function MoodPage() {
 
       {/* History */}
       <section className="space-y-6">
-        <h2 className="font-serif text-2xl text-vent-dark">Recent History</h2>
+        <h2 className="font-serif text-2xl text-itoura-dark">Recent History</h2>
         
         <div className="space-y-4">
           <AnimatePresence>
@@ -145,7 +145,7 @@ export default function MoodPage() {
                     exit={{ opacity: 0, scale: 0.95 }}
                     className="flex items-start gap-4 p-5 bg-white rounded-2xl shadow-sm border border-gray-100"
                   >
-                    <div className="bg-vent-beige/30 rounded-2xl p-1">
+                    <div className="bg-itoura-beige/30 rounded-2xl p-1">
                       {moodConfig && (
                         <SpriteIcon 
                           imageSrc={FiveIcons} 
@@ -159,7 +159,7 @@ export default function MoodPage() {
                     <div className="flex-1 mt-1">
                       <div className="flex justify-between items-start">
                         <div>
-                          <h3 className="font-medium text-vent-dark capitalize">{entry.mood}</h3>
+                          <h3 className="font-medium text-itoura-dark capitalize">{entry.mood}</h3>
                           <span className="text-xs text-gray-400">
                             {new Date(entry.timestamp).toLocaleDateString()} at {new Date(entry.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
                           </span>

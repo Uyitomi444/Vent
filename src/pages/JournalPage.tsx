@@ -44,14 +44,14 @@ export default function JournalPage() {
         <div className="flex items-center justify-between mb-6 pt-4 shrink-0">
           <button 
             onClick={() => setEditingId(null)}
-            className="flex items-center gap-2 text-gray-500 hover:text-vent-dark transition-colors"
+            className="flex items-center gap-2 text-gray-500 hover:text-itoura-dark transition-colors"
           >
             <ArrowLeft size={20} />
             <span>Back</span>
           </button>
           <button 
             onClick={handleSave}
-            className="px-6 py-2 bg-vent-dark text-white rounded-full font-medium shadow-sm hover:scale-105 active:scale-95 transition-all"
+            className="px-6 py-2 bg-itoura-dark text-white rounded-full font-medium shadow-sm hover:scale-105 active:scale-95 transition-all"
           >
             Save Entry
           </button>
@@ -63,9 +63,9 @@ export default function JournalPage() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Give your thoughts a title..."
-            className="text-2xl md:text-3xl font-serif text-vent-dark bg-transparent border-none outline-none mb-4 placeholder:text-gray-400"
+            className="text-2xl md:text-3xl font-serif text-itoura-dark bg-transparent border-none outline-none mb-4 placeholder:text-gray-400"
           />
-          <div className="h-px bg-vent-light/50 w-full mb-6"></div>
+          <div className="h-px bg-itoura-light/50 w-full mb-6"></div>
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
@@ -82,12 +82,12 @@ export default function JournalPage() {
     <div className="h-full flex flex-col max-w-3xl mx-auto">
       <div className="flex items-end justify-between mb-8 pt-4 shrink-0">
         <div>
-          <h1 className="font-serif text-3xl text-vent-dark mb-1">Your Journal</h1>
+          <h1 className="font-serif text-3xl text-itoura-dark mb-1">Your Journal</h1>
           <p className="text-gray-500 text-sm">A private space for your thoughts.</p>
         </div>
         <button 
           onClick={handleCreateNew}
-          className="flex items-center gap-2 px-5 py-2.5 bg-vent-light text-vent-dark border border-vent-dark/10 rounded-full font-medium shadow-sm hover:bg-white transition-all"
+          className="flex items-center gap-2 px-5 py-2.5 bg-itoura-light text-itoura-dark border border-itoura-dark/10 rounded-full font-medium shadow-sm hover:bg-white transition-all"
         >
           <Plus size={18} />
           <span>New Entry</span>
@@ -102,7 +102,7 @@ export default function JournalPage() {
               alt="Empty Journal" 
               className="w-48 h-48 object-cover mix-blend-multiply opacity-80 mb-6 rounded-3xl"
             />
-            <h3 className="text-xl font-serif text-vent-dark mb-2">No entries yet</h3>
+            <h3 className="text-xl font-serif text-itoura-dark mb-2">No entries yet</h3>
             <p className="text-gray-500 max-w-md mx-auto mb-8">
               Writing down your feelings is a powerful way to process them. Start your first entry whenever you're ready.
             </p>
@@ -116,7 +116,7 @@ export default function JournalPage() {
                 onClick={() => handleEdit(entry)}
               >
                 <div className="flex items-start justify-between mb-2">
-                  <h3 className="text-xl font-serif text-vent-dark line-clamp-1">{entry.title}</h3>
+                  <h3 className="text-xl font-serif text-itoura-dark line-clamp-1">{entry.title}</h3>
                   <button 
                     onClick={(e) => {
                       e.stopPropagation();

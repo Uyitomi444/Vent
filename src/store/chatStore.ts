@@ -12,7 +12,7 @@ interface ChatState {
 
 const INITIAL_MESSAGE: ChatMessage = { 
   role: 'assistant', 
-  content: "Hi there. I'm Ventila. This is a safe space to vent, process your thoughts, or just take a breath. What's on your mind today?" 
+  content: "Hi there. I'm Itoura. This is a safe space to vent, process your thoughts, or just take a breath. What's on your mind today?" 
 };
 
 export const useChatStore = create<ChatState>((set, get) => ({
