@@ -1,39 +1,37 @@
 import { useState } from 'react';
-import { Wind, Heart, Sparkles, Coffee } from 'lucide-react';
 import BreathingTool from '../components/tools/BreathingTool';
 import { motion, AnimatePresence } from 'framer-motion';
+import SpriteIcon from '../components/SpriteIcon';
+import FourIcons from '../assets/Four_icons.jpeg';
 
+// The Four_icons.jpeg has 4 icons. 
 const TOOLS = [
   {
     id: 'breathe',
     title: 'Box Breathing',
     description: 'A simple technique to quickly regulate your nervous system.',
-    icon: Wind,
-    color: 'bg-blue-50 text-blue-600',
+    spriteIndex: 0,
     duration: '1-5 mins'
   },
   {
     id: 'grounding',
     title: '5-4-3-2-1 Grounding',
     description: 'Engage your senses to bring yourself back to the present moment.',
-    icon: Heart,
-    color: 'bg-emerald-50 text-emerald-600',
+    spriteIndex: 1,
     duration: '3 mins'
   },
   {
     id: 'meditation',
     title: 'Mindful Moment',
     description: 'Guided reflection to help process complex emotions.',
-    icon: Sparkles,
-    color: 'bg-amber-50 text-amber-600',
+    spriteIndex: 2,
     duration: '5 mins'
   },
   {
     id: 'break',
     title: 'Take a Break',
     description: 'Disconnect and rest your eyes from the screen.',
-    icon: Coffee,
-    color: 'bg-indigo-50 text-indigo-600',
+    spriteIndex: 3,
     duration: '10 mins'
   }
 ];
@@ -68,7 +66,6 @@ export default function ToolsPage() {
             className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6"
           >
             {TOOLS.map((tool) => {
-              const Icon = tool.icon;
               return (
                 <button
                   key={tool.id}
@@ -76,8 +73,13 @@ export default function ToolsPage() {
                   className="flex flex-col text-left p-6 bg-white rounded-3xl shadow-sm border border-vent-beige/50 hover:shadow-md hover:border-vent-beige transition-all group"
                 >
                   <div className="flex justify-between items-start w-full mb-4">
-                    <div className={`p-3 rounded-2xl ${tool.color} group-hover:scale-110 transition-transform`}>
-                      <Icon className="w-6 h-6" />
+                    <div className="p-3 bg-vent-beige/30 rounded-2xl group-hover:scale-105 transition-transform">
+                      <SpriteIcon 
+                        imageSrc={FourIcons} 
+                        totalIcons={4} 
+                        index={tool.spriteIndex} 
+                        size={48} 
+                      />
                     </div>
                     <span className="text-xs font-medium text-gray-400 bg-gray-50 px-3 py-1 rounded-full">
                       {tool.duration}

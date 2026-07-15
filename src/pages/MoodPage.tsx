@@ -2,68 +2,21 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trash2 } from 'lucide-react';
 import { useMoodStore, type MoodType } from '../store/moodStore';
+import SpriteIcon from '../components/SpriteIcon';
+import FiveIcons from '../assets/Five_icons.jpeg';
 
-const CustomTerribleIcon = ({ className }: { className?: string }) => (
-  <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={className} style={{ overflow: 'visible' }}>
-    <circle cx="32" cy="32" r="28" />
-    <path d="M22 36a6 6 0 0 1-2-11.6 8 8 0 0 1 15-3 6 6 0 0 1 7 5.6V28a6 6 0 0 1-6 6H22z" fill="transparent" />
-    <line x1="25" y1="42" x2="23" y2="46" stroke="#b39ddb" strokeWidth="3" />
-    <line x1="32" y1="44" x2="30" y2="48" stroke="#b39ddb" strokeWidth="3" />
-    <line x1="39" y1="42" x2="37" y2="46" stroke="#b39ddb" strokeWidth="3" />
-  </svg>
-);
-
-const CustomBadIcon = ({ className }: { className?: string }) => (
-  <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={className} style={{ overflow: 'visible' }}>
-    <circle cx="32" cy="32" r="28" />
-    <circle cx="22" cy="26" r="2.5" fill="currentColor" stroke="none" />
-    <circle cx="42" cy="26" r="2.5" fill="currentColor" stroke="none" />
-    <path d="M22 42c3-5 17-5 20 0" />
-    <circle cx="60" cy="32" r="4.5" fill="#b39ddb" stroke="none" />
-  </svg>
-);
-
-const CustomOkayIcon = ({ className }: { className?: string }) => (
-  <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={className} style={{ overflow: 'visible' }}>
-    <circle cx="32" cy="32" r="28" />
-    <circle cx="22" cy="26" r="2.5" fill="currentColor" stroke="none" />
-    <circle cx="42" cy="26" r="2.5" fill="currentColor" stroke="none" />
-    <line x1="24" y1="40" x2="40" y2="40" />
-    <circle cx="60" cy="32" r="4.5" fill="#b39ddb" stroke="none" />
-  </svg>
-);
-
-const CustomGoodIcon = ({ className }: { className?: string }) => (
-  <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={className} style={{ overflow: 'visible' }}>
-    <circle cx="32" cy="32" r="28" />
-    <circle cx="22" cy="26" r="2.5" fill="currentColor" stroke="none" />
-    <circle cx="42" cy="26" r="2.5" fill="currentColor" stroke="none" />
-    <path d="M22 38c3 5 17 5 20 0" />
-    <circle cx="60" cy="32" r="4.5" fill="#b39ddb" stroke="none" />
-  </svg>
-);
-
-const CustomGreatIcon = ({ className }: { className?: string }) => (
-  <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={className} style={{ overflow: 'visible' }}>
-    <circle cx="32" cy="32" r="28" />
-    <circle cx="32" cy="32" r="10" />
-    <line x1="32" y1="12" x2="32" y2="16" stroke="#b39ddb" strokeWidth="3" />
-    <line x1="32" y1="48" x2="32" y2="52" />
-    <line x1="12" y1="32" x2="16" y2="32" />
-    <line x1="48" y1="32" x2="52" y2="32" stroke="#b39ddb" strokeWidth="3" />
-    <line x1="18" y1="18" x2="22" y2="22" />
-    <line x1="42" y1="42" x2="46" y2="46" />
-    <line x1="18" y1="46" x2="22" y2="42" />
-    <line x1="42" y1="22" x2="46" y2="18" stroke="#b39ddb" strokeWidth="3" />
-  </svg>
-);
-
-const MOODS: { type: MoodType; icon: any; label: string }[] = [
-  { type: 'terrible', icon: CustomTerribleIcon, label: 'Terrible' },
-  { type: 'bad', icon: CustomBadIcon, label: 'Bad' },
-  { type: 'okay', icon: CustomOkayIcon, label: 'Okay' },
-  { type: 'good', icon: CustomGoodIcon, label: 'Good' },
-  { type: 'great', icon: CustomGreatIcon, label: 'Great' },
+// The Five_icons.jpeg has 5 icons in order (left to right):
+// 0: Rain Cloud (Terrible)
+// 1: Frown (Bad)
+// 2: Neutral (Okay)
+// 3: Smile (Good)
+// 4: Sun (Great)
+const MOODS: { type: MoodType; spriteIndex: number; label: string }[] = [
+  { type: 'terrible', spriteIndex: 0, label: 'Terrible' },
+  { type: 'bad', spriteIndex: 1, label: 'Bad' },
+  { type: 'okay', spriteIndex: 2, label: 'Okay' },
+  { type: 'good', spriteIndex: 3, label: 'Good' },
+  { type: 'great', spriteIndex: 4, label: 'Great' },
 ];
 
 export default function MoodPage() {
@@ -89,25 +42,40 @@ export default function MoodPage() {
       </header>
 
       {/* Check-in Form */}
-      <section className="bg-white rounded-3xl p-6 md:p-10 shadow-sm border border-vent-beige/50 space-y-10">
-        {/* Mood Selection (Custom Design) */}
-        <div className="flex justify-center items-center gap-4 md:gap-8 overflow-x-auto pb-4 px-2">
-          {MOODS.map(({ type, icon: Icon }) => {
-            const isSelected = selectedMood === type;
-            return (
-              <button
-                key={type}
-                onClick={() => setSelectedMood(type)}
-                className={`transition-colors duration-200 outline-none shrink-0 ${
-                  isSelected ? 'text-black' : 'text-gray-300 hover:text-gray-500'
-                }`}
-              >
-                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  <Icon className="w-16 h-16 md:w-20 md:h-20" />
-                </motion.div>
-              </button>
-            );
-          })}
+      <section className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-vent-beige/50 space-y-8">
+        {/* Mood Selection */}
+        <div className="space-y-4">
+          <label className="block text-sm font-medium text-vent-dark">How are you feeling?</label>
+          <div className="grid grid-cols-5 gap-2 md:gap-4">
+            {MOODS.map(({ type, spriteIndex, label }) => {
+              const isSelected = selectedMood === type;
+              return (
+                <button
+                  key={type}
+                  onClick={() => setSelectedMood(type)}
+                  className={`flex flex-col items-center justify-center p-3 md:p-4 rounded-3xl transition-all duration-300 ${
+                    isSelected 
+                      ? 'bg-vent-beige/50 border-2 border-vent-primary/20 scale-105 shadow-sm' 
+                      : 'bg-transparent border-2 border-transparent opacity-60 hover:opacity-100 hover:bg-gray-50/50'
+                  }`}
+                >
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    <SpriteIcon 
+                      imageSrc={FiveIcons} 
+                      totalIcons={5} 
+                      index={spriteIndex} 
+                      size={60}
+                      className={isSelected ? 'scale-110 transition-transform' : ''}
+                    />
+                  </motion.div>
+                  {/* Optional label if the user wants text, otherwise we can keep it subtle */}
+                  <span className={`text-xs md:text-sm font-medium mt-2 transition-colors ${isSelected ? 'text-vent-dark' : 'text-gray-400'}`}>
+                    {label}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         {/* Energy Slider */}
@@ -168,7 +136,6 @@ export default function MoodPage() {
             ) : (
               entries.map((entry) => {
                 const moodConfig = MOODS.find(m => m.type === entry.mood);
-                const Icon = moodConfig?.icon || CustomOkayIcon;
                 
                 return (
                   <motion.div
@@ -178,11 +145,18 @@ export default function MoodPage() {
                     exit={{ opacity: 0, scale: 0.95 }}
                     className="flex items-start gap-4 p-5 bg-white rounded-2xl shadow-sm border border-gray-100"
                   >
-                    <div className="p-2 rounded-xl text-black bg-gray-50 border border-gray-100">
-                      <Icon className="w-8 h-8" />
+                    <div className="bg-vent-beige/30 rounded-2xl p-1">
+                      {moodConfig && (
+                        <SpriteIcon 
+                          imageSrc={FiveIcons} 
+                          totalIcons={5} 
+                          index={moodConfig.spriteIndex} 
+                          size={48}
+                        />
+                      )}
                     </div>
                     
-                    <div className="flex-1">
+                    <div className="flex-1 mt-1">
                       <div className="flex justify-between items-start">
                         <div>
                           <h3 className="font-medium text-vent-dark capitalize">{entry.mood}</h3>
