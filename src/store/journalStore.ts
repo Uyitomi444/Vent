@@ -15,6 +15,7 @@ interface JournalState {
   addEntry: (entry: Omit<JournalEntry, 'id' | 'createdAt' | 'updatedAt'>) => void;
   updateEntry: (id: string, updates: Partial<Omit<JournalEntry, 'id' | 'createdAt' | 'updatedAt'>>) => void;
   deleteEntry: (id: string) => void;
+  clearEntries: () => void;
 }
 
 export const useJournalStore = create<JournalState>()(
@@ -40,6 +41,7 @@ export const useJournalStore = create<JournalState>()(
       deleteEntry: (id) => set((state) => ({
         entries: state.entries.filter((entry) => entry.id !== id)
       })),
+      clearEntries: () => set({ entries: [] }),
     }),
     {
       name: 'vent-journal-storage',

@@ -7,7 +7,7 @@ export default function BreathingTool({ onClose }: { onClose: () => void }) {
   const [phase, setPhase] = useState<'Inhale' | 'Hold' | 'Exhale' | 'Hold ' | 'Ready'>('Ready');
 
   useEffect(() => {
-    let timer: NodeJS.Timeout;
+    let timer: ReturnType<typeof setTimeout>;
     
     if (isActive) {
       setPhase('Inhale');
