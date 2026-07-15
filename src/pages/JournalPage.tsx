@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useJournalStore } from '../store/journalStore';
 import type { JournalEntry } from '../store/journalStore';
-import { Plus, Edit2, Trash2, ArrowLeft, Calendar } from 'lucide-react';
+import { Plus, Trash2, ArrowLeft, Calendar } from 'lucide-react';
 
 export default function JournalPage() {
   const { entries, addEntry, updateEntry, deleteEntry } = useJournalStore();
