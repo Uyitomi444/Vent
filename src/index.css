@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Using SF Pro (system default on Apple devices) */
+
+@layer base {
+  body {
+    @apply font-sans text-vent-text antialiased;
+    background: linear-gradient(145deg, #E9E3F5 0%, #D8CFEA 40%, #4B3B7A 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+}
