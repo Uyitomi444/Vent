@@ -1,14 +1,69 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Frown, Meh, Smile, Sun, CloudRain, Trash2 } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 import { useMoodStore, type MoodType } from '../store/moodStore';
 
-const MOODS: { type: MoodType; icon: any; label: string; color: string }[] = [
-  { type: 'terrible', icon: CloudRain, label: 'Terrible', color: 'text-blue-600 bg-blue-100 border-blue-200' },
-  { type: 'bad', icon: Frown, label: 'Bad', color: 'text-indigo-500 bg-indigo-50 border-indigo-200' },
-  { type: 'okay', icon: Meh, label: 'Okay', color: 'text-gray-500 bg-gray-50 border-gray-200' },
-  { type: 'good', icon: Smile, label: 'Good', color: 'text-emerald-500 bg-emerald-50 border-emerald-200' },
-  { type: 'great', icon: Sun, label: 'Great', color: 'text-amber-500 bg-amber-50 border-amber-200' },
+const CustomTerribleIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={className} style={{ overflow: 'visible' }}>
+    <circle cx="32" cy="32" r="28" />
+    <path d="M22 36a6 6 0 0 1-2-11.6 8 8 0 0 1 15-3 6 6 0 0 1 7 5.6V28a6 6 0 0 1-6 6H22z" fill="transparent" />
+    <line x1="25" y1="42" x2="23" y2="46" stroke="#b39ddb" strokeWidth="3" />
+    <line x1="32" y1="44" x2="30" y2="48" stroke="#b39ddb" strokeWidth="3" />
+    <line x1="39" y1="42" x2="37" y2="46" stroke="#b39ddb" strokeWidth="3" />
+  </svg>
+);
+
+const CustomBadIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={className} style={{ overflow: 'visible' }}>
+    <circle cx="32" cy="32" r="28" />
+    <circle cx="22" cy="26" r="2.5" fill="currentColor" stroke="none" />
+    <circle cx="42" cy="26" r="2.5" fill="currentColor" stroke="none" />
+    <path d="M22 42c3-5 17-5 20 0" />
+    <circle cx="60" cy="32" r="4.5" fill="#b39ddb" stroke="none" />
+  </svg>
+);
+
+const CustomOkayIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={className} style={{ overflow: 'visible' }}>
+    <circle cx="32" cy="32" r="28" />
+    <circle cx="22" cy="26" r="2.5" fill="currentColor" stroke="none" />
+    <circle cx="42" cy="26" r="2.5" fill="currentColor" stroke="none" />
+    <line x1="24" y1="40" x2="40" y2="40" />
+    <circle cx="60" cy="32" r="4.5" fill="#b39ddb" stroke="none" />
+  </svg>
+);
+
+const CustomGoodIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={className} style={{ overflow: 'visible' }}>
+    <circle cx="32" cy="32" r="28" />
+    <circle cx="22" cy="26" r="2.5" fill="currentColor" stroke="none" />
+    <circle cx="42" cy="26" r="2.5" fill="currentColor" stroke="none" />
+    <path d="M22 38c3 5 17 5 20 0" />
+    <circle cx="60" cy="32" r="4.5" fill="#b39ddb" stroke="none" />
+  </svg>
+);
+
+const CustomGreatIcon = ({ className }: { className?: string }) => (
+  <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={className} style={{ overflow: 'visible' }}>
+    <circle cx="32" cy="32" r="28" />
+    <circle cx="32" cy="32" r="10" />
+    <line x1="32" y1="12" x2="32" y2="16" stroke="#b39ddb" strokeWidth="3" />
+    <line x1="32" y1="48" x2="32" y2="52" />
+    <line x1="12" y1="32" x2="16" y2="32" />
+    <line x1="48" y1="32" x2="52" y2="32" stroke="#b39ddb" strokeWidth="3" />
+    <line x1="18" y1="18" x2="22" y2="22" />
+    <line x1="42" y1="42" x2="46" y2="46" />
+    <line x1="18" y1="46" x2="22" y2="42" />
+    <line x1="42" y1="22" x2="46" y2="18" stroke="#b39ddb" strokeWidth="3" />
+  </svg>
+);
+
+const MOODS: { type: MoodType; icon: any; label: string }[] = [
+  { type: 'terrible', icon: CustomTerribleIcon, label: 'Terrible' },
+  { type: 'bad', icon: CustomBadIcon, label: 'Bad' },
+  { type: 'okay', icon: CustomOkayIcon, label: 'Okay' },
+  { type: 'good', icon: CustomGoodIcon, label: 'Good' },
+  { type: 'great', icon: CustomGreatIcon, label: 'Great' },
 ];
 
 export default function MoodPage() {
@@ -34,29 +89,25 @@ export default function MoodPage() {
       </header>
 
       {/* Check-in Form */}
-      <section className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-vent-beige/50 space-y-8">
-        {/* Mood Selection */}
-        <div className="space-y-4">
-          <label className="block text-sm font-medium text-vent-dark">How are you feeling?</label>
-          <div className="grid grid-cols-5 gap-2 md:gap-4">
-            {MOODS.map(({ type, icon: Icon, label, color }) => {
-              const isSelected = selectedMood === type;
-              return (
-                <button
-                  key={type}
-                  onClick={() => setSelectedMood(type)}
-                  className={`flex flex-col items-center justify-center p-3 md:p-4 rounded-2xl border-2 transition-all duration-200 ${
-                    isSelected ? color : 'bg-transparent border-gray-100 text-gray-400 hover:border-gray-200 hover:bg-gray-50'
-                  }`}
-                >
-                  <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-                    <Icon className="w-8 h-8 md:w-10 md:h-10 mb-2" strokeWidth={isSelected ? 2.5 : 1.5} />
-                  </motion.div>
-                  <span className="text-xs md:text-sm font-medium">{label}</span>
-                </button>
-              );
-            })}
-          </div>
+      <section className="bg-white rounded-3xl p-6 md:p-10 shadow-sm border border-vent-beige/50 space-y-10">
+        {/* Mood Selection (Custom Design) */}
+        <div className="flex justify-center items-center gap-4 md:gap-8 overflow-x-auto pb-4 px-2">
+          {MOODS.map(({ type, icon: Icon }) => {
+            const isSelected = selectedMood === type;
+            return (
+              <button
+                key={type}
+                onClick={() => setSelectedMood(type)}
+                className={`transition-colors duration-200 outline-none shrink-0 ${
+                  isSelected ? 'text-black' : 'text-gray-300 hover:text-gray-500'
+                }`}
+              >
+                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <Icon className="w-16 h-16 md:w-20 md:h-20" />
+                </motion.div>
+              </button>
+            );
+          })}
         </div>
 
         {/* Energy Slider */}
@@ -117,7 +168,7 @@ export default function MoodPage() {
             ) : (
               entries.map((entry) => {
                 const moodConfig = MOODS.find(m => m.type === entry.mood);
-                const Icon = moodConfig?.icon || Meh;
+                const Icon = moodConfig?.icon || CustomOkayIcon;
                 
                 return (
                   <motion.div
@@ -127,8 +178,8 @@ export default function MoodPage() {
                     exit={{ opacity: 0, scale: 0.95 }}
                     className="flex items-start gap-4 p-5 bg-white rounded-2xl shadow-sm border border-gray-100"
                   >
-                    <div className={`p-3 rounded-xl ${moodConfig?.color}`}>
-                      <Icon className="w-6 h-6" />
+                    <div className="p-2 rounded-xl text-black bg-gray-50 border border-gray-100">
+                      <Icon className="w-8 h-8" />
                     </div>
                     
                     <div className="flex-1">
