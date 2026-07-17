@@ -9,6 +9,7 @@ interface ChatState {
   error: string | null;
   sendMessage: (content: string, apiKey: string) => Promise<void>;
   clearMessages: () => void;
+  setMessages: (messages: ChatMessage[]) => void;
 }
 
 const INITIAL_MESSAGE: ChatMessage = { 
@@ -46,5 +47,6 @@ export const useChatStore = create<ChatState>((set, get) => ({
   clearMessages: () => set({ 
     messages: [INITIAL_MESSAGE],
     error: null
-  })
+  }),
+  setMessages: (messages) => set({ messages, error: null })
 }));

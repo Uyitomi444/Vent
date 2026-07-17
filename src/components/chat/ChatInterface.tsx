@@ -88,7 +88,7 @@ export default function ChatInterface() {
     setIsSummarizing(true);
     const result = await generateSessionSummary(messages, apiKey);
     if (result) {
-      addMemory(result.summary, result.themes);
+      addMemory(result.summary, result.themes, messages);
     }
     clearMessages();
     setIsSummarizing(false);

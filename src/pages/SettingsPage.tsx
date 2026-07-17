@@ -1,4 +1,5 @@
 import { Bell, Download, Trash2, Shield, User, ChevronRight, BrainCircuit } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useJournalStore } from '../store/journalStore';
 import { useMoodStore } from '../store/moodStore';
 import { useChatStore } from '../store/chatStore';
@@ -6,11 +7,13 @@ import { useSettingsStore } from '../store/settingsStore';
 import { useMemoryStore } from '../store/memoryStore';
 
 export default function SettingsPage() {
+  const navigate = useNavigate();
   const { notifications, setNotifications } = useSettingsStore();
   
   const clearJournal = useJournalStore(state => state.clearEntries);
   const clearMoods = useMoodStore(state => state.clearEntries);
   const clearChat = useChatStore(state => state.clearMessages);
+  const setChatMessages = useChatStore(state => state.setMessages);
   const { memories, clearMemories } = useMemoryStore();
 
   const handleClearData = () => {
@@ -27,6 +30,17 @@ export default function SettingsPage() {
     if (window.confirm('Clear all conversation memories? Itoura will start fresh.')) {
       clearMemories();
       alert('Conversation memories cleared.');
+    }
+  };
+
+  const handleRestoreMemory = (memory: any) => {
+    if (memory.messages && memory.messages.length > 0) {
+      if (window.confirm('Do you want to go back to this past conversation? Your current unsaved chat will be cleared.')) {
+        setChatMessages(memory.messages);
+        navigate('/');
+      }
+    } else {
+      alert("No chat messages saved for this memory. Old memories may only have summaries.");
     }
   };
 
@@ -102,7 +116,7 @@ export default function SettingsPage() {
           <div className="flex justify-between items-start mb-4">
             <div>
               <p className="text-sm text-gray-600 leading-relaxed max-w-md">
-                Itoura remembers <strong>{memories.length}</strong> recent conversation summaries to provide a continuous, contextual experience.
+                Itoura remembers <strong>{memories.length}</strong> recent conversation summaries to provide a continuous, contextual experience. Click a memory to restore that chat.
               </p>
             </div>
             <button 
@@ -116,7 +130,11 @@ export default function SettingsPage() {
           {memories.length > 0 && (
             <div className="mt-4 space-y-3 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
               {memories.map(m => (
-                <div key={m.id} className="bg-gray-50 p-3 rounded-2xl border border-gray-100">
+                <div 
+                  key={m.id} 
+                  onClick={() => handleRestoreMemory(m)}
+                  className={`p-3 rounded-2xl border border-gray-100 transition-colors ${m.messages ? 'bg-white hover:bg-gray-50 cursor-pointer shadow-sm' : 'bg-gray-50 opacity-70'}`}
+                >
                   <p className="text-xs text-gray-500 mb-1">{new Date(m.timestamp).toLocaleDateString()}</p>
                   <p className="text-sm text-gray-700">{m.summary}</p>
                   {m.themes?.length > 0 && (
