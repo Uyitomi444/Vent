@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { Home, Book, Smile, Compass, Settings, HelpCircle } from 'lucide-react';
 import DailyMessagePopup from '../DailyMessagePopup';
 
-import itouraLogo from '../../assets/ABLE/preview.webp';
+import itouraLogo from '../../assets/ABLE/preview.jpeg';
 
 export default function MainLayout() {
   const location = useLocation();
