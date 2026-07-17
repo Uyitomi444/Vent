@@ -30,14 +30,11 @@ export default function ChatInterface() {
       if (SpeechRecognition) {
         recognitionRef.current = new SpeechRecognition();
         recognitionRef.current.continuous = true;
-        recognitionRef.current.interimResults = true;
+        recognitionRef.current.interimResults = false;
         
         recognitionRef.current.onresult = (event: any) => {
-          let currentTranscript = '';
-          for (let i = event.resultIndex; i < event.results.length; ++i) {
-            currentTranscript += event.results[i][0].transcript;
-          }
-          setInput((prev) => prev + (prev.endsWith(' ') ? '' : ' ') + currentTranscript);
+          const newTranscript = event.results[event.results.length - 1][0].transcript;
+          setInput((prev) => prev + (prev.endsWith(' ') || prev.length === 0 ? '' : ' ') + newTranscript.trim());
         };
 
         recognitionRef.current.onerror = (event: any) => {
