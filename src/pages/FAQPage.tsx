@@ -120,15 +120,6 @@ const FAQ_DATA: FAQCategory[] = [
         answer: "Yes! You can jump right into chatting, journaling, and logging your moods without entering an email or creating a password. Everything simply saves to your current device."
       }
     ]
-  },
-  {
-    title: "PLANS & PRICING — TBD",
-    items: [
-      {
-        question: "Placeholder",
-        answer: "Add once a pricing model is decided."
-      }
-    ]
   }
 ];
 
