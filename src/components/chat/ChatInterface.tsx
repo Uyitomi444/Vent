@@ -3,7 +3,7 @@ import { useChatStore } from '../../store/chatStore';
 import { useMemoryStore } from '../../store/memoryStore';
 import { generateSessionSummary } from '../../services/ai';
 import { Send, AlertCircle, Mic, MicOff, Save } from 'lucide-react';
-import MascotPose from '../MascotPose';
+import itouraMascot from '../../assets/ABLE/itoura-mascot.jpeg';
 
 export default function ChatInterface() {
   const { messages, isLoading, error, sendMessage, clearMessages } = useChatStore();
@@ -114,9 +114,10 @@ export default function ChatInterface() {
       <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 mt-10 md:mt-0">
         {messages.length === 1 && (
           <div className="flex flex-col items-center justify-center mb-6 mt-8 md:mt-2">
-            <MascotPose 
-              pose="sitting"
-              className="w-48 h-48 opacity-80"
+            <img 
+              src={itouraMascot} 
+              alt="Itoura Mascot" 
+              className="w-48 h-48 object-cover mix-blend-multiply opacity-80 rounded-3xl"
             />
           </div>
         )}
@@ -124,9 +125,10 @@ export default function ChatInterface() {
         {messages.map((msg, idx) => (
           <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             {msg.role === 'assistant' && (
-              <MascotPose 
-                pose="waving"
-                className="w-8 h-8 rounded-full mr-2 shrink-0 border border-itoura-dark/10 shadow-sm"
+              <img 
+                src={itouraMascot} 
+                alt="Itoura"
+                className="w-8 h-8 rounded-full object-cover mr-2 shrink-0 border border-itoura-dark/10 shadow-sm"
               />
             )}
             <div className={`max-w-[75%] rounded-3xl p-4 ${msg.role === 'user' ? 'bg-itoura-dark text-white rounded-br-sm' : 'bg-white shadow-sm border border-gray-100 rounded-bl-sm text-itoura-text'}`}>
@@ -137,9 +139,10 @@ export default function ChatInterface() {
         
         {(isLoading || isSummarizing) && (
           <div className="flex justify-start">
-            <MascotPose 
-              pose="jumping"
-              className="w-8 h-8 rounded-full mr-2 shrink-0 border border-itoura-dark/10 shadow-sm"
+            <img 
+              src={itouraMascot} 
+              alt="Itoura thinking"
+              className="w-8 h-8 rounded-full object-cover mr-2 shrink-0 border border-itoura-dark/10 shadow-sm"
             />
             <div className="bg-white shadow-sm border border-gray-100 rounded-3xl rounded-bl-sm p-4 flex gap-1 items-center h-[52px]">
               <div className="w-2 h-2 bg-itoura-dark/40 rounded-full animate-bounce"></div>
