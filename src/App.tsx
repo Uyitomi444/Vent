@@ -6,6 +6,7 @@ import MoodPage from './pages/MoodPage';
 import ToolsPage from './pages/ToolsPage';
 import SettingsPage from './pages/SettingsPage';
 import OnboardingPage from './pages/OnboardingPage';
+import FAQPage from './pages/FAQPage';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/mood" element={<MoodPage />} />
           <Route path="/tools" element={<ToolsPage />} />
           <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/faq" element={<FAQPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

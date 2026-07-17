@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { Home, Book, Smile, Compass, Settings } from 'lucide-react';
+import { Home, Book, Smile, Compass, Settings, HelpCircle } from 'lucide-react';
 import DailyMessagePopup from '../DailyMessagePopup';
 
 export default function MainLayout() {
@@ -20,7 +20,8 @@ export default function MainLayout() {
           <NavItem to="/mood" icon={<Smile size={22} strokeWidth={1.5} />} label="Mood" active={isActive('/mood')} desktop />
           <NavItem to="/tools" icon={<Compass size={22} strokeWidth={1.5} />} label="Tools" active={isActive('/tools')} desktop />
         </nav>
-        <div className="mt-auto">
+        <div className="mt-auto space-y-3">
+          <NavItem to="/faq" icon={<HelpCircle size={22} strokeWidth={1.5} />} label="FAQ" active={isActive('/faq')} desktop />
           <NavItem to="/settings" icon={<Settings size={22} strokeWidth={1.5} />} label="Settings" active={isActive('/settings')} desktop />
         </div>
       </aside>
@@ -33,12 +34,13 @@ export default function MainLayout() {
       </main>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="md:hidden fixed bottom-0 w-full bg-itoura-surface/90 backdrop-blur-md border-t border-gray-200 flex justify-around p-3 z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
-        <NavItem to="/" icon={<Home size={24} strokeWidth={1.5} />} label="Chat" active={isActive('/')} />
-        <NavItem to="/journal" icon={<Book size={24} strokeWidth={1.5} />} label="Journal" active={isActive('/journal')} />
-        <NavItem to="/mood" icon={<Smile size={24} strokeWidth={1.5} />} label="Mood" active={isActive('/mood')} />
-        <NavItem to="/tools" icon={<Compass size={24} strokeWidth={1.5} />} label="Tools" active={isActive('/tools')} />
-        <NavItem to="/settings" icon={<Settings size={24} strokeWidth={1.5} />} label="Settings" active={isActive('/settings')} />
+      <nav className="md:hidden fixed bottom-0 w-full bg-itoura-surface/90 backdrop-blur-md border-t border-gray-200 flex justify-around p-3 z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] overflow-x-auto">
+        <NavItem to="/" icon={<Home size={22} strokeWidth={1.5} />} label="Chat" active={isActive('/')} />
+        <NavItem to="/journal" icon={<Book size={22} strokeWidth={1.5} />} label="Journal" active={isActive('/journal')} />
+        <NavItem to="/mood" icon={<Smile size={22} strokeWidth={1.5} />} label="Mood" active={isActive('/mood')} />
+        <NavItem to="/tools" icon={<Compass size={22} strokeWidth={1.5} />} label="Tools" active={isActive('/tools')} />
+        <NavItem to="/faq" icon={<HelpCircle size={22} strokeWidth={1.5} />} label="FAQ" active={isActive('/faq')} />
+        <NavItem to="/settings" icon={<Settings size={22} strokeWidth={1.5} />} label="Settings" active={isActive('/settings')} />
       </nav>
     </div>
   );
