@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { Home, Book, Smile, Compass, Settings, HelpCircle } from 'lucide-react';
 import DailyMessagePopup from '../DailyMessagePopup';
 
-import itouraLogo from '../../assets/ABLE/preview.jpeg';
+import itouraLogo from '../../assets/ABLE/logo.png';
 
 export default function MainLayout() {
   const location = useLocation();
@@ -23,7 +23,7 @@ export default function MainLayout() {
       {/* Desktop Sidebar Navigation */}
       <aside className="hidden md:flex flex-col w-64 bg-white/40 backdrop-blur-md border-r border-gray-200/50 p-6 z-40">
         <div className="mb-12 text-center mt-4 flex justify-center">
-          <img src={itouraLogo} alt="Itoura" className="h-8 md:h-10 object-contain mix-blend-multiply" />
+          <img src={itouraLogo} alt="Itoura" className="h-10 md:h-12 object-contain" />
         </div>
         <nav className="flex flex-col gap-3 flex-1">
           <NavItem to="/" icon={<Home size={22} strokeWidth={1.5} />} label="Chat" active={isActive('/')} desktop />
