@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Shield, Lock, EyeOff, MessageSquare, BrainCircuit, LineChart, Target, ArrowRight } from 'lucide-react';
 import itouraBrand from '../assets/ABLE/itoura-brand.jpeg';
+import MascotPose from '../components/MascotPose';
 
 export default function OnboardingPage() {
   return (
@@ -142,7 +143,8 @@ export default function OnboardingPage() {
 
       {/* 5. CLOSING CTA */}
       <section className="py-24 bg-white/60">
-        <div className="max-w-4xl mx-auto px-6 text-center space-y-8">
+        <div className="max-w-4xl mx-auto px-6 text-center space-y-8 flex flex-col items-center">
+          <MascotPose pose="cheering" className="w-32 h-32 mb-4" />
           <h2 className="font-serif text-4xl md:text-5xl text-itoura-dark">
             Ready to untangle the day?
           </h2>
