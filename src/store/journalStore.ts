@@ -8,6 +8,7 @@ export interface JournalEntry {
   createdAt: number;
   updatedAt: number;
   mood?: 'happy' | 'calm' | 'anxious' | 'sad' | 'angry';
+  themes?: string[];
 }
 
 interface JournalState {

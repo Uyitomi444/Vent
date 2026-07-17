@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Trash2 } from 'lucide-react';
+import { Trash2, TrendingUp, Sparkles } from 'lucide-react';
 import { useMoodStore, type MoodType } from '../store/moodStore';
+import { useMemoryStore } from '../store/memoryStore';
+import { useJournalStore } from '../store/journalStore';
 import SpriteIcon from '../components/SpriteIcon';
 import FiveIcons from '../assets/Five_icons.jpeg';
 
@@ -21,6 +23,9 @@ const MOODS: { type: MoodType; spriteIndex: number; label: string }[] = [
 
 export default function MoodPage() {
   const { entries, addEntry, deleteEntry } = useMoodStore();
+  const { memories } = useMemoryStore();
+  const { entries: journalEntries } = useJournalStore();
+  
   const [selectedMood, setSelectedMood] = useState<MoodType | null>(null);
   const [energy, setEnergy] = useState(5);
   const [note, setNote] = useState('');
@@ -33,6 +38,23 @@ export default function MoodPage() {
     setNote('');
   };
 
+  const topThemes = useMemo(() => {
+    const counts: Record<string, number> = {};
+    const processThemes = (themes?: string[]) => {
+      themes?.forEach(t => {
+        const key = t.toLowerCase();
+        counts[key] = (counts[key] || 0) + 1;
+      });
+    };
+    memories.forEach(m => processThemes(m.themes));
+    journalEntries.forEach(j => processThemes(j.themes));
+    
+    return Object.entries(counts)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 4)
+      .map(([theme, count]) => ({ theme, count }));
+  }, [memories, journalEntries]);
+
   return (
     <div className="p-4 md:p-8 max-w-4xl mx-auto space-y-12">
       {/* Header */}
@@ -40,6 +62,26 @@ export default function MoodPage() {
         <h1 className="font-serif text-3xl text-itoura-dark">Mood Check-in</h1>
         <p className="text-gray-500 text-sm md:text-base">Take a moment to reflect on how you're feeling right now.</p>
       </header>
+      
+      {/* Insights & Patterns */}
+      {topThemes.length > 0 && (
+        <section className="bg-gradient-to-br from-itoura-primary/10 to-itoura-accent/5 rounded-3xl p-6 shadow-sm border border-itoura-primary/20">
+          <div className="flex items-center gap-2 mb-4">
+            <TrendingUp size={20} className="text-itoura-primary" />
+            <h2 className="font-serif text-xl text-itoura-dark">Recent Patterns</h2>
+          </div>
+          <p className="text-sm text-gray-600 mb-4">Based on your recent chats and journal entries, these themes have been on your mind:</p>
+          <div className="flex flex-wrap gap-3">
+            {topThemes.map((item, i) => (
+              <div key={i} className="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm text-sm border border-itoura-beige/50">
+                <Sparkles size={14} className="text-itoura-accent" />
+                <span className="font-medium text-itoura-dark capitalize">{item.theme}</span>
+                <span className="text-xs text-gray-400 bg-gray-50 px-2 py-0.5 rounded-full">{item.count}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Check-in Form */}
       <section className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-itoura-beige/50 space-y-8">

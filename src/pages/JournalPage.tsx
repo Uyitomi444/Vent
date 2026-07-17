@@ -66,12 +66,34 @@ export default function JournalPage() {
             className="text-2xl md:text-3xl font-serif text-itoura-dark bg-transparent border-none outline-none mb-4 placeholder:text-gray-400"
           />
           <div className="h-px bg-itoura-light/50 w-full mb-6"></div>
-          <textarea
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            placeholder="What's on your mind? This space is entirely yours..."
-            className="flex-1 resize-none bg-transparent border-none outline-none text-gray-700 leading-relaxed placeholder:text-gray-400 font-sans text-lg"
-          />
+          <div className="flex-1 relative flex flex-col">
+            <textarea
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              placeholder="What's on your mind? This space is entirely yours..."
+              className="flex-1 resize-none bg-transparent border-none outline-none text-gray-700 leading-relaxed placeholder:text-gray-400 font-sans text-lg pb-12"
+            />
+            <button
+              onClick={() => {
+                const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+                if (!SpeechRecognition) {
+                  alert("Voice input is not supported in this browser.");
+                  return;
+                }
+                const recognition = new SpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.onresult = (event: any) => {
+                  setContent(prev => prev + (prev.endsWith(' ') || prev.length === 0 ? '' : ' ') + event.results[0][0].transcript);
+                };
+                recognition.start();
+              }}
+              className="absolute bottom-2 right-2 p-3 bg-itoura-surface text-itoura-dark rounded-full shadow-sm hover:bg-itoura-light transition-colors"
+              title="Voice Dictation"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+            </button>
+          </div>
         </div>
       </div>
     );

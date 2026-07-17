@@ -38,12 +38,22 @@ export default function OnboardingPage() {
           </p>
         </div>
         
-        <div className="bg-white/60 p-6 md:p-8 rounded-3xl backdrop-blur-md text-itoura-dark text-left w-full max-w-lg mb-10 shadow-sm border border-white/40">
-          <p className="font-bold mb-3 flex items-center gap-3 text-lg">
-            <span className="bg-itoura-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm shadow-sm">!</span>
-            Complete Privacy
-          </p>
-          <p className="opacity-90 leading-relaxed">This is a peer-like supportive space. Your employer and HR department <b>cannot read your messages</b>. Your data is strictly yours.</p>
+        <div className="bg-white/60 p-6 md:p-8 rounded-3xl backdrop-blur-md text-itoura-dark text-left w-full max-w-lg mb-10 shadow-sm border border-white/40 space-y-4">
+          <div>
+            <p className="font-bold mb-2 flex items-center gap-3 text-lg">
+              <span className="bg-itoura-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-sm shadow-sm">!</span>
+              Complete Privacy
+            </p>
+            <p className="opacity-90 leading-relaxed text-sm">This is a peer-like supportive space. Your employer and HR department <b>cannot read your messages</b>. Your data is strictly yours.</p>
+          </div>
+          <div className="h-px bg-white border-t border-gray-200/50 my-2" />
+          <div>
+            <p className="font-bold mb-2 flex items-center gap-3 text-lg">
+              <span className="bg-itoura-dark text-white rounded-full w-6 h-6 flex items-center justify-center text-sm shadow-sm">+</span>
+              Complement to Therapy, Not Replacement
+            </p>
+            <p className="opacity-90 leading-relaxed text-sm">Itoura is a supportive companion designed to be a safe space to vent and process emotions. It is <b>not a replacement for professional therapy, counseling, or psychiatric care</b>.</p>
+          </div>
         </div>
         
         <Link to="/" className="w-full max-w-md bg-itoura-dark text-white py-4 md:py-5 rounded-full font-bold text-center shadow-[0_8px_30px_rgba(62,36,121,0.3)] hover:shadow-[0_8px_30px_rgba(62,36,121,0.4)] hover:-translate-y-0.5 transition-all z-10 text-lg">

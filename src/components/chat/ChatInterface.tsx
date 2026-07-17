@@ -1,12 +1,18 @@
 import { useState, useRef, useEffect } from 'react';
 import { useChatStore } from '../../store/chatStore';
-import { Send, AlertCircle } from 'lucide-react';
+import { useMemoryStore } from '../../store/memoryStore';
+import { generateSessionSummary } from '../../services/ai';
+import { Send, AlertCircle, Mic, MicOff, Save } from 'lucide-react';
 import itouraMascot from '../../assets/ABLE/itoura-mascot.jpeg';
 
 export default function ChatInterface() {
-  const { messages, isLoading, error, sendMessage } = useChatStore();
+  const { messages, isLoading, error, sendMessage, clearMessages } = useChatStore();
+  const { addMemory } = useMemoryStore();
   const [input, setInput] = useState('');
+  const [isRecording, setIsRecording] = useState(false);
+  const [isSummarizing, setIsSummarizing] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const recognitionRef = useRef<any>(null);
   
   const apiKey = import.meta.env.VITE_GROQ_API_KEY || ''; 
 
@@ -18,9 +24,57 @@ export default function ChatInterface() {
     scrollToBottom();
   }, [messages, isLoading]);
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+      if (SpeechRecognition) {
+        recognitionRef.current = new SpeechRecognition();
+        recognitionRef.current.continuous = true;
+        recognitionRef.current.interimResults = true;
+        
+        recognitionRef.current.onresult = (event: any) => {
+          let currentTranscript = '';
+          for (let i = event.resultIndex; i < event.results.length; ++i) {
+            currentTranscript += event.results[i][0].transcript;
+          }
+          setInput((prev) => prev + (prev.endsWith(' ') ? '' : ' ') + currentTranscript);
+        };
+
+        recognitionRef.current.onerror = (event: any) => {
+          console.error("Speech recognition error", event.error);
+          setIsRecording(false);
+        };
+
+        recognitionRef.current.onend = () => {
+          setIsRecording(false);
+        };
+      }
+    }
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+    };
+  }, []);
+
+  const toggleRecording = () => {
+    if (!recognitionRef.current) {
+      alert("Voice input is not supported in this browser.");
+      return;
+    }
+    if (isRecording) {
+      recognitionRef.current.stop();
+      setIsRecording(false);
+    } else {
+      recognitionRef.current.start();
+      setIsRecording(true);
+    }
+  };
+
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim() || isLoading) return;
+    if (isRecording) toggleRecording();
+    if (!input.trim() || isLoading || isSummarizing) return;
     
     if (!apiKey) {
       alert("Please add your VITE_GROQ_API_KEY to the .env file to talk to Itoura.");
@@ -32,12 +86,37 @@ export default function ChatInterface() {
     await sendMessage(content, apiKey);
   };
 
+  const handleSaveSession = async () => {
+    if (!apiKey || messages.length < 3) return;
+    setIsSummarizing(true);
+    const result = await generateSessionSummary(messages, apiKey);
+    if (result) {
+      addMemory(result.summary, result.themes);
+    }
+    clearMessages();
+    setIsSummarizing(false);
+  };
+
   return (
     <div className="flex flex-col h-full bg-itoura-surface/50 rounded-3xl overflow-hidden shadow-sm border border-white/50 relative">
+      {/* Header controls */}
+      {messages.length >= 3 && (
+        <div className="absolute top-4 right-4 z-10">
+          <button 
+            onClick={handleSaveSession}
+            disabled={isSummarizing || isLoading}
+            className="px-4 py-2 bg-white/80 backdrop-blur-sm border border-itoura-primary/20 text-itoura-dark text-sm font-medium rounded-full shadow-sm hover:bg-itoura-light transition-all flex items-center gap-2 disabled:opacity-50"
+          >
+            <Save size={16} />
+            {isSummarizing ? "Saving..." : "Save & Reflect"}
+          </button>
+        </div>
+      )}
+
       {/* Chat Messages Area */}
-      <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
+      <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 mt-10 md:mt-0">
         {messages.length === 1 && (
-          <div className="flex flex-col items-center justify-center mb-6 mt-2">
+          <div className="flex flex-col items-center justify-center mb-6 mt-8 md:mt-2">
             <img 
               src={itouraMascot} 
               alt="Itoura Mascot" 
@@ -61,7 +140,7 @@ export default function ChatInterface() {
           </div>
         ))}
         
-        {isLoading && (
+        {(isLoading || isSummarizing) && (
           <div className="flex justify-start">
             <img 
               src={itouraMascot} 
@@ -92,7 +171,7 @@ export default function ChatInterface() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Talk to Itoura..."
-            className="flex-1 max-h-32 min-h-[56px] py-4 pl-6 pr-14 bg-transparent outline-none resize-none font-sans"
+            className="flex-1 max-h-32 min-h-[56px] py-4 pl-6 pr-24 bg-transparent outline-none resize-none font-sans"
             onKeyDown={(e) => {
               if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
@@ -100,13 +179,22 @@ export default function ChatInterface() {
               }
             }}
           />
-          <button 
-            type="submit" 
-            disabled={!input.trim() || isLoading}
-            className="absolute right-2 bottom-2 p-2.5 bg-itoura-dark text-white rounded-full disabled:opacity-30 disabled:bg-gray-400 transition-all hover:scale-105 active:scale-95 flex items-center justify-center"
-          >
-            <Send size={18} className="ml-0.5" />
-          </button>
+          <div className="absolute right-2 bottom-2 flex items-center gap-1">
+            <button
+              type="button"
+              onClick={toggleRecording}
+              className={`p-2.5 rounded-full transition-all flex items-center justify-center ${isRecording ? 'bg-red-100 text-red-500 animate-pulse' : 'bg-transparent text-gray-400 hover:text-itoura-dark hover:bg-gray-50'}`}
+            >
+              {isRecording ? <MicOff size={18} /> : <Mic size={18} />}
+            </button>
+            <button 
+              type="submit" 
+              disabled={!input.trim() || isLoading || isSummarizing}
+              className="p-2.5 bg-itoura-dark text-white rounded-full disabled:opacity-30 disabled:bg-gray-400 transition-all hover:scale-105 active:scale-95 flex items-center justify-center"
+            >
+              <Send size={18} className="ml-0.5" />
+            </button>
+          </div>
         </form>
         {!apiKey && (
            <p className="text-xs text-center text-red-500 mt-2 font-medium">Missing VITE_GROQ_API_KEY in .env file</p>

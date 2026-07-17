@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { sendMessageToAI } from '../services/ai';
 import type { ChatMessage } from '../services/ai';
+import { useMemoryStore } from './memoryStore';
 
 interface ChatState {
   messages: ChatMessage[];
@@ -28,7 +29,12 @@ export const useChatStore = create<ChatState>((set, get) => ({
     }));
 
     try {
-      const responseContent = await sendMessageToAI(get().messages, apiKey);
+      // Get memory context
+      const memories = useMemoryStore.getState().memories;
+      const pastMemories = memories.map(m => m.summary);
+      
+      const responseContent = await sendMessageToAI(get().messages, apiKey, { pastMemories });
+      
       set((state) => ({
         messages: [...state.messages, { role: 'assistant', content: responseContent }],
         isLoading: false
