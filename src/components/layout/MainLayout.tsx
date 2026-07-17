@@ -1,10 +1,19 @@
-import { Outlet, Link, useLocation } from 'react-router-dom';
+import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import { Home, Book, Smile, Compass, Settings, HelpCircle } from 'lucide-react';
 import DailyMessagePopup from '../DailyMessagePopup';
 
 export default function MainLayout() {
   const location = useLocation();
+  const navigate = useNavigate();
   const isActive = (path: string) => location.pathname === path;
+
+  useEffect(() => {
+    const hasSeenOnboarding = localStorage.getItem('itoura-has-seen-onboarding');
+    if (!hasSeenOnboarding) {
+      navigate('/welcome');
+    }
+  }, [navigate]);
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-itoura-surface relative">

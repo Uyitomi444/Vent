@@ -18,6 +18,7 @@ export default function OnboardingPage() {
           <div className="pt-4">
             <Link 
               to="/" 
+              onClick={() => localStorage.setItem('itoura-has-seen-onboarding', 'true')}
               className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-itoura-dark text-white rounded-full font-medium text-lg shadow-[0_8px_30px_rgba(62,36,121,0.2)] hover:shadow-[0_8px_30px_rgba(62,36,121,0.3)] hover:-translate-y-0.5 transition-all"
             >
               Get Started <ArrowRight size={20} />
@@ -151,9 +152,10 @@ export default function OnboardingPage() {
           <div className="pt-4">
             <Link 
               to="/" 
-              className="inline-flex items-center justify-center gap-3 px-10 py-5 bg-itoura-dark text-white rounded-full font-medium text-lg shadow-[0_8px_30px_rgba(62,36,121,0.2)] hover:shadow-[0_8px_30px_rgba(62,36,121,0.3)] hover:-translate-y-0.5 transition-all"
+              onClick={() => localStorage.setItem('itoura-has-seen-onboarding', 'true')}
+              className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-itoura-dark text-white rounded-full font-medium text-lg shadow-[0_8px_30px_rgba(62,36,121,0.2)] hover:shadow-[0_8px_30px_rgba(62,36,121,0.3)] hover:-translate-y-0.5 transition-all"
             >
-              Start Chatting <ArrowRight size={20} />
+              Get Started <ArrowRight size={20} />
             </Link>
           </div>
         </div>
