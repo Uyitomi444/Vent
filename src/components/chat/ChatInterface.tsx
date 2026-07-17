@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useChatStore } from '../../store/chatStore';
 import { Send, AlertCircle } from 'lucide-react';
+import itouraMascot from '../../assets/ABLE/itoura-mascot.jpeg';
 
 export default function ChatInterface() {
   const { messages, isLoading, error, sendMessage } = useChatStore();
@@ -38,8 +39,8 @@ export default function ChatInterface() {
         {messages.length === 1 && (
           <div className="flex flex-col items-center justify-center mb-6 mt-2">
             <img 
-              src="/assets/illustrations/Figure_meditating_with_breath-cloud_2K_202607141335.jpeg" 
-              alt="Meditating figure" 
+              src={itouraMascot} 
+              alt="Itoura Mascot" 
               className="w-48 h-48 object-cover mix-blend-multiply opacity-80 rounded-3xl"
             />
           </div>
@@ -49,7 +50,7 @@ export default function ChatInterface() {
           <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             {msg.role === 'assistant' && (
               <img 
-                src="/assets/illustrations/AI_companion_listening_pose_2K_202607141347.jpeg" 
+                src={itouraMascot} 
                 alt="Itoura"
                 className="w-8 h-8 rounded-full object-cover mr-2 shrink-0 border border-itoura-dark/10 shadow-sm"
               />
@@ -63,7 +64,7 @@ export default function ChatInterface() {
         {isLoading && (
           <div className="flex justify-start">
             <img 
-              src="/assets/illustrations/AI_companion_idle_pose_2K_202607141345.jpeg" 
+              src={itouraMascot} 
               alt="Itoura thinking"
               className="w-8 h-8 rounded-full object-cover mr-2 shrink-0 border border-itoura-dark/10 shadow-sm"
             />

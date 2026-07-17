@@ -34,20 +34,37 @@ export default function SettingsPage() {
       </header>
 
       {/* Account Section (Placeholder) */}
-      <section className="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-itoura-beige/50">
-        <div className="flex items-center gap-4 mb-6">
-          <div className="w-16 h-16 bg-itoura-beige rounded-full flex items-center justify-center text-itoura-primary">
-            <User className="w-8 h-8" />
+      <section className="space-y-4">
+        <h3 className="font-medium text-gray-400 px-4 uppercase tracking-wider text-sm flex items-center gap-2">
+          <User size={16} /> Account
+        </h3>
+        <div className="bg-itoura-dark text-white rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 shadow-sm border border-itoura-primary/20 relative overflow-hidden">
+          {/* Decorative background elements */}
+          <div className="absolute -right-10 -top-10 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
+          
+          <div className="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center shrink-0 border border-white/20">
+            <User size={32} className="text-white/80" />
           </div>
-          <div>
-            <h2 className="text-xl font-medium text-itoura-dark">Guest User</h2>
-            <p className="text-sm text-gray-500">Local Storage Mode</p>
+          <div className="flex-1 text-center md:text-left z-10">
+            <h2 className="text-2xl font-serif mb-1">Employee Profile</h2>
+            <p className="text-itoura-light/70 text-sm mb-4">Linked to Your Organization</p>
+            <button className="w-full md:w-auto px-6 py-2.5 bg-white text-itoura-dark rounded-full font-medium text-sm hover:bg-gray-50 transition-colors shadow-sm flex items-center justify-center gap-2">
+              Sign in with Work Email <ChevronRight size={16} />
+            </button>
           </div>
         </div>
-        <button className="w-full py-3 bg-gray-50 hover:bg-gray-100 text-gray-700 font-medium rounded-xl transition-colors flex justify-between items-center px-4">
-          <span>Sign in with Google</span>
-          <ChevronRight className="w-5 h-5 text-gray-400" />
-        </button>
+      </section>
+
+      <section className="space-y-4">
+        <h3 className="font-medium text-gray-400 px-4 uppercase tracking-wider text-sm flex items-center gap-2">
+          <Shield size={16} /> Privacy & Trust
+        </h3>
+        <div className="bg-white rounded-3xl p-6 shadow-sm border border-itoura-beige/50">
+          <p className="text-sm text-gray-600 leading-relaxed">
+            <strong className="text-itoura-dark block mb-1">100% Confidential</strong>
+            Your HR department and employer cannot read your messages, view your mood logs, or access your journal entries. Itoura is a secure, judgement-free zone designed solely for your mental wellbeing.
+          </p>
+        </div>
       </section>
 
       {/* Preferences Section */}

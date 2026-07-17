@@ -8,13 +8,13 @@ export default {
     extend: {
       colors: {
         itoura: {
-          light: '#E9E3F5',
-          dark: '#4B3B7A',
-          surface: '#FAF9F6',
+          light: '#EBE5FC', /* Soft lilac background */
+          dark: '#3E2479', /* Deep logo purple */
+          surface: '#F8F6FC', /* Very light purple/white */
           text: '#2D2B33',
-          accent: '#7AB0D6',
+          accent: '#A855F7', /* Neon purple */
           beige: '#FAF9F6',
-          primary: '#4B3B7A'
+          primary: '#8559D6' /* Lighter purple from the logo petals */
         }
       },
       fontFamily: {
