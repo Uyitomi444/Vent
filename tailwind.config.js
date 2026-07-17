@@ -14,7 +14,7 @@ export default {
           text: '#2D2B33',
           accent: '#A855F7', /* Neon purple */
           beige: '#FAF9F6',
-          primary: '#8559D6' /* Lighter purple from the logo petals */
+          primary: '#9333EA' /* Vibrant purple from logo */
         }
       },
       fontFamily: {
