@@ -68,11 +68,11 @@ export default function DailyMessagePopup() {
             <X className="w-5 h-5" />
           </button>
           
-          <div className="h-64 w-full relative overflow-hidden bg-itoura-beige">
+          <div className="w-full aspect-square sm:h-64 sm:aspect-auto relative overflow-hidden bg-[#f4f7f6]">
             <img 
               src={content.image} 
               alt="Daily inspiration" 
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain p-4"
             />
             {/* Gradient overlay for text legibility if we wanted to overlay text */}
           </div>
