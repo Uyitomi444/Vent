@@ -6,8 +6,7 @@
 
 @layer base {
   body {
-    @apply font-sans text-itoura-text antialiased transition-colors duration-500;
-    background: linear-gradient(145deg, #E9E3F5 0%, #D8CFEA 40%, #4B3B7A 100%);
+    @apply font-sans text-itoura-text antialiased transition-colors duration-500 bg-itoura-surface;
     background-attachment: fixed;
     min-height: 100vh;
   }

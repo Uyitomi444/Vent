@@ -3,7 +3,7 @@ import itouraBrand from '../assets/ABLE/itoura-brand.jpeg';
 
 export default function OnboardingPage() {
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-br from-[#EBE5FC] via-[#F2EDFD] to-[#D8CFEA] p-8 relative overflow-hidden">
+    <div className="flex flex-col min-h-screen bg-itoura-surface p-8 relative overflow-hidden">
       {/* Decorative background elements */}
       <div className="absolute top-10 right-10 md:top-20 md:right-20 opacity-10 pointer-events-none">
         <svg width="200" height="200" viewBox="0 0 24 24" fill="none" stroke="#8559D6" strokeWidth="0.5" strokeLinecap="round" strokeLinejoin="round">

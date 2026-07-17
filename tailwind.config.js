@@ -8,9 +8,9 @@ export default {
     extend: {
       colors: {
         itoura: {
-          light: '#EBE5FC', /* Soft lilac background */
+          light: '#E5D0FF', /* Lighter soft purple */
           dark: '#3E2479', /* Deep logo purple */
-          surface: '#F8F6FC', /* Very light purple/white */
+          surface: '#D1A3FF', /* The requested soft purple theme */
           text: '#2D2B33',
           accent: '#A855F7', /* Neon purple */
           beige: '#FAF9F6',
