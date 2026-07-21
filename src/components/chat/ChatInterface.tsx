@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useChatStore } from '../../store/chatStore';
 import { useMemoryStore } from '../../store/memoryStore';
 import { generateSessionSummary } from '../../services/ai';
-import { Send, AlertCircle, Mic, MicOff, Save } from 'lucide-react';
+import { Send, AlertCircle, Mic, MicOff, Save, CloudRain, Sun, Zap, Coffee } from 'lucide-react';
 import itouraMascot from '../../assets/ABLE/itoura-mascot.jpeg';
 
 export default function ChatInterface() {
@@ -162,7 +162,37 @@ export default function ChatInterface() {
       </div>
 
       {/* Input Area */}
-      <div className="p-4 bg-white/40 backdrop-blur-md border-t border-gray-100">
+      <div className="p-4 bg-white/40 backdrop-blur-md border-t border-gray-100 flex flex-col relative z-20">
+        
+        {messages.length === 1 && !isLoading && !isSummarizing && (
+          <div className="flex gap-2 overflow-x-auto pb-3 mb-1 w-full hide-scrollbar">
+            <button 
+              onClick={() => setInput("I'm feeling pretty anxious today.")} 
+              className="flex items-center gap-2 px-4 py-2 bg-white rounded-full text-sm text-itoura-dark border border-itoura-dark/10 shadow-sm hover:bg-itoura-light transition-colors whitespace-nowrap"
+            >
+              <CloudRain size={16} className="text-itoura-dark/70" /> Anxious
+            </button>
+            <button 
+              onClick={() => setInput("I am completely exhausted.")} 
+              className="flex items-center gap-2 px-4 py-2 bg-white rounded-full text-sm text-itoura-dark border border-itoura-dark/10 shadow-sm hover:bg-itoura-light transition-colors whitespace-nowrap"
+            >
+              <Coffee size={16} className="text-itoura-dark/70" /> Exhausted
+            </button>
+            <button 
+              onClick={() => setInput("I feel really overwhelmed.")} 
+              className="flex items-center gap-2 px-4 py-2 bg-white rounded-full text-sm text-itoura-dark border border-itoura-dark/10 shadow-sm hover:bg-itoura-light transition-colors whitespace-nowrap"
+            >
+              <Zap size={16} className="text-itoura-dark/70" /> Overwhelmed
+            </button>
+            <button 
+              onClick={() => setInput("I'm actually doing okay.")} 
+              className="flex items-center gap-2 px-4 py-2 bg-white rounded-full text-sm text-itoura-dark border border-itoura-dark/10 shadow-sm hover:bg-itoura-light transition-colors whitespace-nowrap"
+            >
+              <Sun size={16} className="text-itoura-dark/70" /> Okay
+            </button>
+          </div>
+        )}
+
         <form onSubmit={handleSend} className="relative flex items-end bg-white rounded-3xl shadow-sm border border-gray-200 focus-within:border-itoura-dark focus-within:ring-2 focus-within:ring-itoura-light transition-all">
           <textarea
             value={input}

@@ -88,23 +88,33 @@ export default function ToolsPage() {
                 <button
                   key={tool.id}
                   onClick={() => setActiveTool(tool.id)}
-                  className="flex flex-col text-left p-6 bg-white rounded-3xl shadow-sm border border-itoura-beige/50 hover:shadow-md hover:border-itoura-beige transition-all group"
+                  className="flex flex-col text-left p-8 bg-itoura-light/30 rounded-[2rem] border border-itoura-primary/20 hover:bg-itoura-light/50 hover:scale-[1.02] hover:shadow-lg transition-all duration-300 group relative overflow-hidden"
                 >
-                  <div className="flex justify-between items-start w-full mb-4">
-                    <div className="p-3 bg-itoura-beige/30 rounded-2xl group-hover:scale-105 transition-transform">
+                  {/* Background decoration */}
+                  <div className="absolute -right-8 -top-8 w-32 h-32 bg-itoura-primary/10 rounded-full blur-2xl group-hover:bg-itoura-primary/20 transition-all"></div>
+                  
+                  <div className="flex justify-between items-start w-full mb-6 relative z-10">
+                    <div className="p-4 bg-white rounded-3xl shadow-sm border border-itoura-primary/10 group-hover:-rotate-3 transition-transform duration-300">
                       <SpriteIcon 
                         imageSrc={FourIcons} 
                         totalIcons={4} 
                         index={tool.spriteIndex} 
-                        size={48} 
+                        size={64} 
                       />
                     </div>
-                    <span className="text-xs font-medium text-gray-400 bg-gray-50 px-3 py-1 rounded-full">
+                    <span className="text-xs font-bold text-itoura-dark bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-full border border-itoura-primary/20 shadow-sm">
                       {tool.duration}
                     </span>
                   </div>
-                  <h3 className="text-lg font-medium text-itoura-dark mb-2">{tool.title}</h3>
-                  <p className="text-sm text-gray-500 line-clamp-2">{tool.description}</p>
+                  
+                  <h3 className="text-2xl font-serif font-medium text-itoura-dark mb-3 relative z-10">{tool.title}</h3>
+                  <p className="text-base text-gray-600 mb-8 relative z-10 flex-1">{tool.description}</p>
+                  
+                  <div className="w-full relative z-10 mt-auto">
+                    <span className="inline-flex items-center justify-center w-full py-3.5 bg-itoura-dark text-white rounded-2xl font-medium group-hover:bg-itoura-primary transition-colors">
+                      Begin Exercise
+                    </span>
+                  </div>
                 </button>
               );
             })}

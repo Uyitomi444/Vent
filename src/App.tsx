@@ -4,6 +4,7 @@ import HomePage from './pages/HomePage';
 import JournalPage from './pages/JournalPage';
 import MoodPage from './pages/MoodPage';
 import ToolsPage from './pages/ToolsPage';
+import ProgressPage from './pages/ProgressPage';
 import SettingsPage from './pages/SettingsPage';
 import OnboardingPage from './pages/OnboardingPage';
 import FAQPage from './pages/FAQPage';
@@ -18,6 +19,7 @@ function App() {
         <Route element={<MainLayout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/journal" element={<JournalPage />} />
+          <Route path="/progress" element={<ProgressPage />} />
           <Route path="/mood" element={<MoodPage />} />
           <Route path="/tools" element={<ToolsPage />} />
           <Route path="/settings" element={<SettingsPage />} />

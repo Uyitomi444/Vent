@@ -1,6 +1,6 @@
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import { Home, Book, Smile, Compass, Settings, HelpCircle } from 'lucide-react';
+import { Home, Book, Smile, Compass, Settings, HelpCircle, LineChart } from 'lucide-react';
 import DailyMessagePopup from '../DailyMessagePopup';
 
 import itouraLogo from '../../assets/ABLE/logo.png';
@@ -26,14 +26,15 @@ export default function MainLayout() {
           <img src={itouraLogo} alt="Itoura" className="h-10 md:h-12 object-contain" />
         </div>
         <nav className="flex flex-col gap-3 flex-1">
-          <NavItem to="/" icon={<Home size={22} strokeWidth={1.5} />} label="Chat" active={isActive('/')} desktop />
-          <NavItem to="/journal" icon={<Book size={22} strokeWidth={1.5} />} label="Journal" active={isActive('/journal')} desktop />
-          <NavItem to="/mood" icon={<Smile size={22} strokeWidth={1.5} />} label="Mood" active={isActive('/mood')} desktop />
-          <NavItem to="/tools" icon={<Compass size={22} strokeWidth={1.5} />} label="Tools" active={isActive('/tools')} desktop />
+          <NavItem to="/" icon={<Home size={22} strokeWidth={1.5} fill={isActive('/') ? "currentColor" : "none"} />} label="Chat" active={isActive('/')} desktop />
+          <NavItem to="/tools" icon={<Compass size={22} strokeWidth={1.5} fill={isActive('/tools') ? "currentColor" : "none"} />} label="Tools" active={isActive('/tools')} desktop />
+          <NavItem to="/progress" icon={<LineChart size={22} strokeWidth={1.5} fill={isActive('/progress') ? "currentColor" : "none"} />} label="Progress" active={isActive('/progress')} desktop />
+          <NavItem to="/journal" icon={<Book size={22} strokeWidth={1.5} fill={isActive('/journal') ? "currentColor" : "none"} />} label="Journal" active={isActive('/journal')} desktop />
+          <NavItem to="/mood" icon={<Smile size={22} strokeWidth={1.5} fill={isActive('/mood') ? "currentColor" : "none"} />} label="Mood" active={isActive('/mood')} desktop />
         </nav>
         <div className="mt-auto space-y-3">
-          <NavItem to="/faq" icon={<HelpCircle size={22} strokeWidth={1.5} />} label="FAQ" active={isActive('/faq')} desktop />
-          <NavItem to="/settings" icon={<Settings size={22} strokeWidth={1.5} />} label="Settings" active={isActive('/settings')} desktop />
+          <NavItem to="/faq" icon={<HelpCircle size={22} strokeWidth={1.5} fill={isActive('/faq') ? "currentColor" : "none"} />} label="FAQ" active={isActive('/faq')} desktop />
+          <NavItem to="/settings" icon={<Settings size={22} strokeWidth={1.5} fill={isActive('/settings') ? "currentColor" : "none"} />} label="Settings" active={isActive('/settings')} desktop />
         </div>
       </aside>
 
@@ -46,12 +47,11 @@ export default function MainLayout() {
 
       {/* Mobile Bottom Navigation */}
       <nav className="md:hidden fixed bottom-0 w-full bg-itoura-surface/90 backdrop-blur-md border-t border-gray-200 flex justify-around p-3 z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.05)] overflow-x-auto">
-        <NavItem to="/" icon={<Home size={22} strokeWidth={1.5} />} label="Chat" active={isActive('/')} />
-        <NavItem to="/journal" icon={<Book size={22} strokeWidth={1.5} />} label="Journal" active={isActive('/journal')} />
-        <NavItem to="/mood" icon={<Smile size={22} strokeWidth={1.5} />} label="Mood" active={isActive('/mood')} />
-        <NavItem to="/tools" icon={<Compass size={22} strokeWidth={1.5} />} label="Tools" active={isActive('/tools')} />
-        <NavItem to="/faq" icon={<HelpCircle size={22} strokeWidth={1.5} />} label="FAQ" active={isActive('/faq')} />
-        <NavItem to="/settings" icon={<Settings size={22} strokeWidth={1.5} />} label="Settings" active={isActive('/settings')} />
+        <NavItem to="/" icon={<Home size={22} strokeWidth={1.5} fill={isActive('/') ? "currentColor" : "none"} />} label="Chat" active={isActive('/')} />
+        <NavItem to="/tools" icon={<Compass size={22} strokeWidth={1.5} fill={isActive('/tools') ? "currentColor" : "none"} />} label="Tools" active={isActive('/tools')} />
+        <NavItem to="/progress" icon={<LineChart size={22} strokeWidth={1.5} fill={isActive('/progress') ? "currentColor" : "none"} />} label="Progress" active={isActive('/progress')} />
+        <NavItem to="/journal" icon={<Book size={22} strokeWidth={1.5} fill={isActive('/journal') ? "currentColor" : "none"} />} label="Journal" active={isActive('/journal')} />
+        <NavItem to="/settings" icon={<Settings size={22} strokeWidth={1.5} fill={isActive('/settings') ? "currentColor" : "none"} />} label="Settings" active={isActive('/settings')} />
       </nav>
     </div>
   );
