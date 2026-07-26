@@ -120,6 +120,13 @@ export default function JournalPage() {
       <div className="flex-1 overflow-y-auto pb-8 min-h-0">
         {entries.length === 0 ? (
           <div className="h-full flex flex-col items-center justify-center text-center px-4 py-12 bg-[#230D3E] rounded-3xl border border-purple-700/80 shadow-xl">
+            <div className="p-3 bg-purple-900/60 rounded-3xl border border-purple-700 mb-6 shadow-md">
+              <img 
+                src="/assets/illustrations/Notebook_with_pen_and_star_202607141352.jpeg" 
+                alt="Diary Notebook" 
+                className="w-44 h-44 object-cover mix-blend-screen opacity-90 rounded-2xl"
+              />
+            </div>
             <h3 className="text-2xl font-serif font-black text-[#E5D0FF] mb-2">No entries yet</h3>
             <p className="text-purple-200 font-bold max-w-md mx-auto mb-6">
               Writing down your feelings is a powerful way to process them. Start your first entry whenever you're ready.
