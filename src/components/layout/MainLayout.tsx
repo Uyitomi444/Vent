@@ -174,26 +174,6 @@ export default function MainLayout() {
             </div>
           </div>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-1 bg-purple-950/80 p-1.5 rounded-full border border-purple-800/70">
-            {navCategories.map((item) => {
-              const selected = isActive(item.path);
-              return (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  className={`px-4 py-1.5 rounded-full text-xs md:text-sm font-black transition-all ${
-                    selected
-                      ? 'bg-[#E5D0FF] text-purple-950 shadow-md scale-105'
-                      : 'text-purple-200 hover:text-white hover:bg-purple-900/80'
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              );
-            })}
-          </nav>
-
         </div>
       </header>
 
