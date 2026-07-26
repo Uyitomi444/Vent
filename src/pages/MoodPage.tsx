@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Trash2, TrendingUp, Sparkles } from 'lucide-react';
+import { Trash2, TrendingUp } from 'lucide-react';
 import { useMoodStore, type MoodType } from '../store/moodStore';
 import { useMemoryStore } from '../store/memoryStore';
 import { useJournalStore } from '../store/journalStore';
@@ -53,35 +53,34 @@ export default function MoodPage() {
     <div className="p-4 md:p-8 max-w-4xl mx-auto space-y-10">
       {/* Header */}
       <header className="space-y-2">
-        <h1 className="font-serif text-3xl md:text-4xl font-black text-purple-950">Mood Check-in</h1>
-        <p className="text-purple-900/80 font-bold text-sm md:text-base">Take a moment to reflect on how you're feeling right now.</p>
+        <h1 className="font-serif text-3xl md:text-4xl font-black text-[#E5D0FF]">Mood Check-in</h1>
+        <p className="text-purple-300 font-bold text-sm md:text-base">Take a moment to reflect on how you're feeling right now.</p>
       </header>
       
       {/* Insights & Patterns */}
       {topThemes.length > 0 && (
-        <section className="bg-[#E9D5FF] rounded-3xl p-6 shadow-lg border-2 border-purple-400">
+        <section className="bg-[#230D3E] rounded-3xl p-6 shadow-xl border border-purple-700/80">
           <div className="flex items-center gap-2 mb-4">
-            <TrendingUp size={22} className="text-purple-900" />
-            <h2 className="font-serif text-xl font-black text-black">Recent Patterns</h2>
+            <TrendingUp size={22} className="text-[#E5D0FF]" />
+            <h2 className="font-serif text-xl font-black text-[#E5D0FF]">Recent Patterns</h2>
           </div>
-          <p className="text-sm font-bold text-purple-950 mb-4">Based on your recent chats and journal entries, these themes have been on your mind:</p>
+          <p className="text-sm font-bold text-purple-200 mb-4">Based on your recent chats and journal entries, these themes have been on your mind:</p>
           <div className="flex flex-wrap gap-3">
             {topThemes.map((item, i) => (
-              <div key={i} className="flex items-center gap-2 bg-purple-950 text-white px-4 py-2 rounded-full shadow-md text-sm border border-purple-500">
-                <Sparkles size={14} className="text-purple-300" />
-                <span className="font-extrabold capitalize">{item.theme}</span>
-                <span className="text-xs font-black text-purple-200 bg-purple-800 px-2 py-0.5 rounded-full">{item.count}</span>
+              <div key={i} className="flex items-center gap-2 bg-[#E5D0FF] text-purple-950 px-4 py-2 rounded-full shadow-md text-sm font-black border border-purple-300">
+                <span className="capitalize">{item.theme}</span>
+                <span className="text-xs font-black text-white bg-purple-900 px-2 py-0.5 rounded-full">{item.count}</span>
               </div>
             ))}
           </div>
         </section>
       )}
 
-      {/* Check-in Form in Vibrant Purple Box */}
-      <section className="bg-[#E9D5FF] rounded-3xl p-6 md:p-8 shadow-xl border-2 border-purple-500 space-y-8">
+      {/* Check-in Form in Dark Purple Box */}
+      <section className="bg-[#230D3E] rounded-3xl p-6 md:p-8 shadow-2xl border border-purple-700/80 space-y-8">
         {/* Mood Selection */}
         <div className="space-y-4">
-          <label className="block text-base font-black text-black">How are you feeling?</label>
+          <label className="block text-base font-black text-[#E5D0FF]">How are you feeling?</label>
           <div className="grid grid-cols-5 gap-2 md:gap-4">
             {MOODS.map(({ type, spriteIndex, label }) => {
               const isSelected = selectedMood === type;
@@ -91,8 +90,8 @@ export default function MoodPage() {
                   onClick={() => setSelectedMood(type)}
                   className={`flex flex-col items-center justify-center p-3 md:p-4 rounded-3xl transition-all duration-300 cursor-pointer ${
                     isSelected 
-                      ? 'bg-purple-950 text-white border-2 border-purple-400 scale-105 shadow-lg' 
-                      : 'bg-purple-300/60 border-2 border-purple-400/50 hover:bg-purple-300 opacity-90'
+                      ? 'bg-[#E5D0FF] text-purple-950 border-2 border-white scale-105 shadow-xl' 
+                      : 'bg-purple-900/60 border border-purple-700/60 hover:bg-purple-900 text-purple-200'
                   }`}
                 >
                   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
@@ -104,7 +103,7 @@ export default function MoodPage() {
                       className={isSelected ? 'scale-110 transition-transform' : ''}
                     />
                   </motion.div>
-                  <span className={`text-xs md:text-sm font-extrabold mt-2 ${isSelected ? 'text-purple-200' : 'text-purple-950'}`}>
+                  <span className={`text-xs md:text-sm font-extrabold mt-2 ${isSelected ? 'text-purple-950' : 'text-purple-200'}`}>
                     {label}
                   </span>
                 </button>
@@ -116,8 +115,8 @@ export default function MoodPage() {
         {/* Energy Slider */}
         <div className="space-y-4">
           <div className="flex justify-between items-center">
-            <label className="block text-base font-black text-black">Energy Level</label>
-            <span className="text-sm font-black text-white bg-purple-950 px-4 py-1.5 rounded-full border border-purple-400 shadow-sm">{energy}/10</span>
+            <label className="block text-base font-black text-[#E5D0FF]">Energy Level</label>
+            <span className="text-sm font-black text-purple-950 bg-[#E5D0FF] px-4 py-1.5 rounded-full border border-purple-300 shadow-sm">{energy}/10</span>
           </div>
           <input
             type="range"
@@ -125,22 +124,22 @@ export default function MoodPage() {
             max="10"
             value={energy}
             onChange={(e) => setEnergy(Number(e.target.value))}
-            className="w-full h-3 bg-purple-300 rounded-lg appearance-none cursor-pointer accent-purple-900"
+            className="w-full h-3 bg-purple-900 rounded-lg appearance-none cursor-pointer accent-[#E5D0FF]"
           />
-          <div className="flex justify-between text-xs font-black text-purple-950">
+          <div className="flex justify-between text-xs font-black text-purple-300">
             <span>Exhausted</span>
             <span>Energized</span>
           </div>
         </div>
 
-        {/* Note: Purple space with Bold Black Text */}
+        {/* Note */}
         <div className="space-y-4">
-          <label className="block text-base font-black text-black">Add a note (optional)</label>
+          <label className="block text-base font-black text-[#E5D0FF]">Add a note (optional)</label>
           <textarea
             value={note}
             onChange={(e) => setNote(e.target.value)}
             placeholder="What's making you feel this way?"
-            className="w-full p-4 bg-purple-200/90 border-2 border-purple-500 rounded-2xl resize-none outline-none focus:border-purple-800 transition-colors h-24 text-base font-bold text-black placeholder:text-purple-950/60"
+            className="w-full p-4 bg-[#E5D0FF] border-2 border-purple-400 rounded-2xl resize-none outline-none focus:border-white transition-colors h-24 text-base font-bold text-purple-950 placeholder:text-purple-900/60"
           />
         </div>
 
@@ -148,7 +147,7 @@ export default function MoodPage() {
         <button
           onClick={handleSave}
           disabled={!selectedMood}
-          className="w-full py-4 rounded-2xl bg-purple-950 text-white font-black text-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-purple-800 transition-all shadow-lg border-2 border-purple-400 cursor-pointer"
+          className="w-full py-4 rounded-2xl bg-[#E5D0FF] text-purple-950 font-black text-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-white transition-all shadow-xl cursor-pointer"
         >
           Save Check-in
         </button>
@@ -156,7 +155,7 @@ export default function MoodPage() {
 
       {/* History */}
       <section className="space-y-6">
-        <h2 className="font-serif text-2xl md:text-3xl font-black text-purple-950">Recent History</h2>
+        <h2 className="font-serif text-2xl md:text-3xl font-black text-[#E5D0FF]">Recent History</h2>
         
         <div className="space-y-4">
           <AnimatePresence>
@@ -164,9 +163,9 @@ export default function MoodPage() {
               <motion.div 
                 initial={{ opacity: 0 }} 
                 animate={{ opacity: 1 }} 
-                className="text-center p-8 bg-[#E9D5FF] rounded-3xl border-2 border-purple-400 shadow-md"
+                className="text-center p-8 bg-[#230D3E] rounded-3xl border border-purple-700 shadow-lg"
               >
-                <p className="text-purple-950 font-bold text-base">No check-ins yet. Start tracking your mood above.</p>
+                <p className="text-purple-200 font-bold text-base">No check-ins yet. Start tracking your mood above.</p>
               </motion.div>
             ) : (
               entries.map((entry) => {
@@ -178,9 +177,9 @@ export default function MoodPage() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95 }}
-                    className="flex items-start gap-4 p-5 bg-[#E9D5FF] rounded-3xl shadow-lg border-2 border-purple-400/90"
+                    className="flex items-start gap-4 p-5 bg-[#230D3E] rounded-3xl shadow-xl border border-purple-700/80"
                   >
-                    <div className="bg-purple-950 rounded-2xl p-1 shadow-md">
+                    <div className="bg-purple-900 rounded-2xl p-1 shadow-inner">
                       {moodConfig && (
                         <SpriteIcon 
                           imageSrc={FiveIcons} 
@@ -194,18 +193,18 @@ export default function MoodPage() {
                     <div className="flex-1 mt-1">
                       <div className="flex justify-between items-start">
                         <div>
-                          <h3 className="font-black text-black text-lg capitalize">{entry.mood}</h3>
-                          <span className="text-xs font-bold text-purple-900">
+                          <h3 className="font-black text-[#E5D0FF] text-lg capitalize">{entry.mood}</h3>
+                          <span className="text-xs font-bold text-purple-300">
                             {new Date(entry.timestamp).toLocaleDateString()} at {new Date(entry.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
                           </span>
                         </div>
                         <div className="flex items-center gap-3">
-                          <span className="text-xs font-black bg-purple-950 text-white px-3 py-1 rounded-full border border-purple-400">
+                          <span className="text-xs font-black bg-[#E5D0FF] text-purple-950 px-3 py-1 rounded-full border border-purple-300">
                             Energy: {entry.energyLevel}/10
                           </span>
                           <button 
                             onClick={() => deleteEntry(entry.id)}
-                            className="p-1.5 text-purple-950 hover:text-red-600 hover:bg-red-100 rounded-lg transition-colors cursor-pointer"
+                            className="p-1.5 text-purple-300 hover:text-red-400 hover:bg-purple-900 rounded-lg transition-colors cursor-pointer"
                           >
                             <Trash2 className="w-5 h-5" />
                           </button>
@@ -213,7 +212,7 @@ export default function MoodPage() {
                       </div>
                       
                       {entry.note && (
-                        <p className="mt-3 text-sm font-bold text-black bg-purple-300/80 p-3 rounded-xl border border-purple-400">
+                        <p className="mt-3 text-sm font-bold text-purple-100 bg-purple-900/80 p-3 rounded-xl border border-purple-700">
                           "{entry.note}"
                         </p>
                       )}

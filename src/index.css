@@ -2,11 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Using SF Pro (system default on Apple devices) */
-
 @layer base {
   body {
-    @apply font-sans text-itoura-text antialiased transition-colors duration-500 bg-itoura-surface;
+    @apply font-sans text-purple-100 antialiased transition-colors duration-500 bg-[#18082D];
     background-attachment: fixed;
     min-height: 100vh;
   }

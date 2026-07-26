@@ -8,13 +8,13 @@ export default {
     extend: {
       colors: {
         itoura: {
-          light: '#E5D0FF', /* Lighter soft purple */
-          dark: '#3E2479', /* Deep logo purple */
-          surface: '#D1A3FF', /* The requested soft purple theme */
-          text: '#2D2B33',
-          accent: '#A855F7', /* Neon purple */
-          beige: '#FAF9F6',
-          primary: '#9333EA' /* Vibrant purple from logo */
+          light: '#3E2479', /* Swapped: Was light, now deep purple */
+          dark: '#E5D0FF', /* Swapped: Was dark, now soft light purple */
+          surface: '#18082D', /* Swapped: Deep dark background canvas */
+          text: '#F5EEFF', /* Swapped: Light crisp text */
+          accent: '#A855F7',
+          beige: '#2B124C',
+          primary: '#C084FC' /* Vibrant light violet */
         }
       },
       fontFamily: {

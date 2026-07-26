@@ -60,8 +60,8 @@ export default function ToolsPage() {
     <div className="p-4 md:p-8 max-w-4xl mx-auto space-y-8">
       {/* Header */}
       <header className="space-y-2">
-        <h1 className="font-serif text-3xl md:text-4xl font-black text-purple-950">Wellness Tools</h1>
-        <p className="text-purple-900/80 font-bold text-sm md:text-base">Take a moment for yourself. Choose an exercise to help you reset.</p>
+        <h1 className="font-serif text-3xl md:text-4xl font-black text-[#E5D0FF]">Wellness Tools</h1>
+        <p className="text-purple-300 font-bold text-sm md:text-base">Take a moment for yourself. Choose an exercise to help you reset.</p>
       </header>
 
       <AnimatePresence mode="wait">
@@ -87,13 +87,13 @@ export default function ToolsPage() {
                 <button
                   key={tool.id}
                   onClick={() => setActiveTool(tool.id)}
-                  className="flex flex-col text-left p-8 bg-[#E9D5FF] rounded-[2rem] border-2 border-purple-500 hover:bg-purple-200 hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 group relative overflow-hidden shadow-xl cursor-pointer"
+                  className="flex flex-col text-left p-8 bg-[#230D3E] rounded-[2rem] border border-purple-700/80 hover:bg-purple-900/80 hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 group relative overflow-hidden shadow-xl cursor-pointer"
                 >
                   {/* Background decoration */}
-                  <div className="absolute -right-8 -top-8 w-36 h-36 bg-purple-400/30 rounded-full blur-2xl group-hover:bg-purple-400/50 transition-all"></div>
+                  <div className="absolute -right-8 -top-8 w-36 h-36 bg-purple-600/20 rounded-full blur-2xl group-hover:bg-purple-600/40 transition-all"></div>
                   
                   <div className="flex justify-between items-start w-full mb-6 relative z-10">
-                    <div className="p-3.5 bg-purple-950 rounded-3xl shadow-md border border-purple-500 group-hover:-rotate-3 transition-transform duration-300">
+                    <div className="p-3.5 bg-purple-900 rounded-3xl shadow-inner border border-purple-700 group-hover:-rotate-3 transition-transform duration-300">
                       <SpriteIcon 
                         imageSrc={FourIcons} 
                         totalIcons={4} 
@@ -101,16 +101,16 @@ export default function ToolsPage() {
                         size={64} 
                       />
                     </div>
-                    <span className="text-xs font-black text-white bg-purple-950 px-3.5 py-1.5 rounded-full border border-purple-400 shadow-md">
+                    <span className="text-xs font-black text-purple-950 bg-[#E5D0FF] px-3.5 py-1.5 rounded-full border border-purple-300 shadow-md">
                       {tool.duration}
                     </span>
                   </div>
                   
-                  <h3 className="text-2xl font-serif font-black text-black mb-3 relative z-10">{tool.title}</h3>
-                  <p className="text-base font-bold text-purple-950 mb-8 relative z-10 flex-1 leading-relaxed">{tool.description}</p>
+                  <h3 className="text-2xl font-serif font-black text-[#E5D0FF] mb-3 relative z-10">{tool.title}</h3>
+                  <p className="text-base font-bold text-purple-200 mb-8 relative z-10 flex-1 leading-relaxed">{tool.description}</p>
                   
                   <div className="w-full relative z-10 mt-auto">
-                    <span className="inline-flex items-center justify-center w-full py-4 bg-purple-950 text-white rounded-2xl font-black text-base border-2 border-purple-400 group-hover:bg-purple-800 transition-colors shadow-md">
+                    <span className="inline-flex items-center justify-center w-full py-4 bg-[#E5D0FF] text-purple-950 rounded-2xl font-black text-base border border-purple-300 group-hover:bg-white transition-colors shadow-md">
                       Begin Exercise
                     </span>
                   </div>

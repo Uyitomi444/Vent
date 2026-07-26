@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronDown, MessageCircleHeart, Sparkles } from 'lucide-react';
+import { ChevronDown, MessageCircleHeart } from 'lucide-react';
 
 interface FAQ {
   question: string;
@@ -110,21 +110,21 @@ function AccordionItem({ item }: { item: FAQ }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="border-2 border-purple-500 bg-[#E9D5FF] rounded-2xl overflow-hidden shadow-md transition-all mb-3">
+    <div className="border border-purple-700/80 bg-[#230D3E] rounded-2xl overflow-hidden shadow-lg transition-all mb-3">
       <button 
-        className="w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none hover:bg-purple-200 transition-colors cursor-pointer"
+        className="w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none hover:bg-purple-900/60 transition-colors cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span className="font-extrabold text-black text-lg pr-4">{item.question}</span>
+        <span className="font-extrabold text-[#E5D0FF] text-lg pr-4">{item.question}</span>
         <ChevronDown 
-          className={`shrink-0 text-purple-950 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} 
+          className={`shrink-0 text-purple-300 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} 
           size={22} 
         />
       </button>
       <div 
         className={`px-6 overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-96 pb-5 opacity-100' : 'max-h-0 opacity-0'}`}
       >
-        <p className="text-black font-bold leading-relaxed text-sm md:text-base bg-purple-300/80 p-4 rounded-xl border border-purple-400">
+        <p className="text-purple-100 font-bold leading-relaxed text-sm md:text-base bg-purple-950 p-4 rounded-xl border border-purple-800">
           {item.answer}
         </p>
       </div>
@@ -137,16 +137,15 @@ export default function FAQPage() {
     <div className="max-w-4xl mx-auto space-y-10 pb-16 pt-4 px-4 md:px-8">
       {/* Header */}
       <header className="text-center space-y-3 mb-10">
-        <h1 className="font-serif text-4xl md:text-5xl text-purple-950 font-black tracking-tight">Frequently Asked Questions</h1>
-        <p className="text-purple-900/80 font-bold text-lg">Everything you need to know about your new companion.</p>
+        <h1 className="font-serif text-4xl md:text-5xl text-[#E5D0FF] font-black tracking-tight">Frequently Asked Questions</h1>
+        <p className="text-purple-300 font-bold text-lg">Everything you need to know about your new companion.</p>
       </header>
 
       {/* FAQ Categories */}
       <div className="space-y-10">
         {FAQ_DATA.map((category, idx) => (
           <section key={idx}>
-            <h2 className="text-xs font-black text-purple-950 uppercase tracking-widest mb-4 px-2 flex items-center gap-1.5">
-              <Sparkles size={14} className="text-purple-700" />
+            <h2 className="text-xs font-black text-purple-300 uppercase tracking-widest mb-4 px-2">
               {category.title}
             </h2>
             <div className="space-y-3">
@@ -159,18 +158,18 @@ export default function FAQPage() {
       </div>
 
       {/* Contact Block */}
-      <div className="mt-16 bg-[#E9D5FF] border-2 border-purple-500 rounded-3xl p-8 md:p-10 text-center shadow-xl relative overflow-hidden">
-        <div className="absolute top-0 right-0 p-8 opacity-10 mix-blend-multiply">
-          <MessageCircleHeart size={140} className="text-purple-950" />
+      <div className="mt-16 bg-[#230D3E] border border-purple-700/80 rounded-3xl p-8 md:p-10 text-center shadow-2xl relative overflow-hidden">
+        <div className="absolute top-0 right-0 p-8 opacity-10 mix-blend-screen">
+          <MessageCircleHeart size={140} className="text-purple-300" />
         </div>
         <div className="relative z-10">
-          <h3 className="font-serif text-2xl font-black text-black mb-3">Still have questions?</h3>
-          <p className="text-purple-950 font-bold mb-6 max-w-md mx-auto">
+          <h3 className="font-serif text-2xl font-black text-[#E5D0FF] mb-3">Still have questions?</h3>
+          <p className="text-purple-200 font-bold mb-6 max-w-md mx-auto">
             We're always here to help you navigate Itoura. Reach out to our support team and we'll get back to you shortly.
           </p>
           <a 
             href="mailto:support@itoura.com" 
-            className="inline-block px-8 py-3.5 bg-purple-950 text-white rounded-full font-black hover:bg-purple-800 transition-all shadow-lg hover:scale-105 border-2 border-purple-400"
+            className="inline-block px-8 py-3.5 bg-[#E5D0FF] text-purple-950 rounded-full font-black hover:bg-white transition-all shadow-lg hover:scale-105 border border-purple-300"
           >
             Contact Support
           </a>

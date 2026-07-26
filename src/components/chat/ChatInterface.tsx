@@ -95,17 +95,17 @@ export default function ChatInterface() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#F7F0FF] rounded-3xl overflow-hidden shadow-xl border border-purple-200/80 relative">
+    <div className="flex flex-col h-full bg-[#230D3E] rounded-3xl overflow-hidden shadow-2xl border border-purple-700/80 relative">
       
-      {/* Save Session Header */}
+      {/* Save Session Header Button (Light Purple Button) */}
       {messages.length >= 3 && (
         <div className="absolute top-4 right-4 z-10">
           <button 
             onClick={handleSaveSession}
             disabled={isSummarizing || isLoading}
-            className="px-4 py-2 bg-purple-950 text-white font-bold text-xs md:text-sm rounded-full shadow-sm hover:bg-purple-800 transition-all flex items-center gap-2 disabled:opacity-50 cursor-pointer"
+            className="px-4 py-2 bg-[#E5D0FF] text-purple-950 font-black text-xs md:text-sm rounded-full shadow-md hover:bg-white transition-all flex items-center gap-2 disabled:opacity-50 cursor-pointer"
           >
-            <Save size={15} className="text-purple-200" />
+            <Save size={15} className="text-purple-900" />
             {isSummarizing ? "Saving Memory..." : "Save & Reflect"}
           </button>
         </div>
@@ -115,15 +115,14 @@ export default function ChatInterface() {
       <div className="flex-1 overflow-y-auto p-5 md:p-8 space-y-6">
         {messages.length === 1 && (
           <div className="flex flex-col items-center justify-center mb-6 mt-4">
-            <div className="p-2 bg-purple-100 rounded-full border border-purple-200 shadow-sm mb-3">
+            <div className="p-2 bg-purple-900/60 rounded-full border border-purple-700 shadow-inner mb-3">
               <img 
                 src={itouraMascot} 
                 alt="Itoura Mascot" 
-                className="w-36 h-36 md:w-44 md:h-44 object-cover mix-blend-multiply opacity-90 rounded-full"
+                className="w-36 h-36 md:w-44 md:h-44 object-cover mix-blend-screen opacity-90 rounded-full"
               />
             </div>
-            {/* NO AI SPARKLES EMOJI HERE! */}
-            <p className="text-purple-900 font-extrabold text-xs tracking-widest uppercase">
+            <p className="text-purple-300 font-extrabold text-xs tracking-widest uppercase">
               ITOURA COMPANION
             </p>
           </div>
@@ -135,15 +134,15 @@ export default function ChatInterface() {
               <img 
                 src={itouraMascot} 
                 alt="Itoura"
-                className="w-9 h-9 rounded-full object-cover mr-3 shrink-0 border border-purple-300 shadow-sm"
+                className="w-9 h-9 rounded-full object-cover mr-3 shrink-0 border border-purple-500 shadow-md"
               />
             )}
             
-            {/* Message Bubble: Clean Minimalist Styling */}
-            <div className={`max-w-[78%] rounded-3xl p-4 md:p-5 shadow-sm ${
+            {/* Inverted Message Bubbles */}
+            <div className={`max-w-[78%] rounded-3xl p-4 md:p-5 shadow-md ${
               msg.role === 'user' 
-                ? 'bg-purple-950 text-white font-bold rounded-br-none' 
-                : 'bg-white text-purple-950 font-bold border border-purple-200/90 rounded-bl-none'
+                ? 'bg-[#E5D0FF] text-purple-950 font-black border border-purple-300 rounded-br-none' 
+                : 'bg-[#361660] text-purple-100 font-bold border border-purple-600/70 rounded-bl-none'
             }`}>
               <p className="text-[15px] md:text-base leading-relaxed whitespace-pre-wrap font-bold">
                 {msg.content}
@@ -157,65 +156,65 @@ export default function ChatInterface() {
             <img 
               src={itouraMascot} 
               alt="Itoura thinking"
-              className="w-9 h-9 rounded-full object-cover mr-3 shrink-0 border border-purple-300 shadow-sm"
+              className="w-9 h-9 rounded-full object-cover mr-3 shrink-0 border border-purple-500 shadow-md"
             />
-            <div className="bg-white border border-purple-200 rounded-3xl rounded-bl-none p-4 flex gap-1.5 items-center h-[52px] shadow-sm">
-              <div className="w-2.5 h-2.5 bg-purple-950 rounded-full animate-bounce"></div>
-              <div className="w-2.5 h-2.5 bg-purple-950 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-              <div className="w-2.5 h-2.5 bg-purple-950 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+            <div className="bg-[#361660] border border-purple-600/70 rounded-3xl rounded-bl-none p-4 flex gap-1.5 items-center h-[52px] shadow-md">
+              <div className="w-2.5 h-2.5 bg-purple-200 rounded-full animate-bounce"></div>
+              <div className="w-2.5 h-2.5 bg-purple-200 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+              <div className="w-2.5 h-2.5 bg-purple-200 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
             </div>
           </div>
         )}
         
         {error && (
-          <div className="bg-red-50 text-red-950 font-bold border border-red-200 p-4 rounded-2xl text-sm flex items-start gap-2 max-w-[85%] mx-auto mt-4 shadow-sm">
-            <AlertCircle size={20} className="shrink-0 text-red-700 mt-0.5" />
+          <div className="bg-red-950 text-red-100 font-bold border border-red-700 p-4 rounded-2xl text-sm flex items-start gap-2 max-w-[85%] mx-auto mt-4 shadow-md">
+            <AlertCircle size={20} className="shrink-0 text-red-400 mt-0.5" />
             <p className="font-bold">{error}</p>
           </div>
         )}
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input Area: Clean, Spacious, Minimalist Input Container */}
-      <div className="p-4 md:p-6 bg-white/70 backdrop-blur-xl border-t border-purple-200 flex flex-col relative z-20">
+      {/* Input Area */}
+      <div className="p-4 md:p-6 bg-[#1A0930]/90 backdrop-blur-xl border-t border-purple-800 flex flex-col relative z-20">
         
-        {/* Mood Quick-Reply Chips: Clean & Spaced */}
+        {/* Quick Reply Chips: Light Purple Buttons with Dark Text */}
         {messages.length === 1 && !isLoading && !isSummarizing && (
           <div className="flex gap-2.5 overflow-x-auto pb-3 mb-2 w-full hide-scrollbar">
             <button 
               onClick={() => setInput("I'm feeling pretty anxious today.")} 
-              className="flex items-center gap-2 px-4 py-2 bg-white text-purple-950 font-bold border border-purple-200 rounded-full text-xs md:text-sm shadow-sm hover:bg-purple-100 transition-all whitespace-nowrap cursor-pointer"
+              className="flex items-center gap-2 px-4 py-2 bg-[#E5D0FF] text-purple-950 font-black border border-purple-300 rounded-full text-xs md:text-sm shadow-md hover:bg-white transition-all whitespace-nowrap cursor-pointer"
             >
-              <CloudRain size={16} className="text-purple-700" /> Anxious
+              <CloudRain size={16} className="text-purple-900" /> Anxious
             </button>
             <button 
               onClick={() => setInput("I am completely exhausted.")} 
-              className="flex items-center gap-2 px-4 py-2 bg-white text-purple-950 font-bold border border-purple-200 rounded-full text-xs md:text-sm shadow-sm hover:bg-purple-100 transition-all whitespace-nowrap cursor-pointer"
+              className="flex items-center gap-2 px-4 py-2 bg-[#E5D0FF] text-purple-950 font-black border border-purple-300 rounded-full text-xs md:text-sm shadow-md hover:bg-white transition-all whitespace-nowrap cursor-pointer"
             >
-              <Coffee size={16} className="text-purple-700" /> Exhausted
+              <Coffee size={16} className="text-purple-900" /> Exhausted
             </button>
             <button 
               onClick={() => setInput("I feel really overwhelmed.")} 
-              className="flex items-center gap-2 px-4 py-2 bg-white text-purple-950 font-bold border border-purple-200 rounded-full text-xs md:text-sm shadow-sm hover:bg-purple-100 transition-all whitespace-nowrap cursor-pointer"
+              className="flex items-center gap-2 px-4 py-2 bg-[#E5D0FF] text-purple-950 font-black border border-purple-300 rounded-full text-xs md:text-sm shadow-md hover:bg-white transition-all whitespace-nowrap cursor-pointer"
             >
-              <Zap size={16} className="text-purple-700" /> Overwhelmed
+              <Zap size={16} className="text-purple-900" /> Overwhelmed
             </button>
             <button 
               onClick={() => setInput("I'm actually doing okay.")} 
-              className="flex items-center gap-2 px-4 py-2 bg-white text-purple-950 font-bold border border-purple-200 rounded-full text-xs md:text-sm shadow-sm hover:bg-purple-100 transition-all whitespace-nowrap cursor-pointer"
+              className="flex items-center gap-2 px-4 py-2 bg-[#E5D0FF] text-purple-950 font-black border border-purple-300 rounded-full text-xs md:text-sm shadow-md hover:bg-white transition-all whitespace-nowrap cursor-pointer"
             >
-              <Sun size={16} className="text-purple-700" /> Okay
+              <Sun size={16} className="text-purple-900" /> Okay
             </button>
           </div>
         )}
 
-        {/* Text Input Form */}
-        <form onSubmit={handleSend} className="relative flex items-end bg-white rounded-2xl shadow-sm border border-purple-300 focus-within:border-purple-600 focus-within:ring-2 focus-within:ring-purple-200 transition-all">
+        {/* Text Input Form: Light Purple space with Bold Dark Text */}
+        <form onSubmit={handleSend} className="relative flex items-end bg-[#E5D0FF] rounded-2xl shadow-lg border-2 border-purple-400 focus-within:border-white focus-within:ring-2 focus-within:ring-purple-300 transition-all">
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Talk to Itoura..."
-            className="flex-1 max-h-32 min-h-[58px] py-4 pl-5 pr-24 bg-transparent outline-none resize-none font-bold text-purple-950 placeholder:text-purple-400 text-base"
+            className="flex-1 max-h-32 min-h-[58px] py-4 pl-5 pr-24 bg-transparent outline-none resize-none font-bold text-purple-950 placeholder:text-purple-900/60 text-base"
             onKeyDown={(e) => {
               if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
@@ -228,7 +227,7 @@ export default function ChatInterface() {
               type="button"
               onClick={toggleRecording}
               className={`p-2.5 rounded-full transition-all flex items-center justify-center cursor-pointer ${
-                isRecording ? 'bg-red-500 text-white animate-pulse' : 'bg-purple-100 text-purple-800 hover:bg-purple-200'
+                isRecording ? 'bg-red-600 text-white animate-pulse' : 'bg-purple-900 text-purple-100 hover:bg-purple-800'
               }`}
             >
               {isRecording ? <MicOff size={18} /> : <Mic size={18} />}
@@ -236,15 +235,15 @@ export default function ChatInterface() {
             <button 
               type="submit" 
               disabled={!input.trim() || isLoading || isSummarizing}
-              className="p-2.5 bg-purple-950 text-white rounded-full disabled:opacity-40 disabled:bg-purple-800 transition-all hover:scale-105 active:scale-95 flex items-center justify-center shadow-sm cursor-pointer"
+              className="p-2.5 bg-purple-950 text-white rounded-full disabled:opacity-40 disabled:bg-purple-900 transition-all hover:scale-105 active:scale-95 flex items-center justify-center shadow-md cursor-pointer border border-purple-700"
             >
-              <Send size={18} className="ml-0.5 text-white" />
+              <Send size={18} className="ml-0.5 text-purple-200" />
             </button>
           </div>
         </form>
         
         {!apiKey && (
-          <p className="text-xs text-center text-red-600 font-bold mt-2 bg-red-50 py-1 px-3 rounded-full border border-red-200 w-fit mx-auto">
+          <p className="text-xs text-center text-red-300 font-bold mt-2 bg-red-950 py-1 px-3 rounded-full border border-red-800 w-fit mx-auto">
             Missing VITE_GROQ_API_KEY in .env file
           </p>
         )}
