@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useChatStore } from '../../store/chatStore';
 import { useMemoryStore } from '../../store/memoryStore';
 import { generateSessionSummary } from '../../services/ai';
-import { Send, AlertCircle, Mic, MicOff, Save, CloudRain, Sun, Zap, Coffee, Sparkles } from 'lucide-react';
+import { Send, AlertCircle, Mic, MicOff, Save, CloudRain, Sun, Zap, Coffee } from 'lucide-react';
 import itouraMascot from '../../assets/ABLE/itoura-mascot.jpeg';
 
 export default function ChatInterface() {
@@ -95,7 +95,7 @@ export default function ChatInterface() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-purple-200/80 backdrop-blur-md rounded-3xl overflow-hidden shadow-2xl border-2 border-purple-400/80 relative">
+    <div className="flex flex-col h-full bg-[#F7F0FF] rounded-3xl overflow-hidden shadow-xl border border-purple-200/80 relative">
       
       {/* Save Session Header */}
       {messages.length >= 3 && (
@@ -103,28 +103,28 @@ export default function ChatInterface() {
           <button 
             onClick={handleSaveSession}
             disabled={isSummarizing || isLoading}
-            className="px-4 py-2 bg-purple-950 text-white font-bold text-xs md:text-sm rounded-full shadow-md border-2 border-purple-400 hover:bg-purple-800 transition-all flex items-center gap-2 disabled:opacity-50 cursor-pointer"
+            className="px-4 py-2 bg-purple-950 text-white font-bold text-xs md:text-sm rounded-full shadow-sm hover:bg-purple-800 transition-all flex items-center gap-2 disabled:opacity-50 cursor-pointer"
           >
-            <Save size={16} className="text-purple-300" />
+            <Save size={15} className="text-purple-200" />
             {isSummarizing ? "Saving Memory..." : "Save & Reflect"}
           </button>
         </div>
       )}
 
-      {/* Chat Messages Container */}
-      <div className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6 mt-2">
+      {/* Chat Messages Area */}
+      <div className="flex-1 overflow-y-auto p-5 md:p-8 space-y-6">
         {messages.length === 1 && (
           <div className="flex flex-col items-center justify-center mb-6 mt-4">
-            <div className="relative p-2 bg-purple-300/60 rounded-full border-4 border-purple-400/80 shadow-lg">
+            <div className="p-2 bg-purple-100 rounded-full border border-purple-200 shadow-sm mb-3">
               <img 
                 src={itouraMascot} 
                 alt="Itoura Mascot" 
-                className="w-40 h-40 md:w-48 md:h-48 object-cover mix-blend-multiply opacity-90 rounded-full"
+                className="w-36 h-36 md:w-44 md:h-44 object-cover mix-blend-multiply opacity-90 rounded-full"
               />
             </div>
-            <p className="text-purple-950 font-black text-sm mt-3 tracking-wide flex items-center gap-1.5">
-              <Sparkles size={16} className="text-purple-700" />
-              ITOURA COMPANION READY
+            {/* NO AI SPARKLES EMOJI HERE! */}
+            <p className="text-purple-900 font-extrabold text-xs tracking-widest uppercase">
+              ITOURA COMPANION
             </p>
           </div>
         )}
@@ -135,15 +135,15 @@ export default function ChatInterface() {
               <img 
                 src={itouraMascot} 
                 alt="Itoura"
-                className="w-9 h-9 rounded-full object-cover mr-2 shrink-0 border-2 border-purple-500 shadow-md"
+                className="w-9 h-9 rounded-full object-cover mr-3 shrink-0 border border-purple-300 shadow-sm"
               />
             )}
             
-            {/* Message Bubble: Purple spaces with bold black text for assistant */}
-            <div className={`max-w-[80%] rounded-3xl p-4 md:p-5 shadow-md border-2 ${
+            {/* Message Bubble: Clean Minimalist Styling */}
+            <div className={`max-w-[78%] rounded-3xl p-4 md:p-5 shadow-sm ${
               msg.role === 'user' 
-                ? 'bg-purple-950 text-white font-bold border-purple-600 rounded-br-none' 
-                : 'bg-[#E9D5FF] text-black font-bold border-purple-400/90 rounded-bl-none'
+                ? 'bg-purple-950 text-white font-bold rounded-br-none' 
+                : 'bg-white text-purple-950 font-bold border border-purple-200/90 rounded-bl-none'
             }`}>
               <p className="text-[15px] md:text-base leading-relaxed whitespace-pre-wrap font-bold">
                 {msg.content}
@@ -157,9 +157,9 @@ export default function ChatInterface() {
             <img 
               src={itouraMascot} 
               alt="Itoura thinking"
-              className="w-9 h-9 rounded-full object-cover mr-2 shrink-0 border-2 border-purple-500 shadow-md"
+              className="w-9 h-9 rounded-full object-cover mr-3 shrink-0 border border-purple-300 shadow-sm"
             />
-            <div className="bg-[#E9D5FF] border-2 border-purple-400/90 rounded-3xl rounded-bl-none p-4 flex gap-1.5 items-center h-[52px] shadow-md">
+            <div className="bg-white border border-purple-200 rounded-3xl rounded-bl-none p-4 flex gap-1.5 items-center h-[52px] shadow-sm">
               <div className="w-2.5 h-2.5 bg-purple-950 rounded-full animate-bounce"></div>
               <div className="w-2.5 h-2.5 bg-purple-950 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
               <div className="w-2.5 h-2.5 bg-purple-950 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
@@ -168,7 +168,7 @@ export default function ChatInterface() {
         )}
         
         {error && (
-          <div className="bg-red-200 text-red-950 font-bold border-2 border-red-400 p-4 rounded-2xl text-sm flex items-start gap-2 max-w-[85%] mx-auto mt-4 shadow-md">
+          <div className="bg-red-50 text-red-950 font-bold border border-red-200 p-4 rounded-2xl text-sm flex items-start gap-2 max-w-[85%] mx-auto mt-4 shadow-sm">
             <AlertCircle size={20} className="shrink-0 text-red-700 mt-0.5" />
             <p className="font-bold">{error}</p>
           </div>
@@ -176,46 +176,46 @@ export default function ChatInterface() {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input Area: Purple background with Bold Black Text */}
-      <div className="p-4 bg-purple-300/90 backdrop-blur-xl border-t-2 border-purple-400 flex flex-col relative z-20">
+      {/* Input Area: Clean, Spacious, Minimalist Input Container */}
+      <div className="p-4 md:p-6 bg-white/70 backdrop-blur-xl border-t border-purple-200 flex flex-col relative z-20">
         
-        {/* Mood Quick-Reply Chips: Vibrant Purple with Bold Black Text */}
+        {/* Mood Quick-Reply Chips: Clean & Spaced */}
         {messages.length === 1 && !isLoading && !isSummarizing && (
-          <div className="flex gap-2 overflow-x-auto pb-3 mb-2 w-full hide-scrollbar">
+          <div className="flex gap-2.5 overflow-x-auto pb-3 mb-2 w-full hide-scrollbar">
             <button 
               onClick={() => setInput("I'm feeling pretty anxious today.")} 
-              className="flex items-center gap-2 px-4 py-2 bg-[#E9D5FF] text-black font-extrabold border-2 border-purple-500 rounded-full text-xs md:text-sm shadow-md hover:bg-purple-300 hover:scale-105 transition-all whitespace-nowrap cursor-pointer"
+              className="flex items-center gap-2 px-4 py-2 bg-white text-purple-950 font-bold border border-purple-200 rounded-full text-xs md:text-sm shadow-sm hover:bg-purple-100 transition-all whitespace-nowrap cursor-pointer"
             >
-              <CloudRain size={16} className="text-purple-900" /> Anxious
+              <CloudRain size={16} className="text-purple-700" /> Anxious
             </button>
             <button 
               onClick={() => setInput("I am completely exhausted.")} 
-              className="flex items-center gap-2 px-4 py-2 bg-[#E9D5FF] text-black font-extrabold border-2 border-purple-500 rounded-full text-xs md:text-sm shadow-md hover:bg-purple-300 hover:scale-105 transition-all whitespace-nowrap cursor-pointer"
+              className="flex items-center gap-2 px-4 py-2 bg-white text-purple-950 font-bold border border-purple-200 rounded-full text-xs md:text-sm shadow-sm hover:bg-purple-100 transition-all whitespace-nowrap cursor-pointer"
             >
-              <Coffee size={16} className="text-purple-900" /> Exhausted
+              <Coffee size={16} className="text-purple-700" /> Exhausted
             </button>
             <button 
               onClick={() => setInput("I feel really overwhelmed.")} 
-              className="flex items-center gap-2 px-4 py-2 bg-[#E9D5FF] text-black font-extrabold border-2 border-purple-500 rounded-full text-xs md:text-sm shadow-md hover:bg-purple-300 hover:scale-105 transition-all whitespace-nowrap cursor-pointer"
+              className="flex items-center gap-2 px-4 py-2 bg-white text-purple-950 font-bold border border-purple-200 rounded-full text-xs md:text-sm shadow-sm hover:bg-purple-100 transition-all whitespace-nowrap cursor-pointer"
             >
-              <Zap size={16} className="text-purple-900" /> Overwhelmed
+              <Zap size={16} className="text-purple-700" /> Overwhelmed
             </button>
             <button 
               onClick={() => setInput("I'm actually doing okay.")} 
-              className="flex items-center gap-2 px-4 py-2 bg-[#E9D5FF] text-black font-extrabold border-2 border-purple-500 rounded-full text-xs md:text-sm shadow-md hover:bg-purple-300 hover:scale-105 transition-all whitespace-nowrap cursor-pointer"
+              className="flex items-center gap-2 px-4 py-2 bg-white text-purple-950 font-bold border border-purple-200 rounded-full text-xs md:text-sm shadow-sm hover:bg-purple-100 transition-all whitespace-nowrap cursor-pointer"
             >
-              <Sun size={16} className="text-purple-900" /> Okay
+              <Sun size={16} className="text-purple-700" /> Okay
             </button>
           </div>
         )}
 
-        {/* Text Input Form: Purple space with Bold Black Text */}
-        <form onSubmit={handleSend} className="relative flex items-end bg-[#E9D5FF] rounded-3xl shadow-lg border-2 border-purple-500 focus-within:border-purple-800 focus-within:ring-4 focus-within:ring-purple-400 transition-all">
+        {/* Text Input Form */}
+        <form onSubmit={handleSend} className="relative flex items-end bg-white rounded-2xl shadow-sm border border-purple-300 focus-within:border-purple-600 focus-within:ring-2 focus-within:ring-purple-200 transition-all">
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Talk to Itoura..."
-            className="flex-1 max-h-32 min-h-[60px] py-4 pl-6 pr-24 bg-transparent outline-none resize-none font-bold text-black placeholder:text-purple-950/70 placeholder:font-bold text-base md:text-lg"
+            className="flex-1 max-h-32 min-h-[58px] py-4 pl-5 pr-24 bg-transparent outline-none resize-none font-bold text-purple-950 placeholder:text-purple-400 text-base"
             onKeyDown={(e) => {
               if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
@@ -223,12 +223,12 @@ export default function ChatInterface() {
               }
             }}
           />
-          <div className="absolute right-2 bottom-2.5 flex items-center gap-1.5">
+          <div className="absolute right-2 bottom-2 flex items-center gap-1.5">
             <button
               type="button"
               onClick={toggleRecording}
               className={`p-2.5 rounded-full transition-all flex items-center justify-center cursor-pointer ${
-                isRecording ? 'bg-red-500 text-white animate-pulse' : 'bg-purple-300/80 text-purple-950 hover:bg-purple-400'
+                isRecording ? 'bg-red-500 text-white animate-pulse' : 'bg-purple-100 text-purple-800 hover:bg-purple-200'
               }`}
             >
               {isRecording ? <MicOff size={18} /> : <Mic size={18} />}
@@ -236,15 +236,15 @@ export default function ChatInterface() {
             <button 
               type="submit" 
               disabled={!input.trim() || isLoading || isSummarizing}
-              className="p-3 bg-purple-950 text-white rounded-full disabled:opacity-40 disabled:bg-purple-900 transition-all hover:scale-105 active:scale-95 flex items-center justify-center shadow-md cursor-pointer"
+              className="p-2.5 bg-purple-950 text-white rounded-full disabled:opacity-40 disabled:bg-purple-800 transition-all hover:scale-105 active:scale-95 flex items-center justify-center shadow-sm cursor-pointer"
             >
-              <Send size={18} className="ml-0.5 text-purple-200" />
+              <Send size={18} className="ml-0.5 text-white" />
             </button>
           </div>
         </form>
         
         {!apiKey && (
-          <p className="text-xs text-center text-red-700 font-extrabold mt-2 bg-red-100 py-1 px-3 rounded-full border border-red-300 w-fit mx-auto">
+          <p className="text-xs text-center text-red-600 font-bold mt-2 bg-red-50 py-1 px-3 rounded-full border border-red-200 w-fit mx-auto">
             Missing VITE_GROQ_API_KEY in .env file
           </p>
         )}
