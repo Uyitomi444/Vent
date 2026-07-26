@@ -4,6 +4,7 @@ import { useMemoryStore } from '../../store/memoryStore';
 import { generateSessionSummary } from '../../services/ai';
 import { Send, AlertCircle, Mic, MicOff, Save, CloudRain, Sun, Zap, Coffee } from 'lucide-react';
 import itouraMascot from '../../assets/ABLE/itoura-mascot.jpeg';
+import chatBg from '../../assets/ABLE/chat-bg.jpg';
 
 export default function ChatInterface() {
   const { messages, isLoading, error, sendMessage, clearMessages } = useChatStore();
@@ -95,7 +96,10 @@ export default function ChatInterface() {
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#230D3E] rounded-3xl overflow-hidden shadow-2xl border border-purple-700/80 relative">
+    <div 
+      className="flex flex-col h-full bg-[#230D3E] rounded-3xl overflow-hidden shadow-2xl border border-purple-700/80 relative bg-cover bg-center"
+      style={{ backgroundImage: `linear-gradient(to bottom, rgba(24, 8, 45, 0.82), rgba(35, 13, 62, 0.90)), url(${chatBg})` }}
+    >
       
       {/* Save Session Header Button (Light Purple Button) */}
       {messages.length >= 3 && (
