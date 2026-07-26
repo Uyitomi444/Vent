@@ -37,41 +37,42 @@ export default function JournalPage() {
     return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(ts));
   };
 
-  // Editor View
+  // Editor View: Vibrant Purple Text Space with Bold Black Text
   if (editingId) {
     return (
       <div className="h-full flex flex-col max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-300">
         <div className="flex items-center justify-between mb-6 pt-4 shrink-0">
           <button 
             onClick={() => setEditingId(null)}
-            className="flex items-center gap-2 text-gray-500 hover:text-itoura-dark transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-purple-900 text-white rounded-full font-bold text-sm hover:bg-purple-800 transition-colors shadow-md"
           >
             <ArrowLeft size={20} />
             <span>Back</span>
           </button>
           <button 
             onClick={handleSave}
-            className="px-6 py-2 bg-itoura-dark text-white rounded-full font-medium shadow-sm hover:scale-105 active:scale-95 transition-all"
+            className="px-6 py-2.5 bg-purple-950 text-white font-extrabold rounded-full shadow-lg hover:bg-purple-800 hover:scale-105 active:scale-95 transition-all border-2 border-purple-400"
           >
             Save Entry
           </button>
         </div>
 
-        <div className="flex-1 bg-white/60 backdrop-blur-md rounded-3xl p-6 md:p-8 shadow-sm border border-white/50 flex flex-col min-h-0">
+        {/* Purple Container for Journal Editor */}
+        <div className="flex-1 bg-[#E9D5FF] rounded-3xl p-6 md:p-8 shadow-2xl border-2 border-purple-500 flex flex-col min-h-0">
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Give your thoughts a title..."
-            className="text-2xl md:text-3xl font-serif text-itoura-dark bg-transparent border-none outline-none mb-4 placeholder:text-gray-400"
+            className="text-2xl md:text-3xl font-serif font-black text-black bg-transparent border-none outline-none mb-4 placeholder:text-purple-950/60"
           />
-          <div className="h-px bg-itoura-light/50 w-full mb-6"></div>
+          <div className="h-0.5 bg-purple-400 w-full mb-6"></div>
           <div className="flex-1 relative flex flex-col">
             <textarea
               value={content}
               onChange={(e) => setContent(e.target.value)}
               placeholder="What's on your mind? This space is entirely yours..."
-              className="flex-1 resize-none bg-transparent border-none outline-none text-gray-700 leading-relaxed placeholder:text-gray-400 font-sans text-lg pb-12"
+              className="flex-1 resize-none bg-transparent border-none outline-none text-black font-bold leading-relaxed placeholder:text-purple-950/60 text-lg pb-12"
             />
             <button
               onClick={() => {
@@ -88,10 +89,10 @@ export default function JournalPage() {
                 };
                 recognition.start();
               }}
-              className="absolute bottom-2 right-2 p-3 bg-itoura-surface text-itoura-dark rounded-full shadow-sm hover:bg-itoura-light transition-colors"
+              className="absolute bottom-2 right-2 p-3 bg-purple-950 text-white rounded-full shadow-md hover:bg-purple-800 transition-colors border border-purple-400"
               title="Voice Dictation"
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
             </button>
           </div>
         </div>
@@ -99,17 +100,17 @@ export default function JournalPage() {
     );
   }
 
-  // List View
+  // List View: Purple Cards with Bold Black Text
   return (
     <div className="h-full flex flex-col max-w-3xl mx-auto">
       <div className="flex items-end justify-between mb-8 pt-4 shrink-0">
         <div>
-          <h1 className="font-serif text-3xl text-itoura-dark mb-1">Your Journal</h1>
-          <p className="text-gray-500 text-sm">A private space for your thoughts.</p>
+          <h1 className="font-serif text-3xl md:text-4xl font-black text-purple-950 mb-1">Your Journal</h1>
+          <p className="text-purple-900/80 font-bold text-sm">A private space for your thoughts.</p>
         </div>
         <button 
           onClick={handleCreateNew}
-          className="flex items-center gap-2 px-5 py-2.5 bg-itoura-light text-itoura-dark border border-itoura-dark/10 rounded-full font-medium shadow-sm hover:bg-white transition-all"
+          className="flex items-center gap-2 px-5 py-2.5 bg-purple-950 text-white font-extrabold rounded-full shadow-lg border-2 border-purple-400 hover:bg-purple-800 transition-all hover:scale-105"
         >
           <Plus size={18} />
           <span>New Entry</span>
@@ -118,42 +119,43 @@ export default function JournalPage() {
 
       <div className="flex-1 overflow-y-auto pb-8 min-h-0">
         {entries.length === 0 ? (
-          <div className="h-full flex flex-col items-center justify-center text-center px-4">
-            <img 
-              src="/assets/illustrations/Notebook_with_pen_and_star_202607141352.jpeg" 
-              alt="Empty Journal" 
-              className="w-48 h-48 object-cover mix-blend-multiply opacity-80 mb-6 rounded-3xl"
-            />
-            <h3 className="text-xl font-serif text-itoura-dark mb-2">No entries yet</h3>
-            <p className="text-gray-500 max-w-md mx-auto mb-8">
+          <div className="h-full flex flex-col items-center justify-center text-center px-4 py-12 bg-purple-200/80 rounded-3xl border-2 border-purple-400/80">
+            <h3 className="text-2xl font-serif font-black text-purple-950 mb-2">No entries yet</h3>
+            <p className="text-purple-950 font-bold max-w-md mx-auto mb-6">
               Writing down your feelings is a powerful way to process them. Start your first entry whenever you're ready.
             </p>
+            <button 
+              onClick={handleCreateNew}
+              className="px-6 py-3 bg-purple-950 text-white rounded-full font-extrabold shadow-md hover:bg-purple-800 transition-all"
+            >
+              Write First Entry
+            </button>
           </div>
         ) : (
           <div className="grid gap-4">
             {entries.map((entry) => (
               <div 
                 key={entry.id} 
-                className="bg-white/60 backdrop-blur-sm border border-white/50 p-5 rounded-3xl shadow-sm hover:shadow-md transition-shadow group flex flex-col cursor-pointer"
+                className="bg-[#E9D5FF] border-2 border-purple-400/90 p-6 rounded-3xl shadow-md hover:shadow-xl hover:scale-[1.01] transition-all group flex flex-col cursor-pointer"
                 onClick={() => handleEdit(entry)}
               >
                 <div className="flex items-start justify-between mb-2">
-                  <h3 className="text-xl font-serif text-itoura-dark line-clamp-1">{entry.title}</h3>
+                  <h3 className="text-xl font-serif font-black text-black line-clamp-1">{entry.title}</h3>
                   <button 
                     onClick={(e) => {
                       e.stopPropagation();
                       if(window.confirm('Delete this entry forever?')) deleteEntry(entry.id);
                     }}
-                    className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors opacity-0 md:group-hover:opacity-100 transition-opacity"
+                    className="p-2 text-purple-950 hover:text-red-600 hover:bg-red-100 rounded-full transition-colors opacity-0 md:group-hover:opacity-100 transition-opacity"
                   >
-                    <Trash2 size={16} />
+                    <Trash2 size={18} />
                   </button>
                 </div>
-                <p className="text-gray-600 line-clamp-2 mb-4 text-sm leading-relaxed">
+                <p className="text-black font-bold line-clamp-2 mb-4 text-sm leading-relaxed">
                   {entry.content}
                 </p>
-                <div className="mt-auto flex items-center text-xs text-gray-400 font-medium">
-                  <Calendar size={12} className="mr-1.5" />
+                <div className="mt-auto flex items-center text-xs text-purple-900 font-extrabold">
+                  <Calendar size={14} className="mr-1.5 text-purple-800" />
                   {formatDate(entry.createdAt)}
                 </div>
               </div>

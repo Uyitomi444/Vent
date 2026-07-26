@@ -7,7 +7,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import SpriteIcon from '../components/SpriteIcon';
 import FourIcons from '../assets/Four_icons.jpeg';
 
-// The Four_icons.jpeg has 4 icons. 
 const TOOLS = [
   {
     id: 'breathe',
@@ -61,8 +60,8 @@ export default function ToolsPage() {
     <div className="p-4 md:p-8 max-w-4xl mx-auto space-y-8">
       {/* Header */}
       <header className="space-y-2">
-        <h1 className="font-serif text-3xl text-itoura-dark">Wellness Tools</h1>
-        <p className="text-gray-500 text-sm md:text-base">Take a moment for yourself. Choose an exercise to help you reset.</p>
+        <h1 className="font-serif text-3xl md:text-4xl font-black text-purple-950">Wellness Tools</h1>
+        <p className="text-purple-900/80 font-bold text-sm md:text-base">Take a moment for yourself. Choose an exercise to help you reset.</p>
       </header>
 
       <AnimatePresence mode="wait">
@@ -81,20 +80,20 @@ export default function ToolsPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6"
+            className="grid grid-cols-1 md:grid-cols-2 gap-6"
           >
             {TOOLS.map((tool) => {
               return (
                 <button
                   key={tool.id}
                   onClick={() => setActiveTool(tool.id)}
-                  className="flex flex-col text-left p-8 bg-itoura-light/30 rounded-[2rem] border border-itoura-primary/20 hover:bg-itoura-light/50 hover:scale-[1.02] hover:shadow-lg transition-all duration-300 group relative overflow-hidden"
+                  className="flex flex-col text-left p-8 bg-[#E9D5FF] rounded-[2rem] border-2 border-purple-500 hover:bg-purple-200 hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 group relative overflow-hidden shadow-xl cursor-pointer"
                 >
                   {/* Background decoration */}
-                  <div className="absolute -right-8 -top-8 w-32 h-32 bg-itoura-primary/10 rounded-full blur-2xl group-hover:bg-itoura-primary/20 transition-all"></div>
+                  <div className="absolute -right-8 -top-8 w-36 h-36 bg-purple-400/30 rounded-full blur-2xl group-hover:bg-purple-400/50 transition-all"></div>
                   
                   <div className="flex justify-between items-start w-full mb-6 relative z-10">
-                    <div className="p-4 bg-white rounded-3xl shadow-sm border border-itoura-primary/10 group-hover:-rotate-3 transition-transform duration-300">
+                    <div className="p-3.5 bg-purple-950 rounded-3xl shadow-md border border-purple-500 group-hover:-rotate-3 transition-transform duration-300">
                       <SpriteIcon 
                         imageSrc={FourIcons} 
                         totalIcons={4} 
@@ -102,16 +101,16 @@ export default function ToolsPage() {
                         size={64} 
                       />
                     </div>
-                    <span className="text-xs font-bold text-itoura-dark bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-full border border-itoura-primary/20 shadow-sm">
+                    <span className="text-xs font-black text-white bg-purple-950 px-3.5 py-1.5 rounded-full border border-purple-400 shadow-md">
                       {tool.duration}
                     </span>
                   </div>
                   
-                  <h3 className="text-2xl font-serif font-medium text-itoura-dark mb-3 relative z-10">{tool.title}</h3>
-                  <p className="text-base text-gray-600 mb-8 relative z-10 flex-1">{tool.description}</p>
+                  <h3 className="text-2xl font-serif font-black text-black mb-3 relative z-10">{tool.title}</h3>
+                  <p className="text-base font-bold text-purple-950 mb-8 relative z-10 flex-1 leading-relaxed">{tool.description}</p>
                   
                   <div className="w-full relative z-10 mt-auto">
-                    <span className="inline-flex items-center justify-center w-full py-3.5 bg-itoura-dark text-white rounded-2xl font-medium group-hover:bg-itoura-primary transition-colors">
+                    <span className="inline-flex items-center justify-center w-full py-4 bg-purple-950 text-white rounded-2xl font-black text-base border-2 border-purple-400 group-hover:bg-purple-800 transition-colors shadow-md">
                       Begin Exercise
                     </span>
                   </div>
