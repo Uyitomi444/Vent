@@ -1,5 +1,4 @@
 import { useMemo } from 'react';
-import { BrainCircuit, LineChart, Target, Calendar } from 'lucide-react';
 import { useMoodStore } from '../store/moodStore';
 import { useMemoryStore } from '../store/memoryStore';
 import MascotPose from '../components/MascotPose';
@@ -81,12 +80,10 @@ export default function ProgressPage() {
         {/* Mood Trend Chart */}
         <div className="md:col-span-2 bg-[#2E0B5E] rounded-3xl p-6 md:p-8 shadow-xl border border-[#7C3AED]/80">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="font-serif font-black text-xl text-[#E5D0FF] flex items-center gap-2">
-              <LineChart size={24} className="text-purple-300" />
+            <h2 className="font-serif font-black text-xl text-[#E5D0FF]">
               Mood Trend (Past 7 Days)
             </h2>
-            <div className="bg-[#E5D0FF] text-[#160432] px-4 py-1.5 rounded-full text-xs font-black flex items-center gap-1.5 shadow-sm border border-purple-300">
-              <Calendar size={14} className="text-[#2E0B5E]" />
+            <div className="bg-[#E5D0FF] text-[#160432] px-4 py-1.5 rounded-full text-xs font-black shadow-sm border border-purple-300">
               {daysCheckedIn} of 7 days
             </div>
           </div>
@@ -118,8 +115,7 @@ export default function ProgressPage() {
 
         {/* Top Themes */}
         <div className="bg-[#2E0B5E] rounded-3xl p-6 md:p-8 shadow-xl border border-[#7C3AED]/80">
-          <h2 className="font-serif font-black text-xl text-[#E5D0FF] flex items-center gap-2 mb-6">
-            <BrainCircuit size={24} className="text-purple-300" />
+          <h2 className="font-serif font-black text-xl text-[#E5D0FF] mb-6">
             Top Themes
           </h2>
           
@@ -148,6 +144,7 @@ export default function ProgressPage() {
             </div>
           )}
         </div>
+
       </div>
 
       {/* Weekly Reflection Card */}
@@ -162,7 +159,6 @@ export default function ProgressPage() {
             {reflection}
           </p>
           <div className="inline-flex items-center gap-2 bg-[#E5D0FF] text-[#160432] px-4 py-2 rounded-full text-sm font-extrabold shadow-md">
-            <Target size={16} className="text-[#2E0B5E]" />
             Suggested Next Step
           </div>
         </div>

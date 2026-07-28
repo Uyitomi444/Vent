@@ -1,4 +1,3 @@
-import { Bell, Download, Trash2, Shield, User, ChevronRight, BrainCircuit } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useJournalStore } from '../store/journalStore';
 import { useMoodStore } from '../store/moodStore';
@@ -37,7 +36,7 @@ export default function SettingsPage() {
     if (memory.messages && memory.messages.length > 0) {
       if (window.confirm('Do you want to go back to this past conversation? Your current unsaved chat will be cleared.')) {
         setChatMessages(memory.messages);
-        navigate('/');
+        navigate('/chat');
       }
     } else {
       alert("No chat messages saved for this memory. Old memories may only have summaries.");
@@ -72,18 +71,15 @@ export default function SettingsPage() {
 
       {/* Profile Card */}
       <section className="space-y-3">
-        <h3 className="font-black text-purple-300 px-2 uppercase tracking-wider text-xs flex items-center gap-2">
-          <User size={16} className="text-purple-400" /> Account
+        <h3 className="font-black text-purple-300 px-2 uppercase tracking-wider text-xs">
+          Account
         </h3>
         <div className="bg-[#2E0B5E] text-white rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 shadow-xl border border-[#7C3AED]/80">
-          <div className="w-16 h-16 bg-[#4C1D95] rounded-full flex items-center justify-center shrink-0 border border-[#7C3AED]">
-            <User size={28} className="text-[#E5D0FF]" />
-          </div>
           <div className="flex-1 text-center md:text-left">
             <h2 className="text-2xl font-serif font-black text-[#E5D0FF] mb-1">Employee Profile</h2>
             <p className="text-purple-300 text-xs font-bold mb-4">Linked to Your Organization</p>
-            <button className="w-full md:w-auto px-6 py-2.5 bg-[#E5D0FF] text-[#160432] rounded-full font-black text-sm hover:bg-white transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer border border-purple-300">
-              Sign in with Work Email <ChevronRight size={16} />
+            <button className="w-full md:w-auto px-6 py-2.5 bg-[#E5D0FF] text-[#160432] rounded-full font-black text-sm hover:bg-white transition-all shadow-md cursor-pointer border border-purple-300">
+              Sign in with Work Email
             </button>
           </div>
         </div>
@@ -91,8 +87,8 @@ export default function SettingsPage() {
 
       {/* Confidentiality & Trust */}
       <section className="space-y-3">
-        <h3 className="font-black text-purple-300 px-2 uppercase tracking-wider text-xs flex items-center gap-2">
-          <Shield size={16} className="text-purple-400" /> Privacy & Confidentiality
+        <h3 className="font-black text-purple-300 px-2 uppercase tracking-wider text-xs">
+          Privacy & Confidentiality
         </h3>
         <div className="bg-[#2E0B5E] rounded-3xl p-6 md:p-8 shadow-xl border border-[#7C3AED]/80 space-y-4">
           <p className="text-sm text-purple-100 font-bold leading-relaxed">
@@ -109,8 +105,8 @@ export default function SettingsPage() {
 
       {/* Memory Section */}
       <section className="space-y-3">
-        <h3 className="font-black text-purple-300 px-2 uppercase tracking-wider text-xs flex items-center gap-2">
-          <BrainCircuit size={16} className="text-purple-400" /> Companion Memory
+        <h3 className="font-black text-purple-300 px-2 uppercase tracking-wider text-xs">
+          Companion Memory
         </h3>
         <div className="bg-[#2E0B5E] rounded-3xl p-6 md:p-8 shadow-xl border border-[#7C3AED]/80">
           <div className="flex justify-between items-start mb-4">
@@ -163,14 +159,9 @@ export default function SettingsPage() {
         <div className="bg-[#2E0B5E] rounded-3xl overflow-hidden shadow-xl border border-[#7C3AED]/80">
           
           <div className="flex items-center justify-between p-5 md:p-6">
-            <div className="flex items-center gap-4">
-              <div className="p-2.5 bg-[#4C1D95] text-[#E5D0FF] rounded-xl border border-[#7C3AED]">
-                <Bell size={20} />
-              </div>
-              <div>
-                <p className="font-black text-[#E5D0FF]">Daily Reminders</p>
-                <p className="text-xs font-bold text-purple-300">Receive a gentle nudge to check-in.</p>
-              </div>
+            <div>
+              <p className="font-black text-[#E5D0FF]">Daily Reminders</p>
+              <p className="text-xs font-bold text-purple-300">Receive a gentle nudge to check-in.</p>
             </div>
             <button 
               onClick={() => setNotifications(!notifications)}
@@ -188,39 +179,24 @@ export default function SettingsPage() {
         <h3 className="font-black text-purple-300 px-2 uppercase tracking-wider text-xs">Privacy & Local Storage</h3>
         <div className="bg-[#2E0B5E] rounded-3xl overflow-hidden shadow-xl border border-[#7C3AED]/80">
           
-          <div className="p-5 md:p-6 border-b border-purple-900 flex gap-4">
-            <Shield className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
-            <div>
-              <p className="text-sm font-bold text-purple-100 leading-relaxed">
-                Your data currently lives entirely on your device. Nothing is sent to external servers.
-              </p>
-            </div>
+          <div className="p-5 md:p-6 border-b border-purple-900">
+            <p className="text-sm font-bold text-purple-100 leading-relaxed">
+              Your data currently lives entirely on your device. Nothing is sent to external servers.
+            </p>
           </div>
 
           <button 
             onClick={exportData}
             className="w-full flex items-center justify-between p-5 md:p-6 border-b border-purple-900 hover:bg-[#4C1D95]/60 transition-colors text-left cursor-pointer"
           >
-            <div className="flex items-center gap-4">
-              <div className="p-2.5 bg-[#4C1D95] text-[#E5D0FF] rounded-xl border border-[#7C3AED]">
-                <Download size={20} />
-              </div>
-              <span className="font-black text-[#E5D0FF]">Export My Data Backup</span>
-            </div>
-            <ChevronRight className="w-5 h-5 text-purple-400" />
+            <span className="font-black text-[#E5D0FF]">Export My Data Backup</span>
           </button>
 
           <button 
             onClick={handleClearData}
             className="w-full flex items-center justify-between p-5 md:p-6 hover:bg-red-950/60 transition-colors text-left cursor-pointer"
           >
-            <div className="flex items-center gap-4">
-              <div className="p-2.5 bg-red-950 text-red-400 rounded-xl border border-red-800">
-                <Trash2 size={20} />
-              </div>
-              <span className="font-black text-red-400">Clear All Local Data</span>
-            </div>
-            <ChevronRight className="w-5 h-5 text-red-400" />
+            <span className="font-black text-red-400">Clear All Local Data</span>
           </button>
 
         </div>
