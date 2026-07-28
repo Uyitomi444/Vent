@@ -174,6 +174,13 @@ export default function MainLayout() {
             </div>
           </div>
 
+          {/* Center: Clean & Minimalist "Itoura" Text */}
+          <div className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center pointer-events-auto">
+            <Link to="/" className="font-serif text-2xl md:text-3xl font-black text-[#E5D0FF] tracking-wider hover:scale-105 transition-all drop-shadow-md">
+              Itoura
+            </Link>
+          </div>
+
         </div>
       </header>
 
