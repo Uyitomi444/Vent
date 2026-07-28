@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import MainLayout from './components/layout/MainLayout';
 import HomePage from './pages/HomePage';
 import JournalPage from './pages/JournalPage';
@@ -13,11 +13,13 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Welcome Page is ALWAYS shown when opening the site root (/) */}
+        <Route path="/" element={<OnboardingPage />} />
         <Route path="/welcome" element={<OnboardingPage />} />
         
-        {/* We default to redirecting to /welcome if they haven't seen it, but for development we'll just show it */}
+        {/* App Main Layout Routes */}
         <Route element={<MainLayout />}>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/chat" element={<HomePage />} />
           <Route path="/journal" element={<JournalPage />} />
           <Route path="/progress" element={<ProgressPage />} />
           <Route path="/mood" element={<MoodPage />} />
@@ -25,6 +27,9 @@ function App() {
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/faq" element={<FAQPage />} />
         </Route>
+
+        {/* Catch-all redirect to Welcome Page */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );

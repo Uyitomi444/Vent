@@ -1,4 +1,4 @@
-import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
+import { Outlet, Link, useLocation } from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
 import { 
   Home, 
@@ -22,18 +22,10 @@ interface NavItemData {
 
 export default function MainLayout() {
   const location = useLocation();
-  const navigate = useNavigate();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const isActive = (path: string) => location.pathname === path;
-
-  useEffect(() => {
-    const hasSeenOnboarding = localStorage.getItem('itoura-has-seen-onboarding');
-    if (!hasSeenOnboarding) {
-      navigate('/welcome');
-    }
-  }, [navigate]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -51,7 +43,7 @@ export default function MainLayout() {
 
   const navCategories: NavItemData[] = [
     {
-      path: '/',
+      path: '/chat',
       label: 'Chat Companion',
       description: 'Your safe space to vent and process feelings 24/7',
       icon: <Home size={18} className="text-purple-300" />,
@@ -106,7 +98,7 @@ export default function MainLayout() {
           
           {/* Logo & Category Dropdown Button */}
           <div className="flex items-center gap-2 sm:gap-4 md:gap-8 min-w-0">
-            <Link to="/" className="flex items-center gap-2 group shrink-0">
+            <Link to="/" className="flex items-center gap-2 group shrink-0" title="Go to Welcome Page">
               <img 
                 src={itouraLogo} 
                 alt="Itoura" 
@@ -169,7 +161,7 @@ export default function MainLayout() {
 
           {/* Right Aligned Clean and Minimalist Itoura Text */}
           <div className="flex items-center shrink-0">
-            <Link to="/">
+            <Link to="/" title="Go to Welcome Page">
               <span className="font-serif text-lg sm:text-2xl md:text-3xl font-black tracking-tight text-white hover:text-purple-200 transition-colors drop-shadow-md">
                 Itoura
               </span>
