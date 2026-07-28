@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X } from 'lucide-react';
+import { X, Sparkles } from 'lucide-react';
 
 import daily1 from '../assets/DAILY/daily-1.jpg';
 import daily2 from '../assets/DAILY/daily-2.jpg';
@@ -44,7 +44,7 @@ export default function DailyMessagePopup() {
       const timer = setTimeout(() => {
         setIsVisible(true);
         localStorage.setItem('itoura-daily-message-date', today);
-      }, 1500);
+      }, 1200);
 
       return () => clearTimeout(timer);
     }
@@ -54,41 +54,53 @@ export default function DailyMessagePopup() {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-itoura-dark/40 backdrop-blur-sm">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#160432]/85 backdrop-blur-md">
         <motion.div
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 20 }}
-          className="bg-white rounded-[2rem] overflow-hidden shadow-2xl max-w-sm w-full relative flex flex-col"
+          className="bg-[#220A50] rounded-[2.5rem] border-2 border-[#5B21B6] shadow-2xl max-w-sm w-full relative flex flex-col overflow-hidden"
         >
+          {/* Close Button */}
           <button
             onClick={() => setIsVisible(false)}
-            className="absolute top-4 right-4 p-2 bg-black/20 hover:bg-black/40 text-white rounded-full transition-colors z-10 backdrop-blur-md"
+            className="absolute top-4 right-4 p-2 bg-[#160432]/80 hover:bg-[#160432] text-white rounded-full transition-colors z-20 backdrop-blur-md cursor-pointer border border-[#5B21B6]"
           >
-            <X className="w-5 h-5" />
+            <X className="w-5 h-5 text-[#E5D0FF]" />
           </button>
           
-          <div className="w-full aspect-square sm:h-64 sm:aspect-auto relative overflow-hidden bg-[#f4f7f6]">
+          {/* Top Illustration Card */}
+          <div className="w-full aspect-square relative overflow-hidden bg-white p-4 flex items-center justify-center border-b-2 border-[#5B21B6]">
             <img 
               src={content.image} 
               alt="Daily inspiration" 
-              className="w-full h-full object-contain p-4"
+              className="w-full h-full object-contain"
             />
-            {/* Gradient overlay for text legibility if we wanted to overlay text */}
           </div>
           
-          <div className="p-8 text-center bg-white dark:bg-itoura-dark">
-            <h3 className="font-serif text-2xl text-itoura-dark dark:text-white mb-4">Good Morning</h3>
-            <p className="text-gray-600 dark:text-gray-300 font-medium leading-relaxed">
-              "{content.message}"
-            </p>
+          {/* Bottom Content Area */}
+          <div className="p-6 md:p-8 text-center bg-[#220A50] flex flex-col items-center">
             
+            <div className="flex items-center gap-1.5 text-[#E5D0FF] mb-2">
+              <Sparkles size={18} className="text-[#E5D0FF]" />
+              <h3 className="font-serif text-2xl font-black text-[#E5D0FF]">Daily Reminder</h3>
+            </div>
+
+            {/* High-Contrast Bold Black Text Box */}
+            <div className="w-full bg-[#E5D0FF] text-[#160432] p-4 rounded-2xl shadow-md border border-purple-300 my-4 text-center">
+              <p className="font-black text-base md:text-lg leading-relaxed text-[#160432]">
+                "{content.message}"
+              </p>
+            </div>
+            
+            {/* Bold Action Button */}
             <button
               onClick={() => setIsVisible(false)}
-              className="mt-8 px-8 py-3 bg-itoura-primary text-white rounded-full font-medium shadow-sm hover:scale-105 active:scale-95 transition-all w-full"
+              className="mt-2 w-full py-3.5 bg-[#E5D0FF] hover:bg-white text-[#160432] font-black text-base rounded-full shadow-lg border border-purple-300 hover:scale-[1.02] active:scale-95 transition-all cursor-pointer"
             >
               Start My Day
             </button>
+
           </div>
         </motion.div>
       </div>
