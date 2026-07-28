@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useChatStore } from '../../store/chatStore';
 import { useMemoryStore } from '../../store/memoryStore';
 import { generateSessionSummary } from '../../services/ai';
-import { Send, AlertCircle, Mic, MicOff, Save, CloudRain, Sun, Zap, Coffee } from 'lucide-react';
+import { Send, AlertCircle, Mic, MicOff, Save } from 'lucide-react';
 import itouraMascot from '../../assets/ABLE/itoura-mascot.jpeg';
 import chatBg from '../../assets/ABLE/chat-bg.jpg';
 
@@ -71,34 +71,39 @@ export default function ChatInterface() {
 
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (isRecording) toggleRecording();
     if (!input.trim() || isLoading || isSummarizing) return;
     
-    if (!apiKey) {
-      alert("Please add your VITE_GROQ_API_KEY to the .env file to talk to Itoura.");
-      return;
-    }
-
-    const content = input.trim();
+    const userMsg = input.trim();
     setInput('');
-    await sendMessage(content, apiKey);
+    await sendMessage(userMsg, apiKey);
   };
 
   const handleSaveSession = async () => {
-    if (!apiKey || messages.length < 3) return;
-    setIsSummarizing(true);
-    const result = await generateSessionSummary(messages, apiKey);
-    if (result) {
-      addMemory(result.summary, result.themes, messages);
+    if (messages.length < 3 || isSummarizing) return;
+
+    try {
+      setIsSummarizing(true);
+      const summaryData = await generateSessionSummary(messages, apiKey);
+
+      if (summaryData) {
+        addMemory(summaryData.summary, summaryData.themes, [...messages]);
+        alert("Session reflection saved! You can view it in your Settings and Progress tab.");
+        clearMessages();
+      } else {
+        alert("Could not generate session summary. Please try again.");
+      }
+    } catch (err: any) {
+      console.error("Failed to save memory:", err);
+      alert("Could not generate summary. Check your connection or API key.");
+    } finally {
+      setIsSummarizing(false);
     }
-    clearMessages();
-    setIsSummarizing(false);
   };
 
   return (
     <div 
-      className="flex flex-col h-full bg-[#2E0B5E] rounded-3xl overflow-hidden shadow-2xl border-2 border-[#7C3AED] relative bg-cover bg-center"
-      style={{ backgroundImage: `linear-gradient(to bottom, rgba(46, 11, 94, 0.85), rgba(76, 29, 149, 0.90)), url(${chatBg})` }}
+      className="flex flex-col h-full bg-[#532E60] rounded-3xl overflow-hidden shadow-2xl border-2 border-white/40 relative bg-cover bg-center"
+      style={{ backgroundImage: `linear-gradient(to bottom, rgba(83, 46, 96, 0.90), rgba(61, 32, 72, 0.95)), url(${chatBg})` }}
     >
       
       {/* Save Session Header Button */}
@@ -107,9 +112,9 @@ export default function ChatInterface() {
           <button 
             onClick={handleSaveSession}
             disabled={isSummarizing || isLoading}
-            className="px-4 py-2 bg-[#C8B6FF] text-[#1E0542] font-black text-xs md:text-sm rounded-full shadow-md hover:bg-white transition-all flex items-center gap-2 disabled:opacity-50 cursor-pointer"
+            className="px-4 py-2 bg-[#C4B4E2] text-[#532E60] font-black text-xs md:text-sm rounded-full shadow-md hover:bg-white transition-all flex items-center gap-2 disabled:opacity-50 cursor-pointer border border-white"
           >
-            <Save size={15} className="text-[#2E0B5E]" />
+            <Save size={15} className="text-[#532E60]" />
             {isSummarizing ? "Saving Memory..." : "Save & Reflect"}
           </button>
         </div>
@@ -119,14 +124,14 @@ export default function ChatInterface() {
       <div className="flex-1 overflow-y-auto p-5 md:p-8 space-y-6">
         {messages.length === 1 && (
           <div className="flex flex-col items-center justify-center mb-6 mt-4">
-            <div className="p-2 bg-[#4C1D95]/60 rounded-full border border-[#8A2BE2] shadow-inner mb-3">
+            <div className="p-2 bg-[#613B6E] rounded-full border border-white/40 shadow-inner mb-3">
               <img 
                 src={itouraMascot} 
                 alt="Itoura Mascot" 
                 className="w-36 h-36 md:w-44 md:h-44 object-cover mix-blend-screen opacity-90 rounded-full"
               />
             </div>
-            <p className="text-purple-200 font-extrabold text-xs tracking-widest uppercase">
+            <p className="text-[#E8DCF8] font-black text-xs tracking-widest uppercase">
               ITOURA COMPANION
             </p>
           </div>
@@ -138,15 +143,15 @@ export default function ChatInterface() {
               <img 
                 src={itouraMascot} 
                 alt="Itoura"
-                className="w-9 h-9 rounded-full object-cover mr-3 shrink-0 border border-[#8A2BE2] shadow-md"
+                className="w-9 h-9 rounded-full object-cover mr-3 shrink-0 border border-white/40 shadow-md"
               />
             )}
             
             {/* Message Bubbles */}
             <div className={`max-w-[78%] rounded-3xl p-4 md:p-5 shadow-md ${
               msg.role === 'user' 
-                ? 'bg-[#C8B6FF] text-[#1E0542] font-black border border-purple-300 rounded-br-none' 
-                : 'bg-[#7C3AED] text-white font-bold border border-[#8A2BE2]/70 rounded-bl-none'
+                ? 'bg-[#C4B4E2] text-[#532E60] font-black border border-white rounded-br-none' 
+                : 'bg-[#613B6E] text-white font-bold border border-white/30 rounded-bl-none'
             }`}>
               <p className="text-[15px] md:text-base leading-relaxed whitespace-pre-wrap font-bold">
                 {msg.content}
@@ -160,12 +165,12 @@ export default function ChatInterface() {
             <img 
               src={itouraMascot} 
               alt="Itoura thinking"
-              className="w-9 h-9 rounded-full object-cover mr-3 shrink-0 border border-[#8A2BE2] shadow-md"
+              className="w-9 h-9 rounded-full object-cover mr-3 shrink-0 border border-white/40 shadow-md"
             />
-            <div className="bg-[#7C3AED] border border-[#8A2BE2]/70 rounded-3xl rounded-bl-none p-4 flex gap-1.5 items-center h-[52px] shadow-md">
-              <div className="w-2.5 h-2.5 bg-purple-200 rounded-full animate-bounce"></div>
-              <div className="w-2.5 h-2.5 bg-purple-200 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-              <div className="w-2.5 h-2.5 bg-purple-200 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+            <div className="bg-[#613B6E] border border-white/30 rounded-3xl rounded-bl-none p-4 flex gap-1.5 items-center h-[52px] shadow-md">
+              <div className="w-2.5 h-2.5 bg-[#C4B4E2] rounded-full animate-bounce"></div>
+              <div className="w-2.5 h-2.5 bg-[#C4B4E2] rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+              <div className="w-2.5 h-2.5 bg-[#C4B4E2] rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
             </div>
           </div>
         )}
@@ -180,45 +185,45 @@ export default function ChatInterface() {
       </div>
 
       {/* Input Area */}
-      <div className="p-4 md:p-6 bg-[#23074D]/95 backdrop-blur-xl border-t border-[#7C3AED] flex flex-col relative z-20">
+      <div className="p-4 md:p-6 bg-[#432250]/95 backdrop-blur-xl border-t border-white/20 flex flex-col relative z-20">
         
-        {/* Quick Reply Chips */}
+        {/* Clean Text Quick Reply Chips */}
         {messages.length === 1 && !isLoading && !isSummarizing && (
           <div className="flex gap-2.5 overflow-x-auto pb-3 mb-2 w-full hide-scrollbar">
             <button 
               onClick={() => setInput("I'm feeling pretty anxious today.")} 
-              className="flex items-center gap-2 px-4 py-2 bg-[#C8B6FF] text-[#1E0542] font-black border border-purple-300 rounded-full text-xs md:text-sm shadow-md hover:bg-white transition-all whitespace-nowrap cursor-pointer"
+              className="px-4 py-2 bg-[#C4B4E2] text-[#532E60] font-black border border-white rounded-full text-xs md:text-sm shadow-md hover:bg-white transition-all whitespace-nowrap cursor-pointer"
             >
-              <CloudRain size={16} className="text-[#2E0B5E]" /> Anxious
+              Anxious
             </button>
             <button 
               onClick={() => setInput("I am completely exhausted.")} 
-              className="flex items-center gap-2 px-4 py-2 bg-[#C8B6FF] text-[#1E0542] font-black border border-purple-300 rounded-full text-xs md:text-sm shadow-md hover:bg-white transition-all whitespace-nowrap cursor-pointer"
+              className="px-4 py-2 bg-[#C4B4E2] text-[#532E60] font-black border border-white rounded-full text-xs md:text-sm shadow-md hover:bg-white transition-all whitespace-nowrap cursor-pointer"
             >
-              <Coffee size={16} className="text-[#2E0B5E]" /> Exhausted
+              Exhausted
             </button>
             <button 
               onClick={() => setInput("I feel really overwhelmed.")} 
-              className="flex items-center gap-2 px-4 py-2 bg-[#C8B6FF] text-[#1E0542] font-black border border-purple-300 rounded-full text-xs md:text-sm shadow-md hover:bg-white transition-all whitespace-nowrap cursor-pointer"
+              className="px-4 py-2 bg-[#C4B4E2] text-[#532E60] font-black border border-white rounded-full text-xs md:text-sm shadow-md hover:bg-white transition-all whitespace-nowrap cursor-pointer"
             >
-              <Zap size={16} className="text-[#2E0B5E]" /> Overwhelmed
+              Overwhelmed
             </button>
             <button 
               onClick={() => setInput("I'm actually doing okay.")} 
-              className="flex items-center gap-2 px-4 py-2 bg-[#C8B6FF] text-[#1E0542] font-black border border-purple-300 rounded-full text-xs md:text-sm shadow-md hover:bg-white transition-all whitespace-nowrap cursor-pointer"
+              className="px-4 py-2 bg-[#C4B4E2] text-[#532E60] font-black border border-white rounded-full text-xs md:text-sm shadow-md hover:bg-white transition-all whitespace-nowrap cursor-pointer"
             >
-              <Sun size={16} className="text-[#2E0B5E]" /> Okay
+              Doing Okay
             </button>
           </div>
         )}
 
         {/* Text Input Form */}
-        <form onSubmit={handleSend} className="relative flex items-end bg-[#C8B6FF] rounded-2xl shadow-lg border-2 border-purple-400 focus-within:border-white focus-within:ring-2 focus-within:ring-purple-300 transition-all">
+        <form onSubmit={handleSend} className="relative flex items-end bg-[#C4B4E2] rounded-2xl shadow-lg border-2 border-white focus-within:ring-2 focus-within:ring-white transition-all">
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Talk to Itoura..."
-            className="flex-1 max-h-32 min-h-[58px] py-4 pl-5 pr-24 bg-transparent outline-none resize-none font-bold text-[#1E0542] placeholder:text-[#2E0B5E]/60 text-base"
+            className="flex-1 max-h-32 min-h-[58px] py-4 pl-5 pr-24 bg-transparent outline-none resize-none font-bold text-[#532E60] placeholder:text-[#532E60]/60 text-base"
             onKeyDown={(e) => {
               if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
@@ -231,7 +236,7 @@ export default function ChatInterface() {
               type="button"
               onClick={toggleRecording}
               className={`p-2.5 rounded-full transition-all flex items-center justify-center cursor-pointer ${
-                isRecording ? 'bg-red-600 text-white animate-pulse' : 'bg-[#2E0B5E] text-purple-100 hover:bg-[#4C1D95]'
+                isRecording ? 'bg-red-600 text-white animate-pulse' : 'bg-[#532E60] text-white hover:bg-[#3D2048]'
               }`}
             >
               {isRecording ? <MicOff size={18} /> : <Mic size={18} />}
@@ -239,20 +244,19 @@ export default function ChatInterface() {
             <button 
               type="submit" 
               disabled={!input.trim() || isLoading || isSummarizing}
-              className="p-2.5 bg-[#1E0542] text-white rounded-full disabled:opacity-40 disabled:bg-[#2E0B5E] transition-all hover:scale-105 active:scale-95 flex items-center justify-center shadow-md cursor-pointer border border-[#8A2BE2]"
+              className="p-2.5 bg-[#532E60] text-white rounded-full disabled:opacity-40 transition-all hover:scale-105 active:scale-95 flex items-center justify-center shadow-md cursor-pointer border border-white/40"
             >
-              <Send size={18} className="ml-0.5 text-purple-200" />
+              <Send size={18} className="ml-0.5 text-[#E8DCF8]" />
             </button>
           </div>
         </form>
         
         {!apiKey && (
           <p className="text-xs text-center text-red-300 font-bold mt-2 bg-red-950 py-1 px-3 rounded-full border border-red-800 w-fit mx-auto">
-            Missing VITE_GROQ_API_KEY in .env file
+            Groq API Key not found. Please set VITE_GROQ_API_KEY in .env
           </p>
         )}
       </div>
-
     </div>
   );
 }

@@ -60,8 +60,8 @@ export default function ToolsPage() {
     <div className="p-4 md:p-8 max-w-5xl mx-auto space-y-8 pb-12">
       {/* Header */}
       <header className="space-y-2">
-        <h1 className="font-serif text-3xl md:text-4xl font-black text-white">Wellness Tools</h1>
-        <p className="text-purple-200 font-bold text-sm md:text-base">
+        <h1 className="font-serif text-3xl md:text-4xl font-black text-[#532E60]">Wellness Tools</h1>
+        <p className="text-[#532E60]/80 font-bold text-sm md:text-base">
           Take a moment for yourself. Choose an exercise to help you reset.
         </p>
       </header>
@@ -89,13 +89,10 @@ export default function ToolsPage() {
                 <button
                   key={tool.id}
                   onClick={() => setActiveTool(tool.id)}
-                  className="flex flex-col text-left p-8 bg-[#2E0B5E] rounded-[2rem] border-2 border-[#7C3AED] hover:bg-[#3B0C78] hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 group relative overflow-hidden shadow-xl cursor-pointer"
+                  className="flex flex-col text-left p-8 bg-[#532E60] rounded-[2rem] border-2 border-white/40 hover:bg-[#613B6E] hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 group relative overflow-hidden shadow-xl cursor-pointer"
                 >
-                  {/* Background decoration */}
-                  <div className="absolute -right-8 -top-8 w-36 h-36 bg-[#8A2BE2]/25 rounded-full blur-2xl group-hover:bg-[#8A2BE2]/45 transition-all"></div>
-                  
                   <div className="flex justify-between items-start w-full mb-6 relative z-10">
-                    <div className="p-3.5 bg-[#4C1D95] rounded-3xl shadow-inner border border-[#8A2BE2] group-hover:-rotate-3 transition-transform duration-300">
+                    <div className="p-3.5 bg-[#613B6E] rounded-3xl shadow-inner border border-white/30 group-hover:-rotate-3 transition-transform duration-300">
                       <SpriteIcon 
                         imageSrc={FourIcons} 
                         totalIcons={4} 
@@ -103,16 +100,16 @@ export default function ToolsPage() {
                         size={64} 
                       />
                     </div>
-                    <span className="text-xs font-black text-[#1E0542] bg-[#C8B6FF] px-3.5 py-1.5 rounded-full border border-purple-300 shadow-md">
+                    <span className="text-xs font-black text-[#532E60] bg-[#C4B4E2] px-3.5 py-1.5 rounded-full border border-white shadow-md">
                       {tool.duration}
                     </span>
                   </div>
                   
                   <h3 className="text-2xl font-serif font-black text-white mb-3 relative z-10">{tool.title}</h3>
-                  <p className="text-base font-bold text-purple-200 mb-8 relative z-10 flex-1 leading-relaxed">{tool.description}</p>
+                  <p className="text-base font-bold text-[#E8DCF8] mb-8 relative z-10 flex-1 leading-relaxed">{tool.description}</p>
                   
                   <div className="w-full relative z-10 mt-auto">
-                    <span className="inline-flex items-center justify-center w-full py-4 bg-[#C8B6FF] text-[#1E0542] rounded-2xl font-black text-base border border-purple-300 group-hover:bg-white transition-colors shadow-md">
+                    <span className="inline-flex items-center justify-center w-full py-4 bg-[#C4B4E2] text-[#532E60] rounded-2xl font-black text-base border border-white group-hover:bg-white transition-colors shadow-md">
                       Begin Exercise
                     </span>
                   </div>

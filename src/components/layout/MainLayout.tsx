@@ -72,11 +72,11 @@ export default function MainLayout() {
   const currentCategory = navCategories.find((c) => c.path === location.pathname) || navCategories[0];
 
   return (
-    <div className="flex flex-col min-h-screen bg-transparent relative font-sans text-purple-100 selection:bg-purple-500 selection:text-white">
+    <div className="flex flex-col min-h-screen bg-[#C4B4E2] relative font-sans text-[#532E60] selection:bg-[#532E60] selection:text-white">
       <DailyMessagePopup />
 
-      {/* Mobile & Desktop Responsive Header */}
-      <header className="sticky top-0 z-50 w-full px-3 sm:px-6 md:px-12 py-3 md:py-4 bg-[#7C3AED] backdrop-blur-xl border-b-2 border-purple-400/60 shadow-xl">
+      {/* Deep Plum Responsive Header */}
+      <header className="sticky top-0 z-50 w-full px-3 sm:px-6 md:px-12 py-3 md:py-4 bg-[#532E60] backdrop-blur-xl border-b-2 border-white/20 shadow-xl">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-6">
           
           {/* Logo & Category Dropdown Button */}
@@ -89,28 +89,28 @@ export default function MainLayout() {
               />
             </Link>
 
-            {/* Clean Category Dropdown Button */}
+            {/* Pastel Lilac Category Dropdown Button */}
             <div className="relative min-w-0" ref={dropdownRef}>
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex items-center gap-2 sm:gap-3.5 px-3.5 sm:px-6 md:px-7 py-2 sm:py-2.5 bg-[#1E0542] hover:bg-[#2E0B5E] text-[#C8B6FF] font-black text-xs sm:text-sm md:text-base rounded-full border-2 border-[#C8B6FF]/90 shadow-xl transition-all cursor-pointer whitespace-nowrap overflow-hidden"
+                className="flex items-center gap-2 sm:gap-3.5 px-3.5 sm:px-6 md:px-7 py-2 sm:py-2.5 bg-[#C4B4E2] hover:bg-[#D4C8EC] text-[#532E60] font-black text-xs sm:text-sm md:text-base rounded-full border-2 border-white/80 shadow-xl transition-all cursor-pointer whitespace-nowrap overflow-hidden"
                 aria-expanded={isDropdownOpen}
               >
-                <span className="font-black text-white truncate max-w-[130px] sm:max-w-none">{currentCategory.label}</span>
+                <span className="font-black text-[#532E60] truncate max-w-[130px] sm:max-w-none">{currentCategory.label}</span>
                 <ChevronDown 
                   size={16} 
-                  className={`text-[#C8B6FF] shrink-0 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} 
+                  className={`text-[#532E60] shrink-0 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} 
                 />
               </button>
 
-              {/* Clean Dropdown Modal */}
+              {/* Deep Plum Dropdown Modal */}
               {isDropdownOpen && (
-                <div className="absolute top-full left-0 mt-3 w-[calc(100vw-2rem)] max-w-[340px] sm:max-w-none sm:w-80 md:w-88 bg-[#7C3AED] backdrop-blur-2xl border-2 border-[#C8B6FF] rounded-3xl p-3 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-200">
-                  <div className="px-3 py-2 border-b border-purple-300/50 mb-2 flex justify-between items-center">
+                <div className="absolute top-full left-0 mt-3 w-[calc(100vw-2rem)] max-w-[340px] sm:max-w-none sm:w-80 md:w-88 bg-[#532E60] backdrop-blur-2xl border-2 border-[#C4B4E2] rounded-3xl p-3 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-200">
+                  <div className="px-3 py-2 border-b border-white/20 mb-2 flex justify-between items-center">
                     <span className="text-xs font-black tracking-wider text-white uppercase">
                       Select Section
                     </span>
-                    <span className="text-[11px] font-black bg-[#1E0542] text-[#C8B6FF] px-3 py-1 rounded-full border border-[#C8B6FF]/50 shadow-sm">
+                    <span className="text-[11px] font-black bg-[#C4B4E2] text-[#532E60] px-3 py-1 rounded-full shadow-sm">
                       7 Categories
                     </span>
                   </div>
@@ -125,12 +125,12 @@ export default function MainLayout() {
                           onClick={() => setIsDropdownOpen(false)}
                           className={`flex flex-col p-3 sm:p-3.5 rounded-2xl transition-all ${
                             selected
-                              ? 'bg-[#C8B6FF] text-[#1E0542] font-black shadow-lg border border-white'
-                              : 'text-white hover:bg-[#6D28D9] font-bold'
+                              ? 'bg-[#C4B4E2] text-[#532E60] font-black shadow-lg border border-white'
+                              : 'text-white hover:bg-[#613B6E] font-bold'
                           }`}
                         >
                           <span className="font-black text-sm block truncate">{item.label}</span>
-                          <p className={`text-xs mt-0.5 line-clamp-1 ${selected ? 'text-[#1E0542] font-bold' : 'text-purple-100/80'}`}>
+                          <p className={`text-xs mt-0.5 line-clamp-1 ${selected ? 'text-[#532E60] font-bold' : 'text-[#E8DCF8]/80'}`}>
                             {item.description}
                           </p>
                         </Link>
@@ -145,7 +145,7 @@ export default function MainLayout() {
           {/* Right Aligned Clean and Minimalist Itoura Text */}
           <div className="flex items-center shrink-0">
             <Link to="/" title="Go to Welcome Page">
-              <span className="font-serif text-lg sm:text-2xl md:text-3xl font-black tracking-tight text-white hover:text-purple-200 transition-colors drop-shadow-md">
+              <span className="font-serif text-lg sm:text-2xl md:text-3xl font-black tracking-tight text-white hover:text-[#C4B4E2] transition-colors drop-shadow-md">
                 Itoura
               </span>
             </Link>
@@ -161,8 +161,8 @@ export default function MainLayout() {
         </div>
       </main>
 
-      {/* Mobile Bottom Navigation Bar (Clean Text Pills) */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#7C3AED] backdrop-blur-xl border-t-2 border-purple-400/60 px-2 sm:px-3 py-2.5 shadow-2xl flex justify-around items-center">
+      {/* Deep Plum Mobile Bottom Navigation Bar */}
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#532E60] backdrop-blur-xl border-t-2 border-white/20 px-2 sm:px-3 py-2.5 shadow-2xl flex justify-around items-center">
         {navCategories.slice(0, 5).map((item) => {
           const selected = isActive(item.path);
           return (
@@ -171,8 +171,8 @@ export default function MainLayout() {
               to={item.path}
               className={`px-3 py-1.5 rounded-full text-xs font-black transition-all ${
                 selected 
-                  ? 'bg-[#C8B6FF] text-[#1E0542] shadow-md border border-white scale-105' 
-                  : 'text-purple-100 hover:text-white'
+                  ? 'bg-[#C4B4E2] text-[#532E60] shadow-md border border-white scale-105' 
+                  : 'text-[#E8DCF8] hover:text-white'
               }`}
             >
               <span className="truncate max-w-[64px]">{item.label.split(' ')[0]}</span>

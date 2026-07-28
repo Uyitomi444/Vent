@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronDown, MessageCircleHeart } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 
 interface FAQ {
   question: string;
@@ -33,7 +33,7 @@ const FAQ_DATA: FAQCategory[] = [
       },
       {
         question: "Who is Itoura for?",
-        answer: "Itoura is for anyone navigating daily stressors, looking to build emotional resilience, or just needing a safe space to vent. It's especially tailored to understand and relate to the unique cultural context and lived experiences of the Nigerian ecosystem."
+        answer: "Itoura is for anyone navigating daily stressors, looking to build emotional resilience, or just needing a safe space to vent. It's especially tailored to understand and relate to the unique cultural context and lived experiences of everyday workplace dynamics."
       }
     ]
   },
@@ -92,7 +92,7 @@ const FAQ_DATA: FAQCategory[] = [
       },
       {
         question: "What happens if I say something that sounds like a crisis?",
-        answer: "If Itoura detects language indicating severe distress or a crisis, it will pause standard conversation to provide you with immediate, local emergency resources in Nigeria—like the Mentally Aware Nigeria Initiative (MANI) and the Nigeria Suicide Prevention Initiative (NSPI)."
+        answer: "If Itoura detects language indicating severe distress or a crisis, it will pause standard conversation to provide you with immediate, local emergency resources."
       },
       {
         question: "Is there an age requirement to use Itoura?",
@@ -110,21 +110,21 @@ function AccordionItem({ item }: { item: FAQ }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="border border-[#7C3AED]/80 bg-[#2E0B5E] rounded-2xl overflow-hidden shadow-lg transition-all mb-3">
+    <div className="border-2 border-white/40 bg-[#532E60] text-white rounded-2xl overflow-hidden shadow-lg transition-all mb-3">
       <button 
-        className="w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none hover:bg-[#4C1D95] transition-colors cursor-pointer"
+        className="w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none hover:bg-[#613B6E] transition-colors cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span className="font-extrabold text-[#E5D0FF] text-lg pr-4">{item.question}</span>
+        <span className="font-black text-white text-lg pr-4">{item.question}</span>
         <ChevronDown 
-          className={`shrink-0 text-purple-300 transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} 
+          className={`shrink-0 text-[#C4B4E2] transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`} 
           size={22} 
         />
       </button>
       <div 
         className={`px-6 overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-96 pb-5 opacity-100' : 'max-h-0 opacity-0'}`}
       >
-        <p className="text-purple-100 font-bold leading-relaxed text-sm md:text-base bg-[#23074D] p-4 rounded-xl border border-[#7C3AED]">
+        <p className="text-[#E8DCF8] font-bold leading-relaxed text-sm md:text-base bg-[#613B6E] p-4 rounded-xl border border-white/20">
           {item.answer}
         </p>
       </div>
@@ -137,15 +137,15 @@ export default function FAQPage() {
     <div className="max-w-4xl mx-auto space-y-10 pb-16 pt-4 px-4 md:px-8">
       {/* Header */}
       <header className="text-center space-y-3 mb-10">
-        <h1 className="font-serif text-4xl md:text-5xl text-[#E5D0FF] font-black tracking-tight">Frequently Asked Questions</h1>
-        <p className="text-purple-300 font-bold text-lg">Everything you need to know about your new companion.</p>
+        <h1 className="font-serif text-4xl md:text-5xl text-[#532E60] font-black tracking-tight">Frequently Asked Questions</h1>
+        <p className="text-[#532E60]/80 font-bold text-lg">Everything you need to know about your new companion.</p>
       </header>
 
       {/* FAQ Categories */}
       <div className="space-y-10">
         {FAQ_DATA.map((category, idx) => (
           <section key={idx}>
-            <h2 className="text-xs font-black text-purple-300 uppercase tracking-widest mb-4 px-2">
+            <h2 className="text-xs font-black text-[#532E60] uppercase tracking-widest mb-4 px-2">
               {category.title}
             </h2>
             <div className="space-y-3">
@@ -158,18 +158,15 @@ export default function FAQPage() {
       </div>
 
       {/* Contact Block */}
-      <div className="mt-16 bg-[#2E0B5E] border border-[#7C3AED]/80 rounded-3xl p-8 md:p-10 text-center shadow-2xl relative overflow-hidden">
-        <div className="absolute top-0 right-0 p-8 opacity-10 mix-blend-screen">
-          <MessageCircleHeart size={140} className="text-purple-300" />
-        </div>
+      <div className="mt-16 bg-[#532E60] text-white border-2 border-white/40 rounded-3xl p-8 md:p-10 text-center shadow-2xl relative overflow-hidden">
         <div className="relative z-10">
-          <h3 className="font-serif text-2xl font-black text-[#E5D0FF] mb-3">Still have questions?</h3>
-          <p className="text-purple-200 font-bold mb-6 max-w-md mx-auto">
+          <h3 className="font-serif text-2xl font-black text-white mb-3">Still have questions?</h3>
+          <p className="text-[#E8DCF8] font-bold mb-6 max-w-md mx-auto">
             We're always here to help you navigate Itoura. Reach out to our support team and we'll get back to you shortly.
           </p>
           <a 
             href="mailto:support@itoura.com" 
-            className="inline-block px-8 py-3.5 bg-[#E5D0FF] text-[#160432] rounded-full font-black hover:bg-white transition-all shadow-lg hover:scale-105 border border-purple-300"
+            className="inline-block px-8 py-3.5 bg-[#C4B4E2] text-[#532E60] rounded-full font-black hover:bg-white transition-all shadow-lg hover:scale-105 border border-white"
           >
             Contact Support
           </a>

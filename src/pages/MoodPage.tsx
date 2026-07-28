@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Trash2, TrendingUp } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 import { useMoodStore, type MoodType } from '../store/moodStore';
 import { useMemoryStore } from '../store/memoryStore';
 import { useJournalStore } from '../store/journalStore';
@@ -53,34 +53,31 @@ export default function MoodPage() {
     <div className="p-4 md:p-8 max-w-4xl mx-auto space-y-10">
       {/* Header */}
       <header className="space-y-2">
-        <h1 className="font-serif text-3xl md:text-4xl font-black text-[#E5D0FF]">Mood Check-in</h1>
-        <p className="text-purple-300 font-bold text-sm md:text-base">Take a moment to reflect on how you're feeling right now.</p>
+        <h1 className="font-serif text-3xl md:text-4xl font-black text-[#532E60]">Mood Check-in</h1>
+        <p className="text-[#532E60]/80 font-bold text-sm md:text-base">Take a moment to reflect on how you're feeling right now.</p>
       </header>
       
       {/* Insights & Patterns */}
       {topThemes.length > 0 && (
-        <section className="bg-[#2E0B5E] rounded-3xl p-6 shadow-xl border border-[#7C3AED]/80">
-          <div className="flex items-center gap-2 mb-4">
-            <TrendingUp size={22} className="text-[#E5D0FF]" />
-            <h2 className="font-serif text-xl font-black text-[#E5D0FF]">Recent Patterns</h2>
-          </div>
-          <p className="text-sm font-bold text-purple-200 mb-4">Based on your recent chats and journal entries, these themes have been on your mind:</p>
+        <section className="bg-[#532E60] text-white rounded-3xl p-6 shadow-xl border-2 border-white/40">
+          <h2 className="font-serif text-xl font-black text-white mb-2">Recent Patterns</h2>
+          <p className="text-sm font-bold text-[#E8DCF8] mb-4">Based on your recent chats and journal entries, these themes have been on your mind:</p>
           <div className="flex flex-wrap gap-3">
             {topThemes.map((item, i) => (
-              <div key={i} className="flex items-center gap-2 bg-[#E5D0FF] text-[#160432] px-4 py-2 rounded-full shadow-md text-sm font-black border border-purple-300">
+              <div key={i} className="flex items-center gap-2 bg-[#C4B4E2] text-[#532E60] px-4 py-2 rounded-full shadow-md text-sm font-black border border-white">
                 <span className="capitalize">{item.theme}</span>
-                <span className="text-xs font-black text-white bg-[#4C1D95] px-2 py-0.5 rounded-full">{item.count}</span>
+                <span className="text-xs font-black text-white bg-[#532E60] px-2 py-0.5 rounded-full">{item.count}</span>
               </div>
             ))}
           </div>
         </section>
       )}
 
-      {/* Check-in Form in Rich Indigo-Purple Box */}
-      <section className="bg-[#2E0B5E] rounded-3xl p-6 md:p-8 shadow-2xl border border-[#7C3AED]/80 space-y-8">
+      {/* Check-in Form */}
+      <section className="bg-[#532E60] text-white rounded-3xl p-6 md:p-8 shadow-2xl border-2 border-white/40 space-y-8">
         {/* Mood Selection */}
         <div className="space-y-4">
-          <label className="block text-base font-black text-[#E5D0FF]">How are you feeling?</label>
+          <label className="block text-base font-black text-white">How are you feeling?</label>
           <div className="grid grid-cols-5 gap-2 md:gap-4">
             {MOODS.map(({ type, spriteIndex, label }) => {
               const isSelected = selectedMood === type;
@@ -90,8 +87,8 @@ export default function MoodPage() {
                   onClick={() => setSelectedMood(type)}
                   className={`flex flex-col items-center justify-center p-3 md:p-4 rounded-3xl transition-all duration-300 cursor-pointer ${
                     isSelected 
-                      ? 'bg-[#E5D0FF] text-[#160432] border-2 border-white scale-105 shadow-xl' 
-                      : 'bg-[#4C1D95]/60 border border-[#7C3AED]/60 hover:bg-[#4C1D95] text-purple-200'
+                      ? 'bg-[#C4B4E2] text-[#532E60] border-2 border-white scale-105 shadow-xl' 
+                      : 'bg-[#613B6E] border border-white/30 hover:bg-[#6D427C] text-[#E8DCF8]'
                   }`}
                 >
                   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
@@ -103,7 +100,7 @@ export default function MoodPage() {
                       className={isSelected ? 'scale-110 transition-transform' : ''}
                     />
                   </motion.div>
-                  <span className={`text-xs md:text-sm font-extrabold mt-2 ${isSelected ? 'text-[#160432]' : 'text-purple-200'}`}>
+                  <span className={`text-xs md:text-sm font-extrabold mt-2 ${isSelected ? 'text-[#532E60]' : 'text-[#E8DCF8]'}`}>
                     {label}
                   </span>
                 </button>
@@ -115,8 +112,8 @@ export default function MoodPage() {
         {/* Energy Slider */}
         <div className="space-y-4">
           <div className="flex justify-between items-center">
-            <label className="block text-base font-black text-[#E5D0FF]">Energy Level</label>
-            <span className="text-sm font-black text-[#160432] bg-[#E5D0FF] px-4 py-1.5 rounded-full border border-purple-300 shadow-sm">{energy}/10</span>
+            <label className="block text-base font-black text-white">Energy Level</label>
+            <span className="text-sm font-black text-[#532E60] bg-[#C4B4E2] px-4 py-1.5 rounded-full border border-white shadow-sm">{energy}/10</span>
           </div>
           <input
             type="range"
@@ -124,9 +121,9 @@ export default function MoodPage() {
             max="10"
             value={energy}
             onChange={(e) => setEnergy(Number(e.target.value))}
-            className="w-full h-3 bg-[#4C1D95] rounded-lg appearance-none cursor-pointer accent-[#E5D0FF]"
+            className="w-full h-3 bg-[#613B6E] rounded-lg appearance-none cursor-pointer accent-[#C4B4E2]"
           />
-          <div className="flex justify-between text-xs font-black text-purple-300">
+          <div className="flex justify-between text-xs font-black text-[#E8DCF8]">
             <span>Exhausted</span>
             <span>Energized</span>
           </div>
@@ -134,12 +131,12 @@ export default function MoodPage() {
 
         {/* Note */}
         <div className="space-y-4">
-          <label className="block text-base font-black text-[#E5D0FF]">Add a note (optional)</label>
+          <label className="block text-base font-black text-white">Add a note (optional)</label>
           <textarea
             value={note}
             onChange={(e) => setNote(e.target.value)}
             placeholder="What's making you feel this way?"
-            className="w-full p-4 bg-[#E5D0FF] border-2 border-purple-400 rounded-2xl resize-none outline-none focus:border-white transition-colors h-24 text-base font-bold text-[#160432] placeholder:text-[#2E0B5E]/60"
+            className="w-full p-4 bg-[#C4B4E2] border-2 border-white rounded-2xl resize-none outline-none focus:border-white transition-colors h-24 text-base font-bold text-[#532E60] placeholder:text-[#532E60]/60"
           />
         </div>
 
@@ -147,7 +144,7 @@ export default function MoodPage() {
         <button
           onClick={handleSave}
           disabled={!selectedMood}
-          className="w-full py-4 rounded-2xl bg-[#E5D0FF] text-[#160432] font-black text-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-white transition-all shadow-xl cursor-pointer"
+          className="w-full py-4 rounded-2xl bg-[#C4B4E2] text-[#532E60] font-black text-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-white transition-all shadow-xl cursor-pointer border border-white"
         >
           Save Check-in
         </button>
@@ -155,7 +152,7 @@ export default function MoodPage() {
 
       {/* History */}
       <section className="space-y-6">
-        <h2 className="font-serif text-2xl md:text-3xl font-black text-[#E5D0FF]">Recent History</h2>
+        <h2 className="font-serif text-2xl md:text-3xl font-black text-[#532E60]">Recent History</h2>
         
         <div className="space-y-4">
           <AnimatePresence>
@@ -163,9 +160,9 @@ export default function MoodPage() {
               <motion.div 
                 initial={{ opacity: 0 }} 
                 animate={{ opacity: 1 }} 
-                className="text-center p-8 bg-[#2E0B5E] rounded-3xl border border-[#7C3AED]/80 shadow-lg"
+                className="text-center p-8 bg-[#532E60] text-white rounded-3xl border-2 border-white/40 shadow-lg"
               >
-                <p className="text-purple-200 font-bold text-base">No check-ins yet. Start tracking your mood above.</p>
+                <p className="text-[#E8DCF8] font-bold text-base">No check-ins yet. Start tracking your mood above.</p>
               </motion.div>
             ) : (
               entries.map((entry) => {
@@ -177,9 +174,9 @@ export default function MoodPage() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95 }}
-                    className="flex items-start gap-4 p-5 bg-[#2E0B5E] rounded-3xl shadow-xl border border-[#7C3AED]/80"
+                    className="flex items-start gap-4 p-5 bg-[#532E60] text-white rounded-3xl shadow-xl border-2 border-white/40"
                   >
-                    <div className="bg-[#4C1D95] rounded-2xl p-1 shadow-inner">
+                    <div className="bg-[#613B6E] rounded-2xl p-1 shadow-inner border border-white/20">
                       {moodConfig && (
                         <SpriteIcon 
                           imageSrc={FiveIcons} 
@@ -193,18 +190,18 @@ export default function MoodPage() {
                     <div className="flex-1 mt-1">
                       <div className="flex justify-between items-start">
                         <div>
-                          <h3 className="font-black text-[#E5D0FF] text-lg capitalize">{entry.mood}</h3>
-                          <span className="text-xs font-bold text-purple-300">
+                          <h3 className="font-black text-white text-lg capitalize">{entry.mood}</h3>
+                          <span className="text-xs font-bold text-[#E8DCF8]">
                             {new Date(entry.timestamp).toLocaleDateString()} at {new Date(entry.timestamp).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
                           </span>
                         </div>
                         <div className="flex items-center gap-3">
-                          <span className="text-xs font-black bg-[#E5D0FF] text-[#160432] px-3 py-1 rounded-full border border-purple-300">
+                          <span className="text-xs font-black bg-[#C4B4E2] text-[#532E60] px-3 py-1 rounded-full border border-white">
                             Energy: {entry.energyLevel}/10
                           </span>
                           <button 
                             onClick={() => deleteEntry(entry.id)}
-                            className="p-1.5 text-purple-300 hover:text-red-400 hover:bg-[#4C1D95] rounded-lg transition-colors cursor-pointer"
+                            className="p-1.5 text-[#E8DCF8] hover:text-red-300 hover:bg-red-950 rounded-lg transition-colors cursor-pointer"
                           >
                             <Trash2 className="w-5 h-5" />
                           </button>
@@ -212,7 +209,7 @@ export default function MoodPage() {
                       </div>
                       
                       {entry.note && (
-                        <p className="mt-3 text-sm font-bold text-purple-100 bg-[#4C1D95]/80 p-3 rounded-xl border border-[#7C3AED]">
+                        <p className="mt-3 text-sm font-bold text-white bg-[#613B6E] p-3 rounded-xl border border-white/20">
                           "{entry.note}"
                         </p>
                       )}

@@ -47,9 +47,8 @@
 @layer base {
   body {
     font-family: 'Paperlogy', sans-serif;
-    @apply font-sans text-purple-100 antialiased transition-colors duration-500 bg-[#1E0542];
-    background: radial-gradient(circle at 50% 30%, #8A2BE2 0%, #4C1D95 55%, #1E0542 100%);
-    background-attachment: fixed;
+    @apply font-sans text-[#532E60] antialiased transition-colors duration-500 bg-[#C4B4E2];
+    background-color: #C4B4E2;
     min-height: 100vh;
   }
 }
@@ -61,7 +60,7 @@ body::before {
   inset: 0;
   width: 100vw;
   height: 100vh;
-  opacity: 0.16;
+  opacity: 0.12;
   pointer-events: none;
   z-index: 9999;
   mix-blend-mode: overlay;
@@ -71,7 +70,7 @@ body::before {
 /* Tactile Grain & Orbital Effect Utility Classes */
 .bg-grain-texture {
   position: relative;
-  background: radial-gradient(circle at 50% 35%, #8A2BE2 0%, #7C3AED 45%, #2E0B5E 100%);
+  background: linear-gradient(135deg, #613B6E 0%, #532E60 100%);
 }
 
 .bg-grain-texture::before {
@@ -80,7 +79,7 @@ body::before {
   inset: 0;
   width: 100%;
   height: 100%;
-  opacity: 0.20;
+  opacity: 0.18;
   pointer-events: none;
   mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
