@@ -174,10 +174,12 @@ export default function MainLayout() {
             </div>
           </div>
 
-          {/* Center: Clean & Minimalist "Itoura" Text */}
-          <div className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center pointer-events-auto">
-            <Link to="/" className="font-serif text-2xl md:text-3xl font-black text-[#E5D0FF] tracking-wider hover:scale-105 transition-all drop-shadow-md">
-              Itoura
+          {/* Clean and Minimalist Center Header Brand Title */}
+          <div className="absolute left-1/2 -translate-x-1/2 text-center pointer-events-none">
+            <Link to="/" className="pointer-events-auto">
+              <span className="font-serif text-2xl md:text-3xl font-black tracking-tight text-[#E5D0FF] hover:text-white transition-colors drop-shadow-sm">
+                Itoura
+              </span>
             </Link>
           </div>
 
