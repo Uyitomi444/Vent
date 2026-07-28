@@ -1,233 +1,127 @@
-import { useState, useEffect } from 'react';
-import { Wind, Anchor, Sparkles, X, Play, RotateCcw, ArrowRight } from 'lucide-react';
+import { useState } from 'react';
+import BreathingTool from '../components/tools/BreathingTool';
+import GroundingTool from '../components/tools/GroundingTool';
+import MindfulMomentTool from '../components/tools/MindfulMomentTool';
+import BreakTool from '../components/tools/BreakTool';
+import { motion, AnimatePresence } from 'framer-motion';
+import SpriteIcon from '../components/SpriteIcon';
+import FourIcons from '../assets/Four_icons.jpeg';
+
+const TOOLS = [
+  {
+    id: 'breathe',
+    title: 'Box Breathing',
+    description: 'A simple technique to quickly regulate your nervous system with equal 4-second intervals.',
+    spriteIndex: 0,
+    duration: '1-5 mins'
+  },
+  {
+    id: 'grounding',
+    title: '5-4-3-2-1 Grounding',
+    description: 'Engage your physical senses to bring yourself back to the present moment.',
+    spriteIndex: 1,
+    duration: '3 mins'
+  },
+  {
+    id: 'meditation',
+    title: 'Mindful Moment',
+    description: 'Guided reflection to help process complex emotions and quiet your mind.',
+    spriteIndex: 2,
+    duration: '5 mins'
+  },
+  {
+    id: 'break',
+    title: 'Take a Break',
+    description: 'Disconnect, rest your eyes, and step away from work screens.',
+    spriteIndex: 3,
+    duration: '10 mins'
+  }
+];
 
 export default function ToolsPage() {
-  const [activeTool, setActiveTool] = useState<'breathing' | 'grounding' | 'reframing' | null>(null);
-  
-  // Box breathing state
-  const [breathPhase, setBreathPhase] = useState<'Inhale' | 'Hold' | 'Exhale' | 'Rest'>('Inhale');
-  const [breathTimer, setBreathTimer] = useState(4);
-  const [isBreathingActive, setIsBreathingActive] = useState(false);
+  const [activeTool, setActiveTool] = useState<string | null>(null);
 
-  // Grounding technique state
-  const [groundingStep, setGroundingStep] = useState(0);
-
-  useEffect(() => {
-    let interval: any;
-    if (activeTool === 'breathing' && isBreathingActive) {
-      interval = setInterval(() => {
-        setBreathTimer((prev) => {
-          if (prev > 1) return prev - 1;
-          
-          setBreathPhase((currentPhase) => {
-            if (currentPhase === 'Inhale') return 'Hold';
-            if (currentPhase === 'Hold') return 'Exhale';
-            if (currentPhase === 'Exhale') return 'Rest';
-            return 'Inhale';
-          });
-          return 4;
-        });
-      }, 1000);
+  const renderActiveTool = () => {
+    switch (activeTool) {
+      case 'breathe':
+        return <BreathingTool onClose={() => setActiveTool(null)} />;
+      case 'grounding':
+        return <GroundingTool onClose={() => setActiveTool(null)} />;
+      case 'meditation':
+        return <MindfulMomentTool onClose={() => setActiveTool(null)} />;
+      case 'break':
+        return <BreakTool onClose={() => setActiveTool(null)} />;
+      default:
+        return null;
     }
-    return () => clearInterval(interval);
-  }, [activeTool, isBreathingActive]);
-
-  const groundingSteps = [
-    { count: '5', sense: 'Things you can SEE', desc: 'Look around and notice 5 distinct details in your room.' },
-    { count: '4', sense: 'Things you can TOUCH', desc: 'Feel the fabric of your clothes, the desk, or your feet on the floor.' },
-    { count: '3', sense: 'Things you can HEAR', desc: 'Listen closely for 3 background sounds (ac, traffic, birds).' },
-    { count: '2', sense: 'Things you can SMELL', desc: 'Notice 2 scents in the air or your coffee cup.' },
-    { count: '1', sense: 'Thing you can TASTE', desc: 'Focus on 1 taste in your mouth right now.' },
-  ];
+  };
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto pb-12">
-      
-      <div>
+    <div className="p-4 md:p-8 max-w-5xl mx-auto space-y-8 pb-12">
+      {/* Header */}
+      <header className="space-y-2">
         <h1 className="font-serif text-3xl md:text-4xl font-black text-white">Wellness Tools</h1>
-        <p className="text-purple-200 text-sm md:text-base font-bold mt-1">
-          Instant, science-backed grounding techniques whenever you feel overwhelmed.
+        <p className="text-purple-200 font-bold text-sm md:text-base">
+          Take a moment for yourself. Choose an exercise to help you reset.
         </p>
-      </div>
+      </header>
 
-      {/* Grid of Interactive Wellness Tools */}
-      <div className="grid md:grid-cols-3 gap-6">
-        
-        {/* Tool 1: Box Breathing */}
-        <div 
-          onClick={() => { setActiveTool('breathing'); setIsBreathingActive(true); }}
-          className="flex flex-col text-left p-8 bg-[#2E0B5E] rounded-[2rem] border-2 border-[#7C3AED] hover:bg-[#3B0C78] hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 group relative overflow-hidden shadow-xl cursor-pointer"
-        >
-          <div className="w-14 h-14 bg-[#4C1D95] rounded-2xl flex items-center justify-center text-[#C8B6FF] mb-6 border border-[#8A2BE2]">
-            <Wind size={28} />
-          </div>
-          <span className="text-xs font-black text-[#1E0542] bg-[#C8B6FF] px-3.5 py-1.5 rounded-full border border-purple-300 shadow-md w-fit mb-3">
-            4-4-4-4 Rhythm
-          </span>
-          <h3 className="text-2xl font-serif font-black text-white mb-3 relative z-10">Box Breathing</h3>
-          <p className="text-purple-200 leading-relaxed font-bold text-sm mb-6 flex-1">
-            Reset your nervous system with equal 4-second intervals of inhaling, holding, exhaling, and resting.
-          </p>
-          <button className="inline-flex items-center justify-center gap-2 w-full py-3.5 bg-[#C8B6FF] text-[#1E0542] rounded-2xl font-black text-sm border border-purple-300 group-hover:bg-white transition-colors shadow-md">
-            Start Exercise <ArrowRight size={16} />
-          </button>
-        </div>
-
-        {/* Tool 2: 5-4-3-2-1 Grounding */}
-        <div 
-          onClick={() => { setActiveTool('grounding'); setGroundingStep(0); }}
-          className="flex flex-col text-left p-8 bg-[#2E0B5E] rounded-[2rem] border-2 border-[#7C3AED] hover:bg-[#3B0C78] hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 group relative overflow-hidden shadow-xl cursor-pointer"
-        >
-          <div className="w-14 h-14 bg-[#4C1D95] rounded-2xl flex items-center justify-center text-[#C8B6FF] mb-6 border border-[#8A2BE2]">
-            <Anchor size={28} />
-          </div>
-          <span className="text-xs font-black text-[#1E0542] bg-[#C8B6FF] px-3.5 py-1.5 rounded-full border border-purple-300 shadow-md w-fit mb-3">
-            Sensory Reset
-          </span>
-          <h3 className="text-2xl font-serif font-black text-white mb-3 relative z-10">5-4-3-2-1 Grounding</h3>
-          <p className="text-purple-200 leading-relaxed font-bold text-sm mb-6 flex-1">
-            Pull your mind back to the present moment by engaging your 5 physical senses sequentially.
-          </p>
-          <button className="inline-flex items-center justify-center gap-2 w-full py-3.5 bg-[#C8B6FF] text-[#1E0542] rounded-2xl font-black text-sm border border-purple-300 group-hover:bg-white transition-colors shadow-md">
-            Start Grounding <ArrowRight size={16} />
-          </button>
-        </div>
-
-        {/* Tool 3: Perspective Shift */}
-        <div 
-          onClick={() => setActiveTool('reframing')}
-          className="flex flex-col text-left p-8 bg-[#2E0B5E] rounded-[2rem] border-2 border-[#7C3AED] hover:bg-[#3B0C78] hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 group relative overflow-hidden shadow-xl cursor-pointer"
-        >
-          <div className="w-14 h-14 bg-[#4C1D95] rounded-2xl flex items-center justify-center text-[#C8B6FF] mb-6 border border-[#8A2BE2]">
-            <Sparkles size={28} />
-          </div>
-          <span className="text-xs font-black text-[#1E0542] bg-[#C8B6FF] px-3.5 py-1.5 rounded-full border border-purple-300 shadow-md w-fit mb-3">
-            Cognitive Reframe
-          </span>
-          <h3 className="text-2xl font-serif font-black text-white mb-3 relative z-10">Thought Reframing</h3>
-          <p className="text-purple-200 leading-relaxed font-bold text-sm mb-6 flex-1">
-            Gently re-examine stressful automatic thoughts and transform them into balanced perspectives.
-          </p>
-          <button className="inline-flex items-center justify-center gap-2 w-full py-3.5 bg-[#C8B6FF] text-[#1E0542] rounded-2xl font-black text-sm border border-purple-300 group-hover:bg-white transition-colors shadow-md">
-            Start Reframing <ArrowRight size={16} />
-          </button>
-        </div>
-
-      </div>
-
-      {/* Interactive Modal Overlay */}
-      {activeTool && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#160432]/90 backdrop-blur-md">
-          <div className="bg-[#2E0B5E] rounded-3xl p-8 max-w-lg w-full border-2 border-[#7C3AED] shadow-2xl relative">
-            <button 
-              onClick={() => setActiveTool(null)}
-              className="absolute top-4 right-4 p-2 bg-[#160432] text-white rounded-full hover:bg-white hover:text-[#160432] transition-colors border border-[#8A2BE2]"
-            >
-              <X size={20} />
-            </button>
-
-            {/* Box Breathing Modal */}
-            {activeTool === 'breathing' && (
-              <div className="text-center space-y-6">
-                <h3 className="font-serif text-3xl font-black text-white">Box Breathing</h3>
-                <div className="relative w-48 h-48 mx-auto flex flex-col items-center justify-center bg-[#3B0C78] rounded-full border-4 border-[#8A2BE2] shadow-inner">
-                  <span className="text-2xl font-black text-[#C8B6FF]">{breathPhase}</span>
-                  <span className="text-5xl font-black text-white mt-1">{breathTimer}s</span>
-                </div>
-                <div className="flex justify-center gap-4 pt-4">
-                  <button 
-                    onClick={() => setIsBreathingActive(!isBreathingActive)}
-                    className="px-6 py-3 bg-[#C8B6FF] text-[#1E0542] rounded-full font-black flex items-center gap-2 shadow-md hover:bg-white transition-all cursor-pointer"
-                  >
-                    {isBreathingActive ? <><X size={18} /> Pause</> : <><Play size={18} /> Resume</>}
-                  </button>
-                  <button 
-                    onClick={() => { setBreathPhase('Inhale'); setBreathTimer(4); }}
-                    className="px-6 py-3 bg-[#3B0C78] text-white rounded-full font-black flex items-center gap-2 border border-[#8A2BE2] hover:bg-[#4C1D95] transition-all cursor-pointer"
-                  >
-                    <RotateCcw size={18} /> Reset
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* Grounding Modal */}
-            {activeTool === 'grounding' && (
-              <div className="text-center space-y-6">
-                <span className="text-xs font-black bg-[#C8B6FF] text-[#1E0542] px-3.5 py-1 rounded-full uppercase tracking-wider">
-                  Step {groundingStep + 1} of 5
-                </span>
-                <div className="w-20 h-20 bg-[#3B0C78] rounded-full flex items-center justify-center text-4xl font-black text-white mx-auto border-2 border-[#8A2BE2]">
-                  {groundingSteps[groundingStep].count}
-                </div>
-                <h3 className="text-2xl font-serif font-black text-[#C8B6FF]">
-                  {groundingSteps[groundingStep].sense}
-                </h3>
-                <p className="text-purple-100 font-bold text-base max-w-sm mx-auto leading-relaxed">
-                  {groundingSteps[groundingStep].desc}
-                </p>
-                <div className="flex justify-center gap-4 pt-4">
-                  {groundingStep > 0 && (
-                    <button 
-                      onClick={() => setGroundingStep(prev => prev - 1)}
-                      className="px-6 py-3 bg-[#3B0C78] text-white rounded-full font-black border border-[#8A2BE2] cursor-pointer"
-                    >
-                      Back
-                    </button>
-                  )}
-                  {groundingStep < 4 ? (
-                    <button 
-                      onClick={() => setGroundingStep(prev => prev + 1)}
-                      className="px-6 py-3 bg-[#C8B6FF] text-[#1E0542] rounded-full font-black shadow-md hover:bg-white cursor-pointer"
-                    >
-                      Next Step
-                    </button>
-                  ) : (
-                    <button 
-                      onClick={() => setActiveTool(null)}
-                      className="px-6 py-3 bg-[#C8B6FF] text-[#1E0542] rounded-full font-black shadow-md hover:bg-white cursor-pointer"
-                    >
-                      Complete Reset
-                    </button>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {/* Reframing Modal */}
-            {activeTool === 'reframing' && (
-              <div className="space-y-4 text-left">
-                <h3 className="font-serif text-2xl font-black text-white mb-2">Perspective Reframer</h3>
-                <p className="text-purple-200 text-sm font-bold leading-relaxed">
-                  When feeling overwhelmed, ask yourself these 3 questions:
-                </p>
-                <div className="space-y-3 pt-2">
-                  <div className="p-4 bg-[#3B0C78] rounded-2xl border border-[#8A2BE2]">
-                    <p className="font-black text-[#C8B6FF] text-sm mb-1">1. Is this 100% true right now?</p>
-                    <p className="text-xs text-purple-100 font-bold">Am I predicting the worst-case scenario without proof?</p>
-                  </div>
-                  <div className="p-4 bg-[#3B0C78] rounded-2xl border border-[#8A2BE2]">
-                    <p className="font-black text-[#C8B6FF] text-sm mb-1">2. What can I actually control?</p>
-                    <p className="text-xs text-purple-100 font-bold">Separate what is in your hands from what is outside your control.</p>
-                  </div>
-                  <div className="p-4 bg-[#3B0C78] rounded-2xl border border-[#8A2BE2]">
-                    <p className="font-black text-[#C8B6FF] text-sm mb-1">3. What advice would I give a friend?</p>
-                    <p className="text-xs text-purple-100 font-bold">Treat yourself with the same compassion you extend to others.</p>
-                  </div>
-                </div>
-                <button 
-                  onClick={() => setActiveTool(null)}
-                  className="w-full mt-4 py-3 bg-[#C8B6FF] text-[#1E0542] rounded-full font-black shadow-md hover:bg-white cursor-pointer"
+      <AnimatePresence mode="wait">
+        {activeTool ? (
+          <motion.div
+            key={activeTool}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+          >
+            {renderActiveTool()}
+          </motion.div>
+        ) : (
+          <motion.div
+            key="tools-grid"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="grid grid-cols-1 md:grid-cols-2 gap-6"
+          >
+            {TOOLS.map((tool) => {
+              return (
+                <button
+                  key={tool.id}
+                  onClick={() => setActiveTool(tool.id)}
+                  className="flex flex-col text-left p-8 bg-[#2E0B5E] rounded-[2rem] border-2 border-[#7C3AED] hover:bg-[#3B0C78] hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 group relative overflow-hidden shadow-xl cursor-pointer"
                 >
-                  Finished Reframing
+                  {/* Background decoration */}
+                  <div className="absolute -right-8 -top-8 w-36 h-36 bg-[#8A2BE2]/25 rounded-full blur-2xl group-hover:bg-[#8A2BE2]/45 transition-all"></div>
+                  
+                  <div className="flex justify-between items-start w-full mb-6 relative z-10">
+                    <div className="p-3.5 bg-[#4C1D95] rounded-3xl shadow-inner border border-[#8A2BE2] group-hover:-rotate-3 transition-transform duration-300">
+                      <SpriteIcon 
+                        imageSrc={FourIcons} 
+                        totalIcons={4} 
+                        index={tool.spriteIndex} 
+                        size={64} 
+                      />
+                    </div>
+                    <span className="text-xs font-black text-[#1E0542] bg-[#C8B6FF] px-3.5 py-1.5 rounded-full border border-purple-300 shadow-md">
+                      {tool.duration}
+                    </span>
+                  </div>
+                  
+                  <h3 className="text-2xl font-serif font-black text-white mb-3 relative z-10">{tool.title}</h3>
+                  <p className="text-base font-bold text-purple-200 mb-8 relative z-10 flex-1 leading-relaxed">{tool.description}</p>
+                  
+                  <div className="w-full relative z-10 mt-auto">
+                    <span className="inline-flex items-center justify-center w-full py-4 bg-[#C8B6FF] text-[#1E0542] rounded-2xl font-black text-base border border-purple-300 group-hover:bg-white transition-colors shadow-md">
+                      Begin Exercise
+                    </span>
+                  </div>
                 </button>
-              </div>
-            )}
-
-          </div>
-        </div>
-      )}
-
+              );
+            })}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
