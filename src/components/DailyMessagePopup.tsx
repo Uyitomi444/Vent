@@ -59,18 +59,18 @@ export default function DailyMessagePopup() {
           initial={{ opacity: 0, scale: 0.9, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.9, y: 20 }}
-          className="bg-[#220A50] rounded-[2.5rem] border-2 border-[#5B21B6] shadow-2xl max-w-sm w-full relative flex flex-col overflow-hidden"
+          className="bg-[#2E0B5E] rounded-[2.5rem] border-2 border-[#7C3AED] shadow-2xl max-w-sm w-full relative flex flex-col overflow-hidden"
         >
           {/* Close Button */}
           <button
             onClick={() => setIsVisible(false)}
-            className="absolute top-4 right-4 p-2 bg-[#160432]/80 hover:bg-[#160432] text-white rounded-full transition-colors z-20 backdrop-blur-md cursor-pointer border border-[#5B21B6]"
+            className="absolute top-4 right-4 p-2 bg-[#160432]/80 hover:bg-[#160432] text-white rounded-full transition-colors z-20 backdrop-blur-md cursor-pointer border border-[#7C3AED]"
           >
             <X className="w-5 h-5 text-[#C8B6FF]" />
           </button>
           
           {/* Top Illustration Card */}
-          <div className="w-full aspect-square relative overflow-hidden bg-white p-4 flex items-center justify-center border-b-2 border-[#5B21B6]">
+          <div className="w-full aspect-square relative overflow-hidden bg-white p-4 flex items-center justify-center border-b-2 border-[#7C3AED]">
             <img 
               src={content.image} 
               alt="Daily inspiration" 
@@ -79,7 +79,7 @@ export default function DailyMessagePopup() {
           </div>
           
           {/* Bottom Content Area */}
-          <div className="p-6 md:p-8 text-center bg-[#220A50] flex flex-col items-center">
+          <div className="p-6 md:p-8 text-center bg-[#2E0B5E] flex flex-col items-center">
             
             <div className="flex items-center gap-1.5 text-[#C8B6FF] mb-2">
               <Sparkles size={18} className="text-[#C8B6FF]" />

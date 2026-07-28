@@ -75,8 +75,8 @@ export default function SettingsPage() {
         <h3 className="font-black text-purple-300 px-2 uppercase tracking-wider text-xs flex items-center gap-2">
           <User size={16} className="text-purple-400" /> Account
         </h3>
-        <div className="bg-[#220A50] text-white rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 shadow-xl border border-[#5B21B6]/80">
-          <div className="w-16 h-16 bg-[#32106E] rounded-full flex items-center justify-center shrink-0 border border-[#5B21B6]">
+        <div className="bg-[#2E0B5E] text-white rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 shadow-xl border border-[#7C3AED]/80">
+          <div className="w-16 h-16 bg-[#4C1D95] rounded-full flex items-center justify-center shrink-0 border border-[#7C3AED]">
             <User size={28} className="text-[#E5D0FF]" />
           </div>
           <div className="flex-1 text-center md:text-left">
@@ -94,7 +94,7 @@ export default function SettingsPage() {
         <h3 className="font-black text-purple-300 px-2 uppercase tracking-wider text-xs flex items-center gap-2">
           <Shield size={16} className="text-purple-400" /> Privacy & Confidentiality
         </h3>
-        <div className="bg-[#220A50] rounded-3xl p-6 md:p-8 shadow-xl border border-[#5B21B6]/80 space-y-4">
+        <div className="bg-[#2E0B5E] rounded-3xl p-6 md:p-8 shadow-xl border border-[#7C3AED]/80 space-y-4">
           <p className="text-sm text-purple-100 font-bold leading-relaxed">
             <strong className="text-[#E5D0FF] block text-base font-black mb-1">100% Confidential</strong>
             Your HR department and employer cannot read your messages, view your mood logs, or access your journal entries. Itoura is a secure, judgment-free zone designed solely for your mental wellbeing.
@@ -112,7 +112,7 @@ export default function SettingsPage() {
         <h3 className="font-black text-purple-300 px-2 uppercase tracking-wider text-xs flex items-center gap-2">
           <BrainCircuit size={16} className="text-purple-400" /> Companion Memory
         </h3>
-        <div className="bg-[#220A50] rounded-3xl p-6 md:p-8 shadow-xl border border-[#5B21B6]/80">
+        <div className="bg-[#2E0B5E] rounded-3xl p-6 md:p-8 shadow-xl border border-[#7C3AED]/80">
           <div className="flex justify-between items-start mb-4">
             <div>
               <p className="text-sm text-purple-200 font-bold leading-relaxed max-w-md">
@@ -135,7 +135,7 @@ export default function SettingsPage() {
                   onClick={() => handleRestoreMemory(m)}
                   className={`p-3.5 rounded-2xl border transition-all ${
                     m.messages 
-                      ? 'bg-[#32106E]/80 hover:bg-[#32106E] border-[#5B21B6] cursor-pointer shadow-md' 
+                      ? 'bg-[#4C1D95]/80 hover:bg-[#4C1D95] border-[#7C3AED] cursor-pointer shadow-md' 
                       : 'bg-purple-950/60 border-purple-900 opacity-80'
                   }`}
                 >
@@ -160,11 +160,11 @@ export default function SettingsPage() {
       {/* Preferences Section */}
       <section className="space-y-3">
         <h3 className="font-black text-purple-300 px-2 uppercase tracking-wider text-xs">Preferences</h3>
-        <div className="bg-[#220A50] rounded-3xl overflow-hidden shadow-xl border border-[#5B21B6]/80">
+        <div className="bg-[#2E0B5E] rounded-3xl overflow-hidden shadow-xl border border-[#7C3AED]/80">
           
           <div className="flex items-center justify-between p-5 md:p-6">
             <div className="flex items-center gap-4">
-              <div className="p-2.5 bg-[#32106E] text-[#E5D0FF] rounded-xl border border-[#5B21B6]">
+              <div className="p-2.5 bg-[#4C1D95] text-[#E5D0FF] rounded-xl border border-[#7C3AED]">
                 <Bell size={20} />
               </div>
               <div>
@@ -174,7 +174,7 @@ export default function SettingsPage() {
             </div>
             <button 
               onClick={() => setNotifications(!notifications)}
-              className={`w-12 h-6 rounded-full transition-colors relative cursor-pointer ${notifications ? 'bg-[#E5D0FF]' : 'bg-[#32106E]'}`}
+              className={`w-12 h-6 rounded-full transition-colors relative cursor-pointer ${notifications ? 'bg-[#E5D0FF]' : 'bg-[#4C1D95]'}`}
             >
               <div className={`w-4 h-4 rounded-full absolute top-1 transition-transform ${notifications ? 'translate-x-7 bg-[#160432]' : 'translate-x-1 bg-purple-300'}`} />
             </button>
@@ -186,7 +186,7 @@ export default function SettingsPage() {
       {/* Privacy & Data Section */}
       <section className="space-y-3">
         <h3 className="font-black text-purple-300 px-2 uppercase tracking-wider text-xs">Privacy & Local Storage</h3>
-        <div className="bg-[#220A50] rounded-3xl overflow-hidden shadow-xl border border-[#5B21B6]/80">
+        <div className="bg-[#2E0B5E] rounded-3xl overflow-hidden shadow-xl border border-[#7C3AED]/80">
           
           <div className="p-5 md:p-6 border-b border-purple-900 flex gap-4">
             <Shield className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
@@ -199,10 +199,10 @@ export default function SettingsPage() {
 
           <button 
             onClick={exportData}
-            className="w-full flex items-center justify-between p-5 md:p-6 border-b border-purple-900 hover:bg-[#32106E]/60 transition-colors text-left cursor-pointer"
+            className="w-full flex items-center justify-between p-5 md:p-6 border-b border-purple-900 hover:bg-[#4C1D95]/60 transition-colors text-left cursor-pointer"
           >
             <div className="flex items-center gap-4">
-              <div className="p-2.5 bg-[#32106E] text-[#E5D0FF] rounded-xl border border-[#5B21B6]">
+              <div className="p-2.5 bg-[#4C1D95] text-[#E5D0FF] rounded-xl border border-[#7C3AED]">
                 <Download size={20} />
               </div>
               <span className="font-black text-[#E5D0FF]">Export My Data Backup</span>

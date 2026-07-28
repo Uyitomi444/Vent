@@ -44,7 +44,7 @@ export default function JournalPage() {
         <div className="flex items-center justify-between mb-6 pt-4 shrink-0">
           <button 
             onClick={() => setEditingId(null)}
-            className="flex items-center gap-2 px-4 py-2 bg-[#32106E] text-purple-100 rounded-full font-bold text-sm hover:bg-purple-900 transition-colors shadow-md border border-[#5B21B6]/60"
+            className="flex items-center gap-2 px-4 py-2 bg-[#4C1D95] text-purple-100 rounded-full font-bold text-sm hover:bg-purple-900 transition-colors shadow-md border border-[#7C3AED]/60"
           >
             <ArrowLeft size={20} />
             <span>Back</span>
@@ -58,7 +58,7 @@ export default function JournalPage() {
         </div>
 
         {/* Editor Card */}
-        <div className="flex-1 bg-[#220A50] rounded-3xl p-6 md:p-8 shadow-2xl border border-[#5B21B6]/80 flex flex-col min-h-0">
+        <div className="flex-1 bg-[#2E0B5E] rounded-3xl p-6 md:p-8 shadow-2xl border border-[#7C3AED]/80 flex flex-col min-h-0">
           <input
             type="text"
             value={title}
@@ -119,8 +119,8 @@ export default function JournalPage() {
 
       <div className="flex-1 overflow-y-auto pb-8 min-h-0">
         {entries.length === 0 ? (
-          <div className="h-full flex flex-col items-center justify-center text-center px-4 py-12 bg-[#220A50] rounded-3xl border border-[#5B21B6]/80 shadow-xl">
-            <div className="p-3 bg-[#32106E]/60 rounded-3xl border border-[#5B21B6] mb-6 shadow-md">
+          <div className="h-full flex flex-col items-center justify-center text-center px-4 py-12 bg-[#2E0B5E] rounded-3xl border border-[#7C3AED]/80 shadow-xl">
+            <div className="p-3 bg-[#4C1D95]/60 rounded-3xl border border-[#7C3AED] mb-6 shadow-md">
               <img 
                 src="/assets/illustrations/Notebook_with_pen_and_star_202607141352.jpeg" 
                 alt="Diary Notebook" 
@@ -143,7 +143,7 @@ export default function JournalPage() {
             {entries.map((entry) => (
               <div 
                 key={entry.id} 
-                className="bg-[#220A50] border border-[#5B21B6]/80 p-6 rounded-3xl shadow-lg hover:shadow-2xl hover:scale-[1.01] transition-all group flex flex-col cursor-pointer"
+                className="bg-[#2E0B5E] border border-[#7C3AED]/80 p-6 rounded-3xl shadow-lg hover:shadow-2xl hover:scale-[1.01] transition-all group flex flex-col cursor-pointer"
                 onClick={() => handleEdit(entry)}
               >
                 <div className="flex items-start justify-between mb-2">

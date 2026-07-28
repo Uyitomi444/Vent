@@ -71,7 +71,7 @@ body::before {
 /* Tactile Grain & Orbital Effect Utility Classes */
 .bg-grain-texture {
   position: relative;
-  background: radial-gradient(circle at 50% 35%, #8A2BE2 0%, #5B21B6 45%, #2E0B5E 100%);
+  background: radial-gradient(circle at 50% 35%, #8A2BE2 0%, #7C3AED 45%, #2E0B5E 100%);
 }
 
 .bg-grain-texture::before {

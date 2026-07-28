@@ -59,7 +59,7 @@ export default function MoodPage() {
       
       {/* Insights & Patterns */}
       {topThemes.length > 0 && (
-        <section className="bg-[#220A50] rounded-3xl p-6 shadow-xl border border-[#5B21B6]/80">
+        <section className="bg-[#2E0B5E] rounded-3xl p-6 shadow-xl border border-[#7C3AED]/80">
           <div className="flex items-center gap-2 mb-4">
             <TrendingUp size={22} className="text-[#E5D0FF]" />
             <h2 className="font-serif text-xl font-black text-[#E5D0FF]">Recent Patterns</h2>
@@ -69,7 +69,7 @@ export default function MoodPage() {
             {topThemes.map((item, i) => (
               <div key={i} className="flex items-center gap-2 bg-[#E5D0FF] text-[#160432] px-4 py-2 rounded-full shadow-md text-sm font-black border border-purple-300">
                 <span className="capitalize">{item.theme}</span>
-                <span className="text-xs font-black text-white bg-[#32106E] px-2 py-0.5 rounded-full">{item.count}</span>
+                <span className="text-xs font-black text-white bg-[#4C1D95] px-2 py-0.5 rounded-full">{item.count}</span>
               </div>
             ))}
           </div>
@@ -77,7 +77,7 @@ export default function MoodPage() {
       )}
 
       {/* Check-in Form in Rich Indigo-Purple Box */}
-      <section className="bg-[#220A50] rounded-3xl p-6 md:p-8 shadow-2xl border border-[#5B21B6]/80 space-y-8">
+      <section className="bg-[#2E0B5E] rounded-3xl p-6 md:p-8 shadow-2xl border border-[#7C3AED]/80 space-y-8">
         {/* Mood Selection */}
         <div className="space-y-4">
           <label className="block text-base font-black text-[#E5D0FF]">How are you feeling?</label>
@@ -91,7 +91,7 @@ export default function MoodPage() {
                   className={`flex flex-col items-center justify-center p-3 md:p-4 rounded-3xl transition-all duration-300 cursor-pointer ${
                     isSelected 
                       ? 'bg-[#E5D0FF] text-[#160432] border-2 border-white scale-105 shadow-xl' 
-                      : 'bg-[#32106E]/60 border border-[#5B21B6]/60 hover:bg-[#32106E] text-purple-200'
+                      : 'bg-[#4C1D95]/60 border border-[#7C3AED]/60 hover:bg-[#4C1D95] text-purple-200'
                   }`}
                 >
                   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
@@ -124,7 +124,7 @@ export default function MoodPage() {
             max="10"
             value={energy}
             onChange={(e) => setEnergy(Number(e.target.value))}
-            className="w-full h-3 bg-[#32106E] rounded-lg appearance-none cursor-pointer accent-[#E5D0FF]"
+            className="w-full h-3 bg-[#4C1D95] rounded-lg appearance-none cursor-pointer accent-[#E5D0FF]"
           />
           <div className="flex justify-between text-xs font-black text-purple-300">
             <span>Exhausted</span>
@@ -139,7 +139,7 @@ export default function MoodPage() {
             value={note}
             onChange={(e) => setNote(e.target.value)}
             placeholder="What's making you feel this way?"
-            className="w-full p-4 bg-[#E5D0FF] border-2 border-purple-400 rounded-2xl resize-none outline-none focus:border-white transition-colors h-24 text-base font-bold text-[#160432] placeholder:text-[#220A50]/60"
+            className="w-full p-4 bg-[#E5D0FF] border-2 border-purple-400 rounded-2xl resize-none outline-none focus:border-white transition-colors h-24 text-base font-bold text-[#160432] placeholder:text-[#2E0B5E]/60"
           />
         </div>
 
@@ -163,7 +163,7 @@ export default function MoodPage() {
               <motion.div 
                 initial={{ opacity: 0 }} 
                 animate={{ opacity: 1 }} 
-                className="text-center p-8 bg-[#220A50] rounded-3xl border border-[#5B21B6]/80 shadow-lg"
+                className="text-center p-8 bg-[#2E0B5E] rounded-3xl border border-[#7C3AED]/80 shadow-lg"
               >
                 <p className="text-purple-200 font-bold text-base">No check-ins yet. Start tracking your mood above.</p>
               </motion.div>
@@ -177,9 +177,9 @@ export default function MoodPage() {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95 }}
-                    className="flex items-start gap-4 p-5 bg-[#220A50] rounded-3xl shadow-xl border border-[#5B21B6]/80"
+                    className="flex items-start gap-4 p-5 bg-[#2E0B5E] rounded-3xl shadow-xl border border-[#7C3AED]/80"
                   >
-                    <div className="bg-[#32106E] rounded-2xl p-1 shadow-inner">
+                    <div className="bg-[#4C1D95] rounded-2xl p-1 shadow-inner">
                       {moodConfig && (
                         <SpriteIcon 
                           imageSrc={FiveIcons} 
@@ -204,7 +204,7 @@ export default function MoodPage() {
                           </span>
                           <button 
                             onClick={() => deleteEntry(entry.id)}
-                            className="p-1.5 text-purple-300 hover:text-red-400 hover:bg-[#32106E] rounded-lg transition-colors cursor-pointer"
+                            className="p-1.5 text-purple-300 hover:text-red-400 hover:bg-[#4C1D95] rounded-lg transition-colors cursor-pointer"
                           >
                             <Trash2 className="w-5 h-5" />
                           </button>
@@ -212,7 +212,7 @@ export default function MoodPage() {
                       </div>
                       
                       {entry.note && (
-                        <p className="mt-3 text-sm font-bold text-purple-100 bg-[#32106E]/80 p-3 rounded-xl border border-[#5B21B6]">
+                        <p className="mt-3 text-sm font-bold text-purple-100 bg-[#4C1D95]/80 p-3 rounded-xl border border-[#7C3AED]">
                           "{entry.note}"
                         </p>
                       )}
