@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Shield, Lock, EyeOff, MessageSquare, BrainCircuit, LineChart, Target, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import itouraBrand from '../assets/ABLE/itoura-brand.jpeg';
 import MascotPose from '../components/MascotPose';
 
@@ -42,7 +42,7 @@ export default function OnboardingPage() {
         </div>
       </section>
 
-      {/* 2. FEATURE EXPLAINER */}
+      {/* 2. FEATURE EXPLAINER (Clean text cards without icon emoji slop) */}
       <section className="py-20 bg-[#2E0B5E] border-y-2 border-[#7C3AED]">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
@@ -52,40 +52,32 @@ export default function OnboardingPage() {
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="bg-[#1E0542] p-8 rounded-3xl shadow-xl border border-[#7C3AED]/80 flex flex-col">
-              <div className="w-12 h-12 bg-[#4C1D95] rounded-2xl flex items-center justify-center text-[#C8B6FF] mb-6 border border-[#8A2BE2]">
-                <MessageSquare size={24} />
-              </div>
-              <h3 className="text-xl font-serif font-black text-white mb-3">1. Processing thoughts</h3>
+              <span className="text-xs font-black text-[#C8B6FF] uppercase tracking-widest mb-3">STEP 01</span>
+              <h3 className="text-xl font-serif font-black text-white mb-3">Processing thoughts</h3>
               <p className="text-purple-200 leading-relaxed font-bold text-sm">
                 Whether typing or speaking aloud, Itoura provides a non-judgmental space to vent without interruption.
               </p>
             </div>
             
             <div className="bg-[#1E0542] p-8 rounded-3xl shadow-xl border border-[#7C3AED]/80 flex flex-col">
-              <div className="w-12 h-12 bg-[#4C1D95] rounded-2xl flex items-center justify-center text-[#C8B6FF] mb-6 border border-[#8A2BE2]">
-                <BrainCircuit size={24} />
-              </div>
-              <h3 className="text-xl font-serif font-black text-white mb-3">2. Continuous memory</h3>
+              <span className="text-xs font-black text-[#C8B6FF] uppercase tracking-widest mb-3">STEP 02</span>
+              <h3 className="text-xl font-serif font-black text-white mb-3">Continuous memory</h3>
               <p className="text-purple-200 leading-relaxed font-bold text-sm">
                 Itoura safely saves session summaries on your device so your companion picks up right where you left off.
               </p>
             </div>
             
             <div className="bg-[#1E0542] p-8 rounded-3xl shadow-xl border border-[#7C3AED]/80 flex flex-col">
-              <div className="w-12 h-12 bg-[#4C1D95] rounded-2xl flex items-center justify-center text-[#C8B6FF] mb-6 border border-[#8A2BE2]">
-                <LineChart size={24} />
-              </div>
-              <h3 className="text-xl font-serif font-black text-white mb-3">3. Pattern spotting</h3>
+              <span className="text-xs font-black text-[#C8B6FF] uppercase tracking-widest mb-3">STEP 03</span>
+              <h3 className="text-xl font-serif font-black text-white mb-3">Pattern spotting</h3>
               <p className="text-purple-200 leading-relaxed font-bold text-sm">
                 Visualize emotional trends over time to spot recurring themes and build deeper self-awareness.
               </p>
             </div>
             
             <div className="bg-[#1E0542] p-8 rounded-3xl shadow-xl border border-[#7C3AED]/80 flex flex-col">
-              <div className="w-12 h-12 bg-[#4C1D95] rounded-2xl flex items-center justify-center text-[#C8B6FF] mb-6 border border-[#8A2BE2]">
-                <Target size={24} />
-              </div>
-              <h3 className="text-xl font-serif font-black text-white mb-3">4. Actionable steps</h3>
+              <span className="text-xs font-black text-[#C8B6FF] uppercase tracking-widest mb-3">STEP 04</span>
+              <h3 className="text-xl font-serif font-black text-white mb-3">Actionable steps</h3>
               <p className="text-purple-200 leading-relaxed font-bold text-sm">
                 Pair insights with actionable grounding techniques, breathing exercises, and guided reflections.
               </p>
@@ -94,7 +86,7 @@ export default function OnboardingPage() {
         </div>
       </section>
 
-      {/* 3. PRIVACY SECTION */}
+      {/* 3. PRIVACY SECTION (Clean text cards without icon slop) */}
       <section className="py-20">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
@@ -104,34 +96,22 @@ export default function OnboardingPage() {
           
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-[#2E0B5E] text-white p-8 rounded-3xl shadow-xl border-2 border-[#7C3AED] relative overflow-hidden">
-              <div className="absolute top-0 right-0 p-6 opacity-10">
-                <Lock size={100} />
-              </div>
-              <Shield size={32} className="text-[#C8B6FF] mb-6 relative z-10" />
-              <h3 className="text-xl font-serif font-black text-white mb-3 relative z-10">Technical Protection</h3>
-              <p className="text-purple-200 leading-relaxed text-sm font-bold relative z-10">
+              <h3 className="text-xl font-serif font-black text-[#C8B6FF] mb-3">Technical Protection</h3>
+              <p className="text-purple-200 leading-relaxed text-sm font-bold">
                 Designed to keep data strictly on your device. Journal entries and chat memories are never saved on central servers.
               </p>
             </div>
 
             <div className="bg-[#2E0B5E] text-white p-8 rounded-3xl shadow-xl border-2 border-[#7C3AED] relative overflow-hidden">
-              <div className="absolute top-0 right-0 p-6 opacity-10">
-                <EyeOff size={100} />
-              </div>
-              <EyeOff size={32} className="text-[#C8B6FF] mb-6 relative z-10" />
-              <h3 className="text-xl font-serif font-black text-white mb-3 relative z-10">Private by Default</h3>
-              <p className="text-purple-200 leading-relaxed text-sm font-bold relative z-10">
+              <h3 className="text-xl font-serif font-black text-[#C8B6FF] mb-3">Private by Default</h3>
+              <p className="text-purple-200 leading-relaxed text-sm font-bold">
                 100% confidential. Your employer, HR department, and colleagues cannot read your messages or access your data.
               </p>
             </div>
 
             <div className="bg-[#2E0B5E] text-white p-8 rounded-3xl shadow-xl border-2 border-[#7C3AED] relative overflow-hidden">
-              <div className="absolute top-0 right-0 p-6 opacity-10">
-                <Shield size={100} />
-              </div>
-              <Lock size={32} className="text-[#C8B6FF] mb-6 relative z-10" />
-              <h3 className="text-xl font-serif font-black text-white mb-3 relative z-10">Never Sold or Shared</h3>
-              <p className="text-purple-200 leading-relaxed text-sm font-bold relative z-10">
+              <h3 className="text-xl font-serif font-black text-[#C8B6FF] mb-3">Never Sold or Shared</h3>
+              <p className="text-purple-200 leading-relaxed text-sm font-bold">
                 Your personal reflections are yours alone. We strictly guarantee your private information will never be shared.
               </p>
             </div>

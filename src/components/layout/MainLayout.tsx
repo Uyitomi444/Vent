@@ -1,22 +1,12 @@
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
-import { 
-  Home, 
-  Book, 
-  Smile, 
-  Compass, 
-  Settings, 
-  HelpCircle, 
-  LineChart, 
-  ChevronDown
-} from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import DailyMessagePopup from '../DailyMessagePopup';
 import itouraLogo from '../../assets/ABLE/logo.png';
 
 interface NavItemData {
   path: string;
   label: string;
-  icon: React.ReactNode;
   description: string;
 }
 
@@ -46,43 +36,36 @@ export default function MainLayout() {
       path: '/chat',
       label: 'Chat Companion',
       description: 'Your safe space to vent and process feelings 24/7',
-      icon: <Home size={18} className="text-purple-300" />,
     },
     {
       path: '/tools',
       label: 'Wellness Tools',
       description: 'Box breathing, grounding, & mindful exercises',
-      icon: <Compass size={18} className="text-purple-300" />,
     },
     {
       path: '/progress',
       label: 'Progress & Insights',
       description: '7-day mood trends, top themes, & reflections',
-      icon: <LineChart size={18} className="text-purple-300" />,
     },
     {
       path: '/journal',
       label: 'Private Journal',
       description: 'Encrypted local journal entries & reflections',
-      icon: <Book size={18} className="text-purple-300" />,
     },
     {
       path: '/mood',
       label: 'Mood Tracker',
       description: 'Quick emotional check-in and daily mood history',
-      icon: <Smile size={18} className="text-purple-300" />,
     },
     {
       path: '/faq',
       label: 'Help & FAQ',
       description: 'Everything you need to know about Itoura',
-      icon: <HelpCircle size={18} className="text-purple-300" />,
     },
     {
       path: '/settings',
       label: 'Settings',
       description: 'Data privacy controls & app preferences',
-      icon: <Settings size={18} className="text-purple-300" />,
     },
   ];
 
@@ -106,7 +89,7 @@ export default function MainLayout() {
               />
             </Link>
 
-            {/* Responsive Category Dropdown Button */}
+            {/* Clean Category Dropdown Button */}
             <div className="relative min-w-0" ref={dropdownRef}>
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -120,7 +103,7 @@ export default function MainLayout() {
                 />
               </button>
 
-              {/* Mobile-Adapted Dropdown Modal */}
+              {/* Clean Dropdown Modal */}
               {isDropdownOpen && (
                 <div className="absolute top-full left-0 mt-3 w-[calc(100vw-2rem)] max-w-[340px] sm:max-w-none sm:w-80 md:w-88 bg-[#7C3AED] backdrop-blur-2xl border-2 border-[#C8B6FF] rounded-3xl p-3 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-200">
                   <div className="px-3 py-2 border-b border-purple-300/50 mb-2 flex justify-between items-center">
@@ -178,22 +161,21 @@ export default function MainLayout() {
         </div>
       </main>
 
-      {/* Mobile Bottom Navigation Bar */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#7C3AED] backdrop-blur-xl border-t-2 border-purple-400/60 px-2 sm:px-3 py-2 shadow-2xl flex justify-around items-center">
+      {/* Mobile Bottom Navigation Bar (Clean Text Pills) */}
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#7C3AED] backdrop-blur-xl border-t-2 border-purple-400/60 px-2 sm:px-3 py-2.5 shadow-2xl flex justify-around items-center">
         {navCategories.slice(0, 5).map((item) => {
           const selected = isActive(item.path);
           return (
             <Link
               key={item.path}
               to={item.path}
-              className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-xl transition-all ${
-                selected ? 'text-white font-bold scale-105' : 'text-purple-200 hover:text-white'
+              className={`px-3 py-1.5 rounded-full text-xs font-black transition-all ${
+                selected 
+                  ? 'bg-[#C8B6FF] text-[#1E0542] shadow-md border border-white scale-105' 
+                  : 'text-purple-100 hover:text-white'
               }`}
             >
-              <div className={`p-1.5 rounded-full ${selected ? 'bg-[#1E0542] text-[#C8B6FF] shadow-md' : 'bg-transparent'}`}>
-                {item.icon}
-              </div>
-              <span className="text-[10px] font-extrabold truncate max-w-[56px] sm:max-w-[64px]">{item.label.split(' ')[0]}</span>
+              <span className="truncate max-w-[64px]">{item.label.split(' ')[0]}</span>
             </Link>
           );
         })}
