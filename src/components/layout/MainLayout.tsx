@@ -105,7 +105,7 @@ export default function MainLayout() {
       <header className="sticky top-0 z-50 w-full px-6 md:px-12 py-4 bg-[#23074D]/90 backdrop-blur-xl border-b border-[#7C3AED]/60 shadow-lg">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-6">
           
-          {/* Logo & Category Dropdown Button */}
+          {/* Logo & Category Dropdown Button (Using Second Shade #C8B6FF) */}
           <div className="flex items-center gap-4 md:gap-8">
             <Link to="/" className="flex items-center gap-2 group shrink-0">
               <img 
@@ -119,7 +119,7 @@ export default function MainLayout() {
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex items-center gap-2 px-4.5 py-2 bg-[#E5D0FF] hover:bg-white text-[#1E0542] font-black text-sm rounded-full border border-purple-300 shadow-md transition-all cursor-pointer"
+                className="flex items-center gap-2 px-4.5 py-2 bg-[#C8B6FF] hover:bg-white text-[#1E0542] font-black text-sm rounded-full border border-purple-300 shadow-md transition-all cursor-pointer"
                 aria-expanded={isDropdownOpen}
               >
                 <Layers size={16} className="text-[#2E0B5E]" />
@@ -152,7 +152,7 @@ export default function MainLayout() {
                           onClick={() => setIsDropdownOpen(false)}
                           className={`flex items-start gap-3 p-3 rounded-2xl transition-all ${
                             selected
-                              ? 'bg-[#E5D0FF] text-[#1E0542] font-black shadow-md'
+                              ? 'bg-[#C8B6FF] text-[#1E0542] font-black shadow-md'
                               : 'text-purple-100 hover:bg-[#4C1D95] hover:text-white'
                           }`}
                         >
@@ -177,7 +177,7 @@ export default function MainLayout() {
           {/* Right Aligned Clean and Minimalist Itoura Text */}
           <div className="flex items-center">
             <Link to="/">
-              <span className="font-serif text-2xl md:text-3xl font-black tracking-tight text-[#E5D0FF] hover:text-white transition-colors drop-shadow-sm">
+              <span className="font-serif text-2xl md:text-3xl font-black tracking-tight text-[#C8B6FF] hover:text-white transition-colors drop-shadow-sm">
                 Itoura
               </span>
             </Link>
@@ -205,7 +205,7 @@ export default function MainLayout() {
                 selected ? 'text-purple-100 font-bold scale-105' : 'text-purple-400 hover:text-purple-200'
               }`}
             >
-              <div className={`p-1.5 rounded-full ${selected ? 'bg-[#E5D0FF] text-[#1E0542] shadow-md' : 'bg-transparent'}`}>
+              <div className={`p-1.5 rounded-full ${selected ? 'bg-[#C8B6FF] text-[#1E0542] shadow-md' : 'bg-transparent'}`}>
                 {item.icon}
               </div>
               <span className="text-[10px] font-extrabold truncate max-w-[64px]">{item.label.split(' ')[0]}</span>

@@ -107,7 +107,7 @@ export default function ChatInterface() {
           <button 
             onClick={handleSaveSession}
             disabled={isSummarizing || isLoading}
-            className="px-4 py-2 bg-[#E5D0FF] text-[#160432] font-black text-xs md:text-sm rounded-full shadow-md hover:bg-white transition-all flex items-center gap-2 disabled:opacity-50 cursor-pointer"
+            className="px-4 py-2 bg-[#C8B6FF] text-[#160432] font-black text-xs md:text-sm rounded-full shadow-md hover:bg-white transition-all flex items-center gap-2 disabled:opacity-50 cursor-pointer"
           >
             <Save size={15} className="text-[#220A50]" />
             {isSummarizing ? "Saving Memory..." : "Save & Reflect"}
@@ -145,7 +145,7 @@ export default function ChatInterface() {
             {/* Message Bubbles */}
             <div className={`max-w-[78%] rounded-3xl p-4 md:p-5 shadow-md ${
               msg.role === 'user' 
-                ? 'bg-[#E5D0FF] text-[#160432] font-black border border-purple-300 rounded-br-none' 
+                ? 'bg-[#C8B6FF] text-[#160432] font-black border border-purple-300 rounded-br-none' 
                 : 'bg-[#32106E] text-purple-100 font-bold border border-[#5B21B6]/70 rounded-bl-none'
             }`}>
               <p className="text-[15px] md:text-base leading-relaxed whitespace-pre-wrap font-bold">
@@ -187,25 +187,25 @@ export default function ChatInterface() {
           <div className="flex gap-2.5 overflow-x-auto pb-3 mb-2 w-full hide-scrollbar">
             <button 
               onClick={() => setInput("I'm feeling pretty anxious today.")} 
-              className="flex items-center gap-2 px-4 py-2 bg-[#E5D0FF] text-[#160432] font-black border border-purple-300 rounded-full text-xs md:text-sm shadow-md hover:bg-white transition-all whitespace-nowrap cursor-pointer"
+              className="flex items-center gap-2 px-4 py-2 bg-[#C8B6FF] text-[#160432] font-black border border-purple-300 rounded-full text-xs md:text-sm shadow-md hover:bg-white transition-all whitespace-nowrap cursor-pointer"
             >
               <CloudRain size={16} className="text-[#220A50]" /> Anxious
             </button>
             <button 
               onClick={() => setInput("I am completely exhausted.")} 
-              className="flex items-center gap-2 px-4 py-2 bg-[#E5D0FF] text-[#160432] font-black border border-purple-300 rounded-full text-xs md:text-sm shadow-md hover:bg-white transition-all whitespace-nowrap cursor-pointer"
+              className="flex items-center gap-2 px-4 py-2 bg-[#C8B6FF] text-[#160432] font-black border border-purple-300 rounded-full text-xs md:text-sm shadow-md hover:bg-white transition-all whitespace-nowrap cursor-pointer"
             >
               <Coffee size={16} className="text-[#220A50]" /> Exhausted
             </button>
             <button 
               onClick={() => setInput("I feel really overwhelmed.")} 
-              className="flex items-center gap-2 px-4 py-2 bg-[#E5D0FF] text-[#160432] font-black border border-purple-300 rounded-full text-xs md:text-sm shadow-md hover:bg-white transition-all whitespace-nowrap cursor-pointer"
+              className="flex items-center gap-2 px-4 py-2 bg-[#C8B6FF] text-[#160432] font-black border border-purple-300 rounded-full text-xs md:text-sm shadow-md hover:bg-white transition-all whitespace-nowrap cursor-pointer"
             >
               <Zap size={16} className="text-[#220A50]" /> Overwhelmed
             </button>
             <button 
               onClick={() => setInput("I'm actually doing okay.")} 
-              className="flex items-center gap-2 px-4 py-2 bg-[#E5D0FF] text-[#160432] font-black border border-purple-300 rounded-full text-xs md:text-sm shadow-md hover:bg-white transition-all whitespace-nowrap cursor-pointer"
+              className="flex items-center gap-2 px-4 py-2 bg-[#C8B6FF] text-[#160432] font-black border border-purple-300 rounded-full text-xs md:text-sm shadow-md hover:bg-white transition-all whitespace-nowrap cursor-pointer"
             >
               <Sun size={16} className="text-[#220A50]" /> Okay
             </button>
@@ -213,7 +213,7 @@ export default function ChatInterface() {
         )}
 
         {/* Text Input Form */}
-        <form onSubmit={handleSend} className="relative flex items-end bg-[#E5D0FF] rounded-2xl shadow-lg border-2 border-purple-400 focus-within:border-white focus-within:ring-2 focus-within:ring-purple-300 transition-all">
+        <form onSubmit={handleSend} className="relative flex items-end bg-[#C8B6FF] rounded-2xl shadow-lg border-2 border-purple-400 focus-within:border-white focus-within:ring-2 focus-within:ring-purple-300 transition-all">
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}

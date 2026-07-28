@@ -66,7 +66,7 @@ export default function DailyMessagePopup() {
             onClick={() => setIsVisible(false)}
             className="absolute top-4 right-4 p-2 bg-[#160432]/80 hover:bg-[#160432] text-white rounded-full transition-colors z-20 backdrop-blur-md cursor-pointer border border-[#5B21B6]"
           >
-            <X className="w-5 h-5 text-[#E5D0FF]" />
+            <X className="w-5 h-5 text-[#C8B6FF]" />
           </button>
           
           {/* Top Illustration Card */}
@@ -81,13 +81,13 @@ export default function DailyMessagePopup() {
           {/* Bottom Content Area */}
           <div className="p-6 md:p-8 text-center bg-[#220A50] flex flex-col items-center">
             
-            <div className="flex items-center gap-1.5 text-[#E5D0FF] mb-2">
-              <Sparkles size={18} className="text-[#E5D0FF]" />
-              <h3 className="font-serif text-2xl font-black text-[#E5D0FF]">Daily Reminder</h3>
+            <div className="flex items-center gap-1.5 text-[#C8B6FF] mb-2">
+              <Sparkles size={18} className="text-[#C8B6FF]" />
+              <h3 className="font-serif text-2xl font-black text-[#C8B6FF]">Daily Reminder</h3>
             </div>
 
-            {/* High-Contrast Bold Black Text Box */}
-            <div className="w-full bg-[#E5D0FF] text-[#160432] p-4 rounded-2xl shadow-md border border-purple-300 my-4 text-center">
+            {/* High-Contrast Bold Black Text Box on Lilac */}
+            <div className="w-full bg-[#C8B6FF] text-[#160432] p-4 rounded-2xl shadow-md border border-purple-300 my-4 text-center">
               <p className="font-black text-base md:text-lg leading-relaxed text-[#160432]">
                 "{content.message}"
               </p>
@@ -96,7 +96,7 @@ export default function DailyMessagePopup() {
             {/* Bold Action Button */}
             <button
               onClick={() => setIsVisible(false)}
-              className="mt-2 w-full py-3.5 bg-[#E5D0FF] hover:bg-white text-[#160432] font-black text-base rounded-full shadow-lg border border-purple-300 hover:scale-[1.02] active:scale-95 transition-all cursor-pointer"
+              className="mt-2 w-full py-3.5 bg-[#C8B6FF] hover:bg-white text-[#160432] font-black text-base rounded-full shadow-lg border border-purple-300 hover:scale-[1.02] active:scale-95 transition-all cursor-pointer"
             >
               Start My Day
             </button>
