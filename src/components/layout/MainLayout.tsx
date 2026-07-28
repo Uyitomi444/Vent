@@ -101,17 +101,17 @@ export default function MainLayout() {
     <div className="flex flex-col min-h-screen bg-transparent relative font-sans text-purple-100 selection:bg-purple-500 selection:text-white">
       <DailyMessagePopup />
 
-      {/* Header with Grainy Violet Palette */}
-      <header className="sticky top-0 z-50 w-full px-6 md:px-12 py-4 bg-[#23074D]/90 backdrop-blur-xl border-b border-[#7C3AED]/60 shadow-lg">
+      {/* Header with Vibrant Violet Palette */}
+      <header className="sticky top-0 z-50 w-full px-6 md:px-12 py-4 bg-[#7C3AED]/95 backdrop-blur-xl border-b border-[#9333EA] shadow-xl">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-6">
           
-          {/* Logo & Category Dropdown Button (Using Second Shade #C8B6FF) */}
+          {/* Logo & Category Dropdown Button */}
           <div className="flex items-center gap-4 md:gap-8">
             <Link to="/" className="flex items-center gap-2 group shrink-0">
               <img 
                 src={itouraLogo} 
                 alt="Itoura" 
-                className="h-10 md:h-11 object-contain transition-transform group-hover:scale-105" 
+                className="h-10 md:h-11 object-contain transition-transform group-hover:scale-105 filter brightness-110" 
               />
             </Link>
 
@@ -119,14 +119,14 @@ export default function MainLayout() {
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex items-center gap-2 px-4.5 py-2 bg-[#C8B6FF] hover:bg-white text-[#1E0542] font-black text-sm rounded-full border border-purple-300 shadow-md transition-all cursor-pointer"
+                className="flex items-center gap-2 px-4.5 py-2 bg-[#1E0542] hover:bg-[#2E0B5E] text-[#C8B6FF] font-black text-sm rounded-full border border-[#C8B6FF]/50 shadow-lg transition-all cursor-pointer"
                 aria-expanded={isDropdownOpen}
               >
-                <Layers size={16} className="text-[#2E0B5E]" />
-                <span className="font-black text-[#1E0542]">{currentCategory.label}</span>
+                <Layers size={16} className="text-[#C8B6FF]" />
+                <span className="font-black text-white">{currentCategory.label}</span>
                 <ChevronDown 
                   size={16} 
-                  className={`text-[#2E0B5E] transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} 
+                  className={`text-[#C8B6FF] transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} 
                 />
               </button>
 
@@ -177,7 +177,7 @@ export default function MainLayout() {
           {/* Right Aligned Clean and Minimalist Itoura Text */}
           <div className="flex items-center">
             <Link to="/">
-              <span className="font-serif text-2xl md:text-3xl font-black tracking-tight text-[#C8B6FF] hover:text-white transition-colors drop-shadow-sm">
+              <span className="font-serif text-2xl md:text-3xl font-black tracking-tight text-white hover:text-purple-200 transition-colors drop-shadow-md">
                 Itoura
               </span>
             </Link>
@@ -194,7 +194,7 @@ export default function MainLayout() {
       </main>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#23074D]/95 backdrop-blur-xl border-t border-[#7C3AED]/60 px-3 py-2 shadow-2xl flex justify-around items-center">
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#7C3AED]/95 backdrop-blur-xl border-t border-[#9333EA] px-3 py-2 shadow-2xl flex justify-around items-center">
         {navCategories.slice(0, 5).map((item) => {
           const selected = isActive(item.path);
           return (
@@ -202,10 +202,10 @@ export default function MainLayout() {
               key={item.path}
               to={item.path}
               className={`flex flex-col items-center gap-1 px-2 py-1 rounded-xl transition-all ${
-                selected ? 'text-purple-100 font-bold scale-105' : 'text-purple-400 hover:text-purple-200'
+                selected ? 'text-white font-bold scale-105' : 'text-purple-200 hover:text-white'
               }`}
             >
-              <div className={`p-1.5 rounded-full ${selected ? 'bg-[#C8B6FF] text-[#1E0542] shadow-md' : 'bg-transparent'}`}>
+              <div className={`p-1.5 rounded-full ${selected ? 'bg-[#1E0542] text-[#C8B6FF] shadow-md' : 'bg-transparent'}`}>
                 {item.icon}
               </div>
               <span className="text-[10px] font-extrabold truncate max-w-[64px]">{item.label.split(' ')[0]}</span>
