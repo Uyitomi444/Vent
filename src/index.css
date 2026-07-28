@@ -47,16 +47,31 @@
 @layer base {
   body {
     font-family: 'Paperlogy', sans-serif;
-    @apply font-sans text-purple-100 antialiased transition-colors duration-500 bg-[#160432];
+    @apply font-sans text-purple-100 antialiased transition-colors duration-500 bg-[#1E0542];
+    background: radial-gradient(circle at 50% 30%, #8A2BE2 0%, #4C1D95 55%, #1E0542 100%);
     background-attachment: fixed;
     min-height: 100vh;
   }
 }
 
+/* Global Grain Texture Overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  opacity: 0.16;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
 /* Tactile Grain & Orbital Effect Utility Classes */
 .bg-grain-texture {
   position: relative;
-  background: radial-gradient(circle at 50% 35%, #6D28D9 0%, #3B0764 45%, #160432 100%);
+  background: radial-gradient(circle at 50% 35%, #8A2BE2 0%, #5B21B6 45%, #2E0B5E 100%);
 }
 
 .bg-grain-texture::before {
@@ -65,7 +80,7 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  opacity: 0.18;
+  opacity: 0.20;
   pointer-events: none;
   mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
