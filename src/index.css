@@ -47,7 +47,7 @@
 @layer base {
   body {
     font-family: 'Paperlogy', sans-serif;
-    @apply font-sans text-purple-100 antialiased transition-colors duration-500 bg-[#18082D];
+    @apply font-sans text-purple-100 antialiased transition-colors duration-500 bg-[#160432];
     background-attachment: fixed;
     min-height: 100vh;
   }

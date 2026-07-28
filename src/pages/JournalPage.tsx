@@ -44,21 +44,21 @@ export default function JournalPage() {
         <div className="flex items-center justify-between mb-6 pt-4 shrink-0">
           <button 
             onClick={() => setEditingId(null)}
-            className="flex items-center gap-2 px-4 py-2 bg-purple-900 text-purple-100 rounded-full font-bold text-sm hover:bg-purple-800 transition-colors shadow-md"
+            className="flex items-center gap-2 px-4 py-2 bg-[#32106E] text-purple-100 rounded-full font-bold text-sm hover:bg-purple-900 transition-colors shadow-md border border-[#5B21B6]/60"
           >
             <ArrowLeft size={20} />
             <span>Back</span>
           </button>
           <button 
             onClick={handleSave}
-            className="px-6 py-2.5 bg-[#E5D0FF] text-purple-950 font-black rounded-full shadow-lg hover:bg-white transition-all cursor-pointer"
+            className="px-6 py-2.5 bg-[#E5D0FF] text-[#160432] font-black rounded-full shadow-lg hover:bg-white transition-all cursor-pointer border border-purple-300"
           >
             Save Entry
           </button>
         </div>
 
-        {/* Inverted Journal Editor Card */}
-        <div className="flex-1 bg-[#230D3E] rounded-3xl p-6 md:p-8 shadow-2xl border border-purple-700/80 flex flex-col min-h-0">
+        {/* Editor Card */}
+        <div className="flex-1 bg-[#220A50] rounded-3xl p-6 md:p-8 shadow-2xl border border-[#5B21B6]/80 flex flex-col min-h-0">
           <input
             type="text"
             value={title}
@@ -66,7 +66,7 @@ export default function JournalPage() {
             placeholder="Give your thoughts a title..."
             className="text-2xl md:text-3xl font-serif font-black text-[#E5D0FF] bg-transparent border-none outline-none mb-4 placeholder:text-purple-400/60"
           />
-          <div className="h-px bg-purple-800 w-full mb-6"></div>
+          <div className="h-px bg-purple-800/80 w-full mb-6"></div>
           <div className="flex-1 relative flex flex-col">
             <textarea
               value={content}
@@ -89,7 +89,7 @@ export default function JournalPage() {
                 };
                 recognition.start();
               }}
-              className="absolute bottom-2 right-2 p-3 bg-[#E5D0FF] text-purple-950 rounded-full shadow-md hover:bg-white transition-colors cursor-pointer"
+              className="absolute bottom-2 right-2 p-3 bg-[#E5D0FF] text-[#160432] rounded-full shadow-md hover:bg-white transition-colors cursor-pointer"
               title="Voice Dictation"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
@@ -110,7 +110,7 @@ export default function JournalPage() {
         </div>
         <button 
           onClick={handleCreateNew}
-          className="flex items-center gap-2 px-5 py-2.5 bg-[#E5D0FF] text-purple-950 font-black rounded-full shadow-lg hover:bg-white transition-all hover:scale-105 cursor-pointer"
+          className="flex items-center gap-2 px-5 py-2.5 bg-[#E5D0FF] text-[#160432] font-black rounded-full shadow-lg hover:bg-white transition-all hover:scale-105 cursor-pointer border border-purple-300"
         >
           <Plus size={18} />
           <span>New Entry</span>
@@ -119,8 +119,8 @@ export default function JournalPage() {
 
       <div className="flex-1 overflow-y-auto pb-8 min-h-0">
         {entries.length === 0 ? (
-          <div className="h-full flex flex-col items-center justify-center text-center px-4 py-12 bg-[#230D3E] rounded-3xl border border-purple-700/80 shadow-xl">
-            <div className="p-3 bg-purple-900/60 rounded-3xl border border-purple-700 mb-6 shadow-md">
+          <div className="h-full flex flex-col items-center justify-center text-center px-4 py-12 bg-[#220A50] rounded-3xl border border-[#5B21B6]/80 shadow-xl">
+            <div className="p-3 bg-[#32106E]/60 rounded-3xl border border-[#5B21B6] mb-6 shadow-md">
               <img 
                 src="/assets/illustrations/Notebook_with_pen_and_star_202607141352.jpeg" 
                 alt="Diary Notebook" 
@@ -133,7 +133,7 @@ export default function JournalPage() {
             </p>
             <button 
               onClick={handleCreateNew}
-              className="px-6 py-3 bg-[#E5D0FF] text-purple-950 rounded-full font-black shadow-md hover:bg-white transition-all cursor-pointer"
+              className="px-6 py-3 bg-[#E5D0FF] text-[#160432] rounded-full font-black shadow-md hover:bg-white transition-all cursor-pointer"
             >
               Write First Entry
             </button>
@@ -143,7 +143,7 @@ export default function JournalPage() {
             {entries.map((entry) => (
               <div 
                 key={entry.id} 
-                className="bg-[#230D3E] border border-purple-700/80 p-6 rounded-3xl shadow-lg hover:shadow-2xl hover:scale-[1.01] transition-all group flex flex-col cursor-pointer"
+                className="bg-[#220A50] border border-[#5B21B6]/80 p-6 rounded-3xl shadow-lg hover:shadow-2xl hover:scale-[1.01] transition-all group flex flex-col cursor-pointer"
                 onClick={() => handleEdit(entry)}
               >
                 <div className="flex items-start justify-between mb-2">

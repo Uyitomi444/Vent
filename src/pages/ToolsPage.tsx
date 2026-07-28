@@ -87,13 +87,13 @@ export default function ToolsPage() {
                 <button
                   key={tool.id}
                   onClick={() => setActiveTool(tool.id)}
-                  className="flex flex-col text-left p-8 bg-[#230D3E] rounded-[2rem] border border-purple-700/80 hover:bg-purple-900/80 hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 group relative overflow-hidden shadow-xl cursor-pointer"
+                  className="flex flex-col text-left p-8 bg-[#220A50] rounded-[2rem] border border-[#5B21B6]/80 hover:bg-[#2C0E66] hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 group relative overflow-hidden shadow-xl cursor-pointer"
                 >
                   {/* Background decoration */}
-                  <div className="absolute -right-8 -top-8 w-36 h-36 bg-purple-600/20 rounded-full blur-2xl group-hover:bg-purple-600/40 transition-all"></div>
+                  <div className="absolute -right-8 -top-8 w-36 h-36 bg-[#6D28D9]/25 rounded-full blur-2xl group-hover:bg-[#6D28D9]/45 transition-all"></div>
                   
                   <div className="flex justify-between items-start w-full mb-6 relative z-10">
-                    <div className="p-3.5 bg-purple-900 rounded-3xl shadow-inner border border-purple-700 group-hover:-rotate-3 transition-transform duration-300">
+                    <div className="p-3.5 bg-[#32106E] rounded-3xl shadow-inner border border-[#5B21B6] group-hover:-rotate-3 transition-transform duration-300">
                       <SpriteIcon 
                         imageSrc={FourIcons} 
                         totalIcons={4} 
@@ -101,7 +101,7 @@ export default function ToolsPage() {
                         size={64} 
                       />
                     </div>
-                    <span className="text-xs font-black text-purple-950 bg-[#E5D0FF] px-3.5 py-1.5 rounded-full border border-purple-300 shadow-md">
+                    <span className="text-xs font-black text-[#160432] bg-[#E5D0FF] px-3.5 py-1.5 rounded-full border border-purple-300 shadow-md">
                       {tool.duration}
                     </span>
                   </div>
@@ -110,7 +110,7 @@ export default function ToolsPage() {
                   <p className="text-base font-bold text-purple-200 mb-8 relative z-10 flex-1 leading-relaxed">{tool.description}</p>
                   
                   <div className="w-full relative z-10 mt-auto">
-                    <span className="inline-flex items-center justify-center w-full py-4 bg-[#E5D0FF] text-purple-950 rounded-2xl font-black text-base border border-purple-300 group-hover:bg-white transition-colors shadow-md">
+                    <span className="inline-flex items-center justify-center w-full py-4 bg-[#E5D0FF] text-[#160432] rounded-2xl font-black text-base border border-purple-300 group-hover:bg-white transition-colors shadow-md">
                       Begin Exercise
                     </span>
                   </div>

@@ -98,14 +98,14 @@ export default function MainLayout() {
   const currentCategory = navCategories.find((c) => c.path === location.pathname) || navCategories[0];
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#18082D] relative font-sans text-purple-100 selection:bg-purple-400 selection:text-purple-950">
+    <div className="flex flex-col min-h-screen bg-[#160432] relative font-sans text-purple-100 selection:bg-purple-500 selection:text-white">
       <DailyMessagePopup />
 
-      {/* Deep Dark Purple Header */}
-      <header className="sticky top-0 z-50 w-full px-6 md:px-12 py-4 bg-[#1E0B36]/90 backdrop-blur-xl border-b border-purple-800/70 shadow-lg">
+      {/* Header with New Indigo-Purple Palette */}
+      <header className="sticky top-0 z-50 w-full px-6 md:px-12 py-4 bg-[#1A053C]/90 backdrop-blur-xl border-b border-[#5B21B6]/60 shadow-lg">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-6">
           
-          {/* Logo & Light Purple Dropdown Button */}
+          {/* Logo & Category Dropdown Button */}
           <div className="flex items-center gap-4 md:gap-8">
             <Link to="/" className="flex items-center gap-2 group shrink-0">
               <img 
@@ -115,29 +115,29 @@ export default function MainLayout() {
               />
             </Link>
 
-            {/* Inverted Category Dropdown Button: Light Purple Background with Bold Dark Text */}
+            {/* Inverted Category Dropdown Button */}
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex items-center gap-2 px-4 py-2 bg-[#E5D0FF] hover:bg-white text-purple-950 font-black text-sm rounded-full border border-purple-300 shadow-md transition-all cursor-pointer"
+                className="flex items-center gap-2 px-4.5 py-2 bg-[#E5D0FF] hover:bg-white text-[#160432] font-black text-sm rounded-full border border-purple-300 shadow-md transition-all cursor-pointer"
                 aria-expanded={isDropdownOpen}
               >
-                <Layers size={16} className="text-purple-900" />
-                <span className="font-black text-purple-950">{currentCategory.label}</span>
+                <Layers size={16} className="text-[#220A50]" />
+                <span className="font-black text-[#160432]">{currentCategory.label}</span>
                 <ChevronDown 
                   size={16} 
-                  className={`text-purple-900 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} 
+                  className={`text-[#220A50] transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} 
                 />
               </button>
 
-              {/* Inverted Dropdown Modal: Dark Purple Box */}
+              {/* Inverted Dropdown Modal */}
               {isDropdownOpen && (
-                <div className="absolute top-full left-0 mt-3 w-80 md:w-88 bg-[#260E47]/95 backdrop-blur-2xl border border-purple-700/80 rounded-3xl p-3 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-200">
-                  <div className="px-3 py-2 border-b border-purple-800/80 mb-2 flex justify-between items-center">
+                <div className="absolute top-full left-0 mt-3 w-80 md:w-88 bg-[#230953]/95 backdrop-blur-2xl border border-[#6D28D9]/70 rounded-3xl p-3 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-200">
+                  <div className="px-3 py-2 border-b border-purple-800/60 mb-2 flex justify-between items-center">
                     <span className="text-xs font-black tracking-wider text-purple-300 uppercase">
                       Select Section
                     </span>
-                    <span className="text-[11px] font-extrabold bg-purple-900 text-purple-200 px-2.5 py-0.5 rounded-full border border-purple-700">
+                    <span className="text-[11px] font-extrabold bg-[#361376] text-purple-200 px-2.5 py-0.5 rounded-full border border-[#6D28D9]">
                       7 Categories
                     </span>
                   </div>
@@ -152,16 +152,16 @@ export default function MainLayout() {
                           onClick={() => setIsDropdownOpen(false)}
                           className={`flex items-start gap-3 p-3 rounded-2xl transition-all ${
                             selected
-                              ? 'bg-[#E5D0FF] text-purple-950 font-black shadow-md'
-                              : 'text-purple-100 hover:bg-purple-900/70 hover:text-white'
+                              ? 'bg-[#E5D0FF] text-[#160432] font-black shadow-md'
+                              : 'text-purple-100 hover:bg-[#32106E] hover:text-white'
                           }`}
                         >
-                          <div className={`p-2 rounded-xl shrink-0 ${selected ? 'bg-purple-950 text-purple-100' : 'bg-purple-900 text-purple-300'}`}>
+                          <div className={`p-2 rounded-xl shrink-0 ${selected ? 'bg-[#160432] text-purple-100' : 'bg-[#32106E] text-purple-300'}`}>
                             {item.icon}
                           </div>
                           <div className="flex-1 min-w-0">
                             <span className="font-black text-sm block truncate">{item.label}</span>
-                            <p className={`text-xs mt-0.5 line-clamp-1 ${selected ? 'text-purple-900/80 font-bold' : 'text-purple-300/70'}`}>
+                            <p className={`text-xs mt-0.5 line-clamp-1 ${selected ? 'text-[#220A50] font-bold' : 'text-purple-300/70'}`}>
                               {item.description}
                             </p>
                           </div>
@@ -177,7 +177,7 @@ export default function MainLayout() {
         </div>
       </header>
 
-      {/* Main Full-Width Content Canvas */}
+      {/* Main Content Area */}
       <main className="flex-1 flex flex-col min-w-0 overflow-y-auto pb-24 md:pb-12">
         <div className="flex-1 max-w-5xl w-full mx-auto px-4 md:px-8 py-6">
           <Outlet />
@@ -185,7 +185,7 @@ export default function MainLayout() {
       </main>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#1D0A35]/95 backdrop-blur-xl border-t border-purple-800/80 px-3 py-2 shadow-2xl flex justify-around items-center">
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#1A053C]/95 backdrop-blur-xl border-t border-[#5B21B6]/60 px-3 py-2 shadow-2xl flex justify-around items-center">
         {navCategories.slice(0, 5).map((item) => {
           const selected = isActive(item.path);
           return (
@@ -196,7 +196,7 @@ export default function MainLayout() {
                 selected ? 'text-purple-100 font-bold scale-105' : 'text-purple-400 hover:text-purple-200'
               }`}
             >
-              <div className={`p-1.5 rounded-full ${selected ? 'bg-[#E5D0FF] text-purple-950 shadow-md' : 'bg-transparent'}`}>
+              <div className={`p-1.5 rounded-full ${selected ? 'bg-[#E5D0FF] text-[#160432] shadow-md' : 'bg-transparent'}`}>
                 {item.icon}
               </div>
               <span className="text-[10px] font-extrabold truncate max-w-[64px]">{item.label.split(' ')[0]}</span>

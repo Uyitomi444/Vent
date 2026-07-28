@@ -79,14 +79,14 @@ export default function ProgressPage() {
       <div className="grid md:grid-cols-3 gap-6">
         
         {/* Mood Trend Chart */}
-        <div className="md:col-span-2 bg-[#230D3E] rounded-3xl p-6 md:p-8 shadow-xl border border-purple-700/80">
+        <div className="md:col-span-2 bg-[#220A50] rounded-3xl p-6 md:p-8 shadow-xl border border-[#5B21B6]/80">
           <div className="flex justify-between items-center mb-6">
             <h2 className="font-serif font-black text-xl text-[#E5D0FF] flex items-center gap-2">
               <LineChart size={24} className="text-purple-300" />
               Mood Trend (Past 7 Days)
             </h2>
-            <div className="bg-[#E5D0FF] text-purple-950 px-4 py-1.5 rounded-full text-xs font-black flex items-center gap-1.5 shadow-sm border border-purple-300">
-              <Calendar size={14} className="text-purple-900" />
+            <div className="bg-[#E5D0FF] text-[#160432] px-4 py-1.5 rounded-full text-xs font-black flex items-center gap-1.5 shadow-sm border border-purple-300">
+              <Calendar size={14} className="text-[#220A50]" />
               {daysCheckedIn} of 7 days
             </div>
           </div>
@@ -98,11 +98,11 @@ export default function ProgressPage() {
                 <div key={idx} className="flex flex-col items-center gap-3 flex-1">
                   <div className="w-full relative flex justify-center items-end h-32 rounded-t-lg">
                     {/* Background track */}
-                    <div className="absolute inset-0 bg-purple-900/60 rounded-t-xl w-8 md:w-12 mx-auto border border-purple-700/40"></div>
+                    <div className="absolute inset-0 bg-[#32106E]/60 rounded-t-xl w-8 md:w-12 mx-auto border border-[#5B21B6]/40"></div>
                     {/* Actual Bar */}
                     <div 
                       className={`w-8 md:w-12 rounded-t-xl transition-all duration-1000 ${
-                        day.isToday ? 'bg-[#E5D0FF] shadow-md border-2 border-white' : (day.score > 0 ? 'bg-purple-500 shadow-sm' : 'bg-transparent')
+                        day.isToday ? 'bg-[#E5D0FF] shadow-md border-2 border-white' : (day.score > 0 ? 'bg-[#7C3AED] shadow-sm' : 'bg-transparent')
                       }`}
                       style={{ height }}
                     ></div>
@@ -117,7 +117,7 @@ export default function ProgressPage() {
         </div>
 
         {/* Top Themes */}
-        <div className="bg-[#230D3E] rounded-3xl p-6 md:p-8 shadow-xl border border-purple-700/80">
+        <div className="bg-[#220A50] rounded-3xl p-6 md:p-8 shadow-xl border border-[#5B21B6]/80">
           <h2 className="font-serif font-black text-xl text-[#E5D0FF] flex items-center gap-2 mb-6">
             <BrainCircuit size={24} className="text-purple-300" />
             Top Themes
@@ -129,10 +129,10 @@ export default function ProgressPage() {
                 <div key={idx} className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span className="font-extrabold text-[#E5D0FF] capitalize">{theme}</span>
-                    <span className="font-black text-purple-950 bg-[#E5D0FF] px-2.5 py-0.5 rounded-full border border-purple-300">{count} {count === 1 ? 'time' : 'times'}</span>
+                    <span className="font-black text-[#160432] bg-[#E5D0FF] px-2.5 py-0.5 rounded-full border border-purple-300">{count} {count === 1 ? 'time' : 'times'}</span>
                   </div>
                   {/* Frequency Indicator Bar */}
-                  <div className="h-3 w-full bg-purple-900 rounded-full overflow-hidden border border-purple-700">
+                  <div className="h-3 w-full bg-[#32106E] rounded-full overflow-hidden border border-[#5B21B6]">
                     <div 
                       className="h-full bg-[#E5D0FF] rounded-full" 
                       style={{ width: `${Math.min((count / topThemes[0][1]) * 100, 100)}%` }}
@@ -151,8 +151,8 @@ export default function ProgressPage() {
       </div>
 
       {/* Weekly Reflection Card */}
-      <div className="bg-[#230D3E] rounded-3xl p-8 shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-center gap-6 border border-purple-700/80">
-        <div className="shrink-0 bg-purple-900 p-4 rounded-2xl border border-purple-700 shadow-md">
+      <div className="bg-[#220A50] rounded-3xl p-8 shadow-2xl relative overflow-hidden flex flex-col md:flex-row items-center gap-6 border border-[#5B21B6]/80">
+        <div className="shrink-0 bg-[#32106E] p-4 rounded-2xl border border-[#5B21B6] shadow-md">
           <MascotPose pose="sitting" className="w-20 h-20 drop-shadow-md brightness-110" />
         </div>
         
@@ -161,8 +161,8 @@ export default function ProgressPage() {
           <p className="text-purple-100 leading-relaxed font-bold mb-5 text-[15px]">
             {reflection}
           </p>
-          <div className="inline-flex items-center gap-2 bg-[#E5D0FF] text-purple-950 px-4 py-2 rounded-full text-sm font-extrabold shadow-md">
-            <Target size={16} className="text-purple-900" />
+          <div className="inline-flex items-center gap-2 bg-[#E5D0FF] text-[#160432] px-4 py-2 rounded-full text-sm font-extrabold shadow-md">
+            <Target size={16} className="text-[#220A50]" />
             Suggested Next Step
           </div>
         </div>

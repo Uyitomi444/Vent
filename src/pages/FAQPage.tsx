@@ -110,9 +110,9 @@ function AccordionItem({ item }: { item: FAQ }) {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="border border-purple-700/80 bg-[#230D3E] rounded-2xl overflow-hidden shadow-lg transition-all mb-3">
+    <div className="border border-[#5B21B6]/80 bg-[#220A50] rounded-2xl overflow-hidden shadow-lg transition-all mb-3">
       <button 
-        className="w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none hover:bg-purple-900/60 transition-colors cursor-pointer"
+        className="w-full px-6 py-5 flex items-center justify-between text-left focus:outline-none hover:bg-[#32106E] transition-colors cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
       >
         <span className="font-extrabold text-[#E5D0FF] text-lg pr-4">{item.question}</span>
@@ -124,7 +124,7 @@ function AccordionItem({ item }: { item: FAQ }) {
       <div 
         className={`px-6 overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-96 pb-5 opacity-100' : 'max-h-0 opacity-0'}`}
       >
-        <p className="text-purple-100 font-bold leading-relaxed text-sm md:text-base bg-purple-950 p-4 rounded-xl border border-purple-800">
+        <p className="text-purple-100 font-bold leading-relaxed text-sm md:text-base bg-[#18043A] p-4 rounded-xl border border-[#5B21B6]">
           {item.answer}
         </p>
       </div>
@@ -158,7 +158,7 @@ export default function FAQPage() {
       </div>
 
       {/* Contact Block */}
-      <div className="mt-16 bg-[#230D3E] border border-purple-700/80 rounded-3xl p-8 md:p-10 text-center shadow-2xl relative overflow-hidden">
+      <div className="mt-16 bg-[#220A50] border border-[#5B21B6]/80 rounded-3xl p-8 md:p-10 text-center shadow-2xl relative overflow-hidden">
         <div className="absolute top-0 right-0 p-8 opacity-10 mix-blend-screen">
           <MessageCircleHeart size={140} className="text-purple-300" />
         </div>
@@ -169,7 +169,7 @@ export default function FAQPage() {
           </p>
           <a 
             href="mailto:support@itoura.com" 
-            className="inline-block px-8 py-3.5 bg-[#E5D0FF] text-purple-950 rounded-full font-black hover:bg-white transition-all shadow-lg hover:scale-105 border border-purple-300"
+            className="inline-block px-8 py-3.5 bg-[#E5D0FF] text-[#160432] rounded-full font-black hover:bg-white transition-all shadow-lg hover:scale-105 border border-purple-300"
           >
             Contact Support
           </a>
