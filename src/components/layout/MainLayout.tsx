@@ -8,8 +8,7 @@ import {
   Settings, 
   HelpCircle, 
   LineChart, 
-  ChevronDown, 
-  Layers
+  ChevronDown
 } from 'lucide-react';
 import DailyMessagePopup from '../DailyMessagePopup';
 import itouraLogo from '../../assets/ABLE/logo.png';
@@ -115,14 +114,13 @@ export default function MainLayout() {
               />
             </Link>
 
-            {/* Vibrant Category Dropdown Button */}
+            {/* Clean Sleek Category Dropdown Button */}
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 className="flex items-center gap-2 px-4.5 py-2 bg-[#1E0542] hover:bg-[#2E0B5E] text-[#C8B6FF] font-black text-sm rounded-full border-2 border-[#C8B6FF]/80 shadow-lg transition-all cursor-pointer"
                 aria-expanded={isDropdownOpen}
               >
-                <Layers size={16} className="text-[#C8B6FF]" />
                 <span className="font-black text-white">{currentCategory.label}</span>
                 <ChevronDown 
                   size={16} 
@@ -130,7 +128,7 @@ export default function MainLayout() {
                 />
               </button>
 
-              {/* Vibrant Category Dropdown Modal */}
+              {/* Clean Category Dropdown Modal without Tiny Icon Emojis */}
               {isDropdownOpen && (
                 <div className="absolute top-full left-0 mt-3 w-80 md:w-88 bg-[#7C3AED] backdrop-blur-2xl border-2 border-[#C8B6FF] rounded-3xl p-3 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-200">
                   <div className="px-3 py-2 border-b border-purple-300/50 mb-2 flex justify-between items-center">
@@ -150,21 +148,16 @@ export default function MainLayout() {
                           key={item.path}
                           to={item.path}
                           onClick={() => setIsDropdownOpen(false)}
-                          className={`flex items-start gap-3 p-3 rounded-2xl transition-all ${
+                          className={`flex flex-col p-3 rounded-2xl transition-all ${
                             selected
                               ? 'bg-[#C8B6FF] text-[#1E0542] font-black shadow-lg border border-white'
                               : 'text-white hover:bg-[#6D28D9] font-bold'
                           }`}
                         >
-                          <div className={`p-2 rounded-xl shrink-0 ${selected ? 'bg-[#1E0542] text-[#C8B6FF]' : 'bg-[#1E0542] text-purple-200'}`}>
-                            {item.icon}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <span className="font-black text-sm block truncate">{item.label}</span>
-                            <p className={`text-xs mt-0.5 line-clamp-1 ${selected ? 'text-[#1E0542] font-bold' : 'text-purple-100/80'}`}>
-                              {item.description}
-                            </p>
-                          </div>
+                          <span className="font-black text-sm block truncate">{item.label}</span>
+                          <p className={`text-xs mt-0.5 line-clamp-1 ${selected ? 'text-[#1E0542] font-bold' : 'text-purple-100/80'}`}>
+                            {item.description}
+                          </p>
                         </Link>
                       );
                     })}
