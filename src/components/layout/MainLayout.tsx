@@ -114,21 +114,21 @@ export default function MainLayout() {
               />
             </Link>
 
-            {/* Clean Sleek Category Dropdown Button */}
+            {/* Roomier & Longer Category Dropdown Button */}
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex items-center gap-2 px-4.5 py-2 bg-[#1E0542] hover:bg-[#2E0B5E] text-[#C8B6FF] font-black text-sm rounded-full border-2 border-[#C8B6FF]/80 shadow-lg transition-all cursor-pointer"
+                className="flex items-center gap-3.5 px-6 md:px-7 py-2.5 bg-[#1E0542] hover:bg-[#2E0B5E] text-[#C8B6FF] font-black text-sm md:text-base rounded-full border-2 border-[#C8B6FF]/90 shadow-xl transition-all cursor-pointer whitespace-nowrap"
                 aria-expanded={isDropdownOpen}
               >
                 <span className="font-black text-white">{currentCategory.label}</span>
                 <ChevronDown 
-                  size={16} 
+                  size={18} 
                   className={`text-[#C8B6FF] transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} 
                 />
               </button>
 
-              {/* Clean Category Dropdown Modal without Tiny Icon Emojis */}
+              {/* Clean Category Dropdown Modal */}
               {isDropdownOpen && (
                 <div className="absolute top-full left-0 mt-3 w-80 md:w-88 bg-[#7C3AED] backdrop-blur-2xl border-2 border-[#C8B6FF] rounded-3xl p-3 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-200">
                   <div className="px-3 py-2 border-b border-purple-300/50 mb-2 flex justify-between items-center">
@@ -148,7 +148,7 @@ export default function MainLayout() {
                           key={item.path}
                           to={item.path}
                           onClick={() => setIsDropdownOpen(false)}
-                          className={`flex flex-col p-3 rounded-2xl transition-all ${
+                          className={`flex flex-col p-3.5 rounded-2xl transition-all ${
                             selected
                               ? 'bg-[#C8B6FF] text-[#1E0542] font-black shadow-lg border border-white'
                               : 'text-white hover:bg-[#6D28D9] font-bold'
