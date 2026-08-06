@@ -8,6 +8,7 @@ import ProgressPage from './pages/ProgressPage';
 import SettingsPage from './pages/SettingsPage';
 import OnboardingPage from './pages/OnboardingPage';
 import FAQPage from './pages/FAQPage';
+import GroupSessionPage from './pages/GroupSessionPage';
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         {/* App Main Layout Routes */}
         <Route element={<MainLayout />}>
           <Route path="/chat" element={<HomePage />} />
+          <Route path="/group" element={<GroupSessionPage />} />
           <Route path="/journal" element={<JournalPage />} />
           <Route path="/progress" element={<ProgressPage />} />
           <Route path="/mood" element={<MoodPage />} />

@@ -1,21 +1,27 @@
-import { Outlet, Link, useLocation } from 'react-router-dom';
-import { useEffect, useState, useRef } from 'react';
-import { ChevronDown } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
+import { Link, useLocation, Outlet } from 'react-router-dom';
+import { useLanguageStore } from '../../i18n';
+import { useSubscriptionStore } from '../../store/subscriptionStore';
+import LanguageSelector from '../LanguageSelector';
+import PaywallModal from '../paywall/PaywallModal';
 import DailyMessagePopup from '../DailyMessagePopup';
 import itouraLogo from '../../assets/ABLE/logo.png';
-
-interface NavItemData {
-  path: string;
-  label: string;
-  description: string;
-}
+import { 
+  ChevronDown, 
+  MessageSquare, 
+  Sparkles, 
+  TrendingUp, 
+  BookOpen, 
+  Users
+} from 'lucide-react';
 
 export default function MainLayout() {
-  const location = useLocation();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const location = useLocation();
   const dropdownRef = useRef<HTMLDivElement>(null);
-
-  const isActive = (path: string) => location.pathname === path;
+  
+  const { t } = useLanguageStore();
+  const { status, responseCount, maxFreeResponses } = useSubscriptionStore();
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -27,56 +33,61 @@ export default function MainLayout() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  useEffect(() => {
-    setIsDropdownOpen(false);
-  }, [location.pathname]);
+  const isActive = (path: string) => location.pathname === path;
 
-  const navCategories: NavItemData[] = [
+  const navCategories = [
     {
       path: '/chat',
-      label: 'Chat Companion',
-      description: 'Your safe space to vent and process feelings 24/7',
+      label: t('nav.chat'),
+      description: 'AI companion chat, empathetic venting, & reflection',
     },
     {
       path: '/tools',
-      label: 'Wellness Tools',
+      label: t('nav.tools'),
       description: 'Box breathing, grounding, & mindful exercises',
     },
     {
+      path: '/group',
+      label: t('nav.group'),
+      description: 'Shared group conversations for families & friends',
+    },
+    {
       path: '/progress',
-      label: 'Progress & Insights',
+      label: t('nav.progress'),
       description: '7-day mood trends, top themes, & reflections',
     },
     {
       path: '/journal',
-      label: 'Private Journal',
+      label: t('nav.journal'),
       description: 'Encrypted local journal entries & reflections',
     },
     {
       path: '/mood',
-      label: 'Mood Tracker',
+      label: t('nav.mood'),
       description: 'Quick emotional check-in and daily mood history',
     },
     {
       path: '/faq',
-      label: 'Help & FAQ',
+      label: t('nav.faq'),
       description: 'Everything you need to know about Itoura',
     },
     {
       path: '/settings',
-      label: 'Settings',
+      label: t('nav.settings'),
       description: 'Data privacy controls & app preferences',
     },
   ];
 
   const currentCategory = navCategories.find((c) => c.path === location.pathname) || navCategories[0];
+  const remainingResponses = Math.max(0, maxFreeResponses - responseCount);
 
   return (
     <div className="flex flex-col min-h-screen bg-[#C4B4E2] relative font-sans text-[#532E60] selection:bg-[#532E60] selection:text-white">
       <DailyMessagePopup />
+      <PaywallModal />
 
       {/* Deep Plum Responsive Header */}
-      <header className="sticky top-0 z-50 w-full px-3 sm:px-6 md:px-12 py-3 md:py-4 bg-[#532E60] backdrop-blur-xl border-b-2 border-white/20 shadow-xl">
+      <header className="sticky top-0 z-40 w-full px-3 sm:px-6 md:px-12 py-3 md:py-4 bg-[#532E60] backdrop-blur-xl border-b-2 border-white/20 shadow-xl">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-6">
           
           {/* Logo & Category Dropdown Button */}
@@ -89,7 +100,7 @@ export default function MainLayout() {
               />
             </Link>
 
-            {/* Pastel Lilac Category Dropdown Button */}
+            {/* Category Dropdown Button */}
             <div className="relative min-w-0" ref={dropdownRef}>
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
@@ -103,7 +114,7 @@ export default function MainLayout() {
                 />
               </button>
 
-              {/* Deep Plum Dropdown Modal */}
+              {/* Dropdown Modal */}
               {isDropdownOpen && (
                 <div className="absolute top-full left-0 mt-3 w-[calc(100vw-2rem)] max-w-[340px] sm:max-w-none sm:w-80 md:w-88 bg-[#532E60] backdrop-blur-2xl border-2 border-[#C4B4E2] rounded-3xl p-3 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-200">
                   <div className="px-3 py-2 border-b border-white/20 mb-2 flex justify-between items-center">
@@ -111,7 +122,7 @@ export default function MainLayout() {
                       Select Section
                     </span>
                     <span className="text-[11px] font-black bg-[#C4B4E2] text-[#532E60] px-3 py-1 rounded-full shadow-sm">
-                      7 Categories
+                      8 Categories
                     </span>
                   </div>
 
@@ -123,16 +134,19 @@ export default function MainLayout() {
                           key={item.path}
                           to={item.path}
                           onClick={() => setIsDropdownOpen(false)}
-                          className={`flex flex-col p-3 sm:p-3.5 rounded-2xl transition-all ${
-                            selected
-                              ? 'bg-[#C4B4E2] text-[#532E60] font-black shadow-lg border border-white'
-                              : 'text-white hover:bg-[#613B6E] font-bold'
+                          className={`flex flex-col p-3 rounded-2xl transition-all ${
+                            selected 
+                              ? 'bg-[#C4B4E2] text-[#532E60] font-black shadow-md border border-white' 
+                              : 'hover:bg-[#613B6E] text-white hover:text-white'
                           }`}
                         >
-                          <span className="font-black text-sm block truncate">{item.label}</span>
-                          <p className={`text-xs mt-0.5 line-clamp-1 ${selected ? 'text-[#532E60] font-bold' : 'text-[#E8DCF8]/80'}`}>
+                          <span className="text-sm font-black flex items-center justify-between">
+                            {item.label}
+                            {selected && <span className="w-2 h-2 rounded-full bg-[#532E60]" />}
+                          </span>
+                          <span className={`text-xs mt-0.5 font-bold ${selected ? 'text-[#532E60]/80' : 'text-[#E8DCF8]'}`}>
                             {item.description}
-                          </p>
+                          </span>
                         </Link>
                       );
                     })}
@@ -142,43 +156,66 @@ export default function MainLayout() {
             </div>
           </div>
 
-          {/* Right Aligned Clean and Minimalist Itoura Text */}
-          <div className="flex items-center shrink-0">
-            <Link to="/" title="Go to Welcome Page">
-              <span className="font-serif text-lg sm:text-2xl md:text-3xl font-black tracking-tight text-white hover:text-[#C4B4E2] transition-colors drop-shadow-md">
-                Itoura
+          {/* Right Header Actions: Language & Remaining Count Badge */}
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            {status === 'free' && (
+              <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#613B6E] text-white text-xs font-black rounded-full border border-white/30 shadow-md">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                {remainingResponses} free replies left
               </span>
-            </Link>
+            )}
+            <LanguageSelector />
           </div>
 
         </div>
       </header>
 
-      {/* Main Content Area */}
-      <main className="flex-1 flex flex-col min-w-0 overflow-y-auto pb-24 md:pb-12">
-        <div className="flex-1 max-w-5xl w-full mx-auto px-3 sm:px-6 md:px-8 py-4 sm:py-6">
-          <Outlet />
-        </div>
+      {/* Main Canvas */}
+      <main className="flex-1 w-full max-w-7xl mx-auto p-4 md:p-8 flex flex-col min-h-0">
+        <Outlet />
       </main>
 
-      {/* Deep Plum Mobile Bottom Navigation Bar */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#532E60] backdrop-blur-xl border-t-2 border-white/20 px-2 sm:px-3 py-2.5 shadow-2xl flex justify-around items-center">
-        {navCategories.slice(0, 5).map((item) => {
-          const selected = isActive(item.path);
-          return (
-            <Link
-              key={item.path}
-              to={item.path}
-              className={`px-3 py-1.5 rounded-full text-xs font-black transition-all ${
-                selected 
-                  ? 'bg-[#C4B4E2] text-[#532E60] shadow-md border border-white scale-105' 
-                  : 'text-[#E8DCF8] hover:text-white'
-              }`}
-            >
-              <span className="truncate max-w-[64px]">{item.label.split(' ')[0]}</span>
-            </Link>
-          );
-        })}
+      {/* Mobile Bottom Quick Navigation Bar */}
+      <nav className="md:hidden sticky bottom-0 z-30 w-full bg-[#532E60] border-t-2 border-white/20 px-2 py-2 flex items-center justify-around shadow-2xl">
+        <Link 
+          to="/chat" 
+          className={`flex flex-col items-center gap-1 p-2 rounded-2xl transition-all ${isActive('/chat') ? 'bg-[#C4B4E2] text-[#532E60] font-black scale-105' : 'text-[#E8DCF8]'}`}
+        >
+          <MessageSquare size={18} />
+          <span className="text-[10px] font-extrabold">{t('nav.chat')}</span>
+        </Link>
+        
+        <Link 
+          to="/group" 
+          className={`flex flex-col items-center gap-1 p-2 rounded-2xl transition-all ${isActive('/group') ? 'bg-[#C4B4E2] text-[#532E60] font-black scale-105' : 'text-[#E8DCF8]'}`}
+        >
+          <Users size={18} />
+          <span className="text-[10px] font-extrabold">{t('nav.group')}</span>
+        </Link>
+
+        <Link 
+          to="/tools" 
+          className={`flex flex-col items-center gap-1 p-2 rounded-2xl transition-all ${isActive('/tools') ? 'bg-[#C4B4E2] text-[#532E60] font-black scale-105' : 'text-[#E8DCF8]'}`}
+        >
+          <Sparkles size={18} />
+          <span className="text-[10px] font-extrabold">{t('nav.tools')}</span>
+        </Link>
+
+        <Link 
+          to="/progress" 
+          className={`flex flex-col items-center gap-1 p-2 rounded-2xl transition-all ${isActive('/progress') ? 'bg-[#C4B4E2] text-[#532E60] font-black scale-105' : 'text-[#E8DCF8]'}`}
+        >
+          <TrendingUp size={18} />
+          <span className="text-[10px] font-extrabold">{t('nav.progress')}</span>
+        </Link>
+
+        <Link 
+          to="/journal" 
+          className={`flex flex-col items-center gap-1 p-2 rounded-2xl transition-all ${isActive('/journal') ? 'bg-[#C4B4E2] text-[#532E60] font-black scale-105' : 'text-[#E8DCF8]'}`}
+        >
+          <BookOpen size={18} />
+          <span className="text-[10px] font-extrabold">{t('nav.journal')}</span>
+        </Link>
       </nav>
     </div>
   );

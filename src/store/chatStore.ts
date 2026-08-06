@@ -1,7 +1,9 @@
 import { create } from 'zustand';
-import { sendMessageToAI } from '../services/ai';
+import { sendMessageToAI, detectCrisisLanguage } from '../services/ai';
 import type { ChatMessage } from '../services/ai';
 import { useMemoryStore } from './memoryStore';
+import { useSubscriptionStore } from './subscriptionStore';
+import { useLanguageStore } from '../i18n';
 
 interface ChatState {
   messages: ChatMessage[];
@@ -23,6 +25,16 @@ export const useChatStore = create<ChatState>((set, get) => ({
   error: null,
   sendMessage: async (content, apiKey) => {
     const userMessage: ChatMessage = { role: 'user', content };
+    const { status, responseCount, maxFreeResponses, openPaywall, incrementResponseCount } = useSubscriptionStore.getState();
+    const isCrisis = detectCrisisLanguage(content);
+
+    // HARD CRISIS PATHWAY OVERRIDE:
+    // If distress/crisis is detected, BYPASS the paywall completely!
+    if (!isCrisis && status === 'free' && responseCount >= maxFreeResponses) {
+      openPaywall();
+      return;
+    }
+
     set((state) => ({ 
       messages: [...state.messages, userMessage],
       isLoading: true,
@@ -30,16 +42,34 @@ export const useChatStore = create<ChatState>((set, get) => ({
     }));
 
     try {
-      // Get memory context
+      // Memory context
       const memories = useMemoryStore.getState().memories;
       const pastMemories = memories.map(m => m.summary);
+      const activeLanguage = useLanguageStore.getState().currentLanguage;
       
-      const responseContent = await sendMessageToAI(get().messages, apiKey, { pastMemories });
+      const responseContent = await sendMessageToAI(
+        get().messages,
+        apiKey,
+        { pastMemories },
+        activeLanguage
+      );
       
       set((state) => ({
         messages: [...state.messages, { role: 'assistant', content: responseContent }],
         isLoading: false
       }));
+
+      // Increment response count for free tier
+      if (!isCrisis && status === 'free') {
+        incrementResponseCount();
+        const updatedCount = useSubscriptionStore.getState().responseCount;
+        if (updatedCount >= maxFreeResponses) {
+          // Open paywall after the 5th message completes its full thought
+          setTimeout(() => {
+            openPaywall();
+          }, 1500);
+        }
+      }
     } catch (error: any) {
       set({ error: error.message || 'Failed to send message', isLoading: false });
     }
