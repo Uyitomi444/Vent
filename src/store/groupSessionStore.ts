@@ -47,12 +47,18 @@ interface GroupSessionState {
   subscribeToRoom: (code: string) => () => void;
 }
 
-// Socket.IO client instance connecting to real-time server
-const SERVER_URL = typeof window !== 'undefined' && window.location.hostname !== 'localhost'
-  ? 'https://itoura-realtime-server.onrender.com' // Production server URL or local
-  : 'http://localhost:3001';
+// Dynamic Realtime Server URL: uses VITE_REALTIME_SERVER_URL if set, or window location/localhost
+const getRealtimeServerUrl = () => {
+  if (import.meta.env.VITE_REALTIME_SERVER_URL) {
+    return import.meta.env.VITE_REALTIME_SERVER_URL;
+  }
+  if (typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
+    return `${window.location.protocol}//${window.location.hostname}`;
+  }
+  return 'http://localhost:3001';
+};
 
-const socket: Socket = io(SERVER_URL, {
+const socket: Socket = io(getRealtimeServerUrl(), {
   autoConnect: true,
   transports: ['websocket', 'polling']
 });
