@@ -83,8 +83,8 @@ export const useGroupSessionStore = create<GroupSessionState>()(
           }
         }
 
-        // 2. Sync to Firebase Firestore if project ID configured
-        if (import.meta.env.VITE_FIREBASE_PROJECT_ID) {
+        // 2. Sync to Firebase Firestore if initialized and configured
+        if (db && import.meta.env.VITE_FIREBASE_PROJECT_ID) {
           try {
             const roomRef = doc(db, 'group_sessions', session.code);
             await setDoc(roomRef, session, { merge: true });
@@ -150,8 +150,8 @@ export const useGroupSessionStore = create<GroupSessionState>()(
             targetSession = current;
           }
 
-          // 2. Try fetching from Firestore if available
-          if (!targetSession && import.meta.env.VITE_FIREBASE_PROJECT_ID) {
+          // 2. Try fetching from Firestore if db available
+          if (!targetSession && db && import.meta.env.VITE_FIREBASE_PROJECT_ID) {
             try {
               const roomRef = doc(db, 'group_sessions', normalizedCode);
               const snapshot = await getDoc(roomRef);
@@ -326,8 +326,8 @@ export const useGroupSessionStore = create<GroupSessionState>()(
         subscribeToRoom: (code: string) => {
           const normalizedCode = code.trim().toUpperCase();
 
-          // 1. Firestore listener if project ID configured
-          if (import.meta.env.VITE_FIREBASE_PROJECT_ID) {
+          // 1. Firestore listener if db available and project ID configured
+          if (db && import.meta.env.VITE_FIREBASE_PROJECT_ID) {
             try {
               const roomRef = doc(db, 'group_sessions', normalizedCode);
               const unsubscribe = onSnapshot(roomRef, (snapshot) => {
