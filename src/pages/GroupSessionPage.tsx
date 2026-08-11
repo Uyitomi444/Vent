@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useGroupSessionStore } from '../store/groupSessionStore';
 import { useLanguageStore } from '../i18n';
 import { Users, Shield, Send, LogOut, Download, Plus, ArrowRight, Copy, Check } from 'lucide-react';
@@ -10,13 +10,15 @@ export default function GroupSessionPage() {
     hasSeenPrivacyNotice,
     isLoading,
     error,
+    currentUserId,
     setHasSeenPrivacyNotice,
     createSession,
     joinSession,
     sendGroupMessage,
     leaveSession,
     endSession,
-    exportSessionToJournal
+    exportSessionToJournal,
+    subscribeToRoom
   } = useGroupSessionStore();
 
   const { t, currentLanguage } = useLanguageStore();
@@ -26,30 +28,49 @@ export default function GroupSessionPage() {
   const [joinCode, setJoinCode] = useState('');
   const [inputMsg, setInputMsg] = useState('');
   const [copiedCode, setCopiedCode] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const apiKey = import.meta.env.VITE_GROQ_API_KEY || '';
 
-  const handleCreate = (e: React.FormEvent) => {
+  // Real-time subscription hook when activeSession exists
+  useEffect(() => {
+    if (activeSession?.code) {
+      const unsubscribe = subscribeToRoom(activeSession.code);
+      return () => {
+        unsubscribe();
+      };
+    }
+  }, [activeSession?.code, subscribeToRoom]);
+
+  // Auto-scroll to bottom of group messages
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [activeSession?.messages, isLoading]);
+
+  const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!displayName.trim()) return;
-    createSession(createTitle, displayName, currentLanguage);
+    await createSession(createTitle, displayName, currentLanguage);
   };
 
-  const handleJoin = (e: React.FormEvent) => {
+  const handleJoin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!joinCode.trim() || !displayName.trim()) return;
-    joinSession(joinCode, displayName);
+    await joinSession(joinCode, displayName);
   };
+
+  const currentParticipant = activeSession?.participants.find(p => p.id === currentUserId) 
+    || activeSession?.participants[0] 
+    || { id: 'me', displayName: 'Me', isCreator: true };
 
   const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputMsg.trim() || !activeSession || isLoading) return;
 
-    const me = activeSession.participants[0] || { id: 'user-me', displayName: 'Me' };
     const content = inputMsg.trim();
     setInputMsg('');
 
-    await sendGroupMessage(content, me.id, me.displayName, apiKey);
+    await sendGroupMessage(content, currentParticipant.id, currentParticipant.displayName, apiKey);
   };
 
   const handleCopyCode = () => {
@@ -99,8 +120,6 @@ export default function GroupSessionPage() {
 
   // 2. Active Session View
   if (activeSession) {
-    const currentParticipant = activeSession.participants[0] || { id: 'me', displayName: 'Me', isCreator: true };
-
     return (
       <div className="h-full flex flex-col max-w-4xl mx-auto space-y-4 pb-4">
         
@@ -114,7 +133,7 @@ export default function GroupSessionPage() {
             <div className="flex items-center gap-3 text-xs text-[#E8DCF8] font-bold mt-1">
               <span>Code: <strong className="text-white tracking-widest bg-[#613B6E] px-2 py-0.5 rounded border border-white/20">{activeSession.code}</strong></span>
               <span>•</span>
-              <span>{activeSession.participants.length} of {activeSession.maxParticipants} participants</span>
+              <span className="text-[#C4B4E2] font-black">{activeSession.participants.length} of {activeSession.maxParticipants} participants</span>
             </div>
           </div>
 
@@ -157,20 +176,41 @@ export default function GroupSessionPage() {
           </div>
         </div>
 
-        {/* Participants Chips Bar */}
+        {/* Real-time Participants Chips Bar */}
         <div className="flex gap-2 overflow-x-auto pb-1 px-1">
-          {activeSession.participants.map(p => (
-            <span key={p.id} className="px-3 py-1 bg-[#532E60] text-white text-xs font-extrabold rounded-full border border-white/30 shrink-0">
-              {p.displayName} {p.isCreator && '(Host)'}
-            </span>
-          ))}
+          {activeSession.participants.map(p => {
+            const isMe = p.id === currentParticipant.id;
+            return (
+              <span 
+                key={p.id} 
+                className={`px-3.5 py-1.5 text-xs font-black rounded-full border transition-all shrink-0 ${
+                  isMe 
+                    ? 'bg-[#C4B4E2] text-[#532E60] border-white shadow-md' 
+                    : 'bg-[#532E60] text-white border-white/30'
+                }`}
+              >
+                {p.displayName} {p.isCreator && '(Host)'} {isMe && '(You)'}
+              </span>
+            );
+          })}
         </div>
 
         {/* Group Chat Messages Box */}
         <div className="flex-1 bg-[#532E60] border-2 border-white/40 shadow-2xl rounded-3xl p-4 md:p-6 overflow-y-auto space-y-4 min-h-[380px]">
           {activeSession.messages.map(msg => {
             const isAI = msg.senderId === 'assistant';
+            const isSystem = msg.senderId === 'system';
             const isMe = msg.senderId === currentParticipant.id;
+
+            if (isSystem) {
+              return (
+                <div key={msg.id} className="flex justify-center my-2">
+                  <span className="px-4 py-1.5 bg-[#613B6E]/80 text-[#C4B4E2] text-xs font-bold rounded-full border border-white/20 shadow-sm">
+                    {msg.content}
+                  </span>
+                </div>
+              );
+            }
 
             return (
               <div key={msg.id} className={`flex ${isAI ? 'justify-start' : isMe ? 'justify-end' : 'justify-start'}`}>
@@ -214,6 +254,7 @@ export default function GroupSessionPage() {
               {error}
             </div>
           )}
+          <div ref={messagesEndRef} />
         </div>
 
         {/* Message Form */}
