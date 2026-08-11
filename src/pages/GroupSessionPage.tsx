@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useGroupSessionStore } from '../store/groupSessionStore';
 import { useLanguageStore } from '../i18n';
-import { Users, Shield, Send, LogOut, Download, Plus, ArrowRight, Copy, Check } from 'lucide-react';
+import { Users, Shield, Send, LogOut, Download, Plus, ArrowRight, Copy, Check, Mic, MicOff } from 'lucide-react';
 import itouraMascot from '../assets/ABLE/itoura-mascot.jpeg';
 
 export default function GroupSessionPage() {
@@ -28,6 +28,7 @@ export default function GroupSessionPage() {
   const [joinCode, setJoinCode] = useState('');
   const [inputMsg, setInputMsg] = useState('');
   const [copiedCode, setCopiedCode] = useState(false);
+  const [isListening, setIsListening] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const apiKey = import.meta.env.VITE_GROQ_API_KEY || '';
@@ -46,6 +47,45 @@ export default function GroupSessionPage() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [activeSession?.messages, isLoading]);
+
+  const handleVoiceInput = () => {
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("Speech-to-text voice input is not supported in this browser.");
+      return;
+    }
+
+    if (isListening) {
+      setIsListening(false);
+      return;
+    }
+
+    try {
+      const recognition = new SpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = currentLanguage === 'yo' ? 'yo-NG' 
+        : currentLanguage === 'ha' ? 'ha-NG' 
+        : currentLanguage === 'ig' ? 'ig-NG' 
+        : currentLanguage === 'pcm' ? 'en-NG' 
+        : 'en-US';
+
+      recognition.onstart = () => setIsListening(true);
+      recognition.onend = () => setIsListening(false);
+      recognition.onerror = () => setIsListening(false);
+
+      recognition.onresult = (event: any) => {
+        const transcript = event.results[0][0].transcript;
+        setInputMsg(prev => (prev ? `${prev} ${transcript}` : transcript));
+        setIsListening(false);
+      };
+
+      recognition.start();
+    } catch (err) {
+      console.error("Speech recognition error:", err);
+      setIsListening(false);
+    }
+  };
 
   const handleCreate = (e: React.FormEvent) => {
     e.preventDefault();
@@ -265,22 +305,36 @@ export default function GroupSessionPage() {
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Message Form */}
+        {/* Message Form with Voice to Text Input */}
         <form onSubmit={handleSendMessage} className="flex gap-2">
-          <input
-            type="text"
-            value={inputMsg}
-            onChange={e => setInputMsg(e.target.value)}
-            placeholder={`Message the group as ${currentParticipant.displayName}...`}
-            className="flex-1 px-4 sm:px-5 py-3 sm:py-3.5 bg-[#C4B4E2] text-[#532E60] font-bold text-xs sm:text-base placeholder:text-[#532E60]/60 rounded-xl sm:rounded-2xl outline-none border-2 border-white shadow-md"
-          />
-          <button
-            type="submit"
-            disabled={!inputMsg.trim() || isLoading}
-            className="px-4 sm:px-5 py-3 sm:py-3.5 bg-[#532E60] text-white rounded-xl sm:rounded-2xl font-black border border-white/40 hover:bg-[#613B6E] transition-all disabled:opacity-50 cursor-pointer shrink-0"
-          >
-            <Send size={16} />
-          </button>
+          <div className="flex items-center gap-1.5 flex-1">
+            <input
+              type="text"
+              value={inputMsg}
+              onChange={e => setInputMsg(e.target.value)}
+              placeholder={isListening ? "Listening..." : `Message the group as ${currentParticipant.displayName}...`}
+              className={`flex-1 px-4 sm:px-5 py-3 sm:py-3.5 bg-[#C4B4E2] text-[#532E60] font-bold text-xs sm:text-base placeholder:text-[#532E60]/60 rounded-xl sm:rounded-2xl outline-none border-2 border-white shadow-md transition-all ${isListening ? 'animate-pulse bg-[#E8DCF8]' : ''}`}
+            />
+            <button
+              type="button"
+              onClick={handleVoiceInput}
+              className={`px-3 sm:px-4 py-3 sm:py-3.5 rounded-xl sm:rounded-2xl border transition-all cursor-pointer shrink-0 ${
+                isListening 
+                  ? 'bg-red-600 text-white animate-pulse border-red-300 shadow-lg' 
+                  : 'bg-[#613B6E] text-white hover:bg-[#6D427C] border-white/30'
+              }`}
+              title="Voice to Text Input"
+            >
+              {isListening ? <MicOff size={18} /> : <Mic size={18} />}
+            </button>
+            <button
+              type="submit"
+              disabled={!inputMsg.trim() || isLoading}
+              className="px-4 sm:px-5 py-3 sm:py-3.5 bg-[#532E60] text-white rounded-xl sm:rounded-2xl font-black border border-white/40 hover:bg-[#613B6E] transition-all disabled:opacity-50 cursor-pointer shrink-0"
+            >
+              <Send size={18} />
+            </button>
+          </div>
         </form>
 
       </div>
@@ -347,7 +401,7 @@ export default function GroupSessionPage() {
             <div className="p-2.5 sm:p-3 bg-[#613B6E] rounded-2xl border border-white/30 shrink-0">
               <Users size={20} className="text-[#C4B4E2]" />
             </div>
-            <h2 className="font-serif text-xl sm:text-2xl font-black text-white">{t('group.join')}</h2>
+            <h2 className="font-serif text-2xl font-black text-white">{t('group.join')}</h2>
           </div>
 
           <form onSubmit={handleJoin} className="space-y-4">

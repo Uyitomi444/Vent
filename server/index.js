@@ -20,12 +20,16 @@ const rooms = new Map();
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
 async function sendGroupMessageToAI(messages, language, apiKey) {
-  if (!apiKey) return "Thank you for sharing with the group.";
+  if (!apiKey) return "Thank you for sharing with the group. Let's keep supporting one another.";
 
-  const GROUP_SYSTEM_PROMPT = `You are Itoura, an AI mental health companion facilitating a shared group session (families, couples, or friends).
-Address the group as a collective, not individuals. NEVER take sides or agree one person is right.
-Invite quieter participants gently. Acknowledge disagreements neutrally.
-Keep tone warm, empathetic, non-clinical, and supportive. Language: ${language}`;
+  const GROUP_SYSTEM_PROMPT = `You are Itoura, a warm, empathetic AI companion facilitating a shared group session for friends, family, or partners.
+
+CRITICAL CONVERSATIONAL RULES (STRICTLY ENFORCED):
+1. MANDATORY BREVITY: Keep your reply VERY SHORT — MAXIMUM 2 TO 3 SENTENCES (under 40 words total). NEVER write long speeches, essays, seminars, or formal lectures.
+2. NO PREFIXES OR LABELS: NEVER start with "[Itoura]:", "Itoura:", or any bracketed tags. Output ONLY your direct conversational words.
+3. WARM HUMAN TONALITY: Speak naturally like a caring friend sitting in the room. Be warm, supportive, and grounded.
+4. NEUTRAL FACILITATION: Never take sides, pick favorites, or declare who is right or wrong.
+5. Language: ${language}`;
 
   const formattedLog = messages.map(m => `[${m.senderName}]: ${m.content}`).join('\n');
 
@@ -40,7 +44,7 @@ Keep tone warm, empathetic, non-clinical, and supportive. Language: ${language}`
         model: 'llama-3.1-8b-instant',
         messages: [
           { role: 'system', content: GROUP_SYSTEM_PROMPT },
-          { role: 'user', content: `Current Group Session Transcript:\n${formattedLog}\n\nRespond as Itoura to the group:` }
+          { role: 'user', content: `Group Discussion Log:\n${formattedLog}\n\nRespond briefly as Itoura (max 2-3 sentences):` }
         ],
         temperature: 0.7
       })
@@ -48,10 +52,11 @@ Keep tone warm, empathetic, non-clinical, and supportive. Language: ${language}`
 
     if (!response.ok) return "I hear you all. Let's take a moment together.";
     const data = await response.json();
-    return data.choices[0].message.content;
+    let text = data.choices[0].message.content || '';
+    return text.replace(/^\[?Itoura\]?:?\s*/i, '').trim();
   } catch (err) {
     console.error("AI service error:", err);
-    return "Thank you for sharing with the group. Let's continue listening to one another.";
+    return "Thank you for sharing with the group. Let me know how everyone is feeling.";
   }
 }
 
@@ -95,7 +100,6 @@ io.on('connection', (socket) => {
     socket.join(code);
 
     socket.emit('ROOM_CREATED', { session: newSession, currentUserId: creatorId });
-    console.log(`[Room Created] ${code} by ${displayName}`);
   });
 
   // 2. Join Room
@@ -104,7 +108,6 @@ io.on('connection', (socket) => {
     let session = rooms.get(normalizedCode);
 
     if (!session) {
-      // Mock room fallback if room code wasn't created on this instance
       const creatorId = 'creator-external';
       session = {
         id: 'grp-' + Date.now(),
@@ -157,7 +160,6 @@ io.on('connection', (socket) => {
     socket.join(normalizedCode);
     io.to(normalizedCode).emit('ROOM_UPDATED', { session });
     socket.emit('JOINED_SUCCESS', { currentUserId: userId });
-    console.log(`[Room Joined] ${normalizedCode} by ${displayName} (Total: ${session.participants.length})`);
   });
 
   // 3. Send Message
@@ -249,7 +251,6 @@ io.on('connection', (socket) => {
 
     io.to(normalizedCode).emit('ROOM_ENDED', { session });
     rooms.delete(normalizedCode);
-    console.log(`[Room Ended] ${normalizedCode}`);
   });
 
   socket.on('disconnect', () => {

@@ -15,6 +15,8 @@ interface ChatState {
 }
 
 const INITIAL_MESSAGE: ChatMessage = { 
+  id: 'init-msg',
+  timestamp: Date.now(),
   role: 'assistant', 
   content: "Hi there. I'm Itoura. This is a safe space to vent, process your thoughts, or just take a breath. What's on your mind today?" 
 };
@@ -24,7 +26,12 @@ export const useChatStore = create<ChatState>((set, get) => ({
   isLoading: false,
   error: null,
   sendMessage: async (content, apiKey) => {
-    const userMessage: ChatMessage = { role: 'user', content };
+    const userMessage: ChatMessage = { 
+      id: 'msg-user-' + Date.now(),
+      timestamp: Date.now(),
+      role: 'user', 
+      content 
+    };
     const { status, responseCount, maxFreeResponses, openPaywall, incrementResponseCount } = useSubscriptionStore.getState();
     const isCrisis = detectCrisisLanguage(content);
 
@@ -54,8 +61,15 @@ export const useChatStore = create<ChatState>((set, get) => ({
         activeLanguage
       );
       
+      const aiMsg: ChatMessage = {
+        id: 'msg-ai-' + Date.now(),
+        timestamp: Date.now(),
+        role: 'assistant',
+        content: responseContent
+      };
+
       set((state) => ({
-        messages: [...state.messages, { role: 'assistant', content: responseContent }],
+        messages: [...state.messages, aiMsg],
         isLoading: false
       }));
 
@@ -70,13 +84,14 @@ export const useChatStore = create<ChatState>((set, get) => ({
           }, 1500);
         }
       }
-    } catch (error: any) {
-      set({ error: error.message || 'Failed to send message', isLoading: false });
+
+    } catch (err: any) {
+      set({ 
+        error: err.message || 'Failed to send message', 
+        isLoading: false 
+      });
     }
   },
-  clearMessages: () => set({ 
-    messages: [INITIAL_MESSAGE],
-    error: null
-  }),
-  setMessages: (messages) => set({ messages, error: null })
+  clearMessages: () => set({ messages: [INITIAL_MESSAGE] }),
+  setMessages: (messages) => set({ messages })
 }));

@@ -90,12 +90,12 @@ export const useGroupSessionStore = create<GroupSessionState>()(
           creatorId
         };
 
-        set({ activeSession: newSession, currentUserId: creatorId, error: null });
+        set({ activeSession: newSession, currentUserId: creatorId, error: null, isLoading: false });
 
         // Initialize PeerJS P2P WebRTC Host signal
         peerGroupService.initHost(
           code,
-          (updatedSession) => set({ activeSession: updatedSession, error: null }),
+          (updatedSession) => set({ activeSession: updatedSession, isLoading: false, error: null }),
           () => get().activeSession
         );
 
@@ -141,14 +141,14 @@ export const useGroupSessionStore = create<GroupSessionState>()(
           creatorId: 'creator-external'
         };
 
-        set({ activeSession: joinedSession, currentUserId: userId, error: null });
+        set({ activeSession: joinedSession, currentUserId: userId, error: null, isLoading: false });
 
         // Connect over PeerJS P2P WebRTC to Host
         peerGroupService.joinRoom(
           normalizedCode,
           newParticipant,
-          (updatedSession) => set({ activeSession: updatedSession, error: null }),
-          () => set({ activeSession: null })
+          (updatedSession) => set({ activeSession: updatedSession, isLoading: false, error: null }),
+          () => set({ activeSession: null, isLoading: false })
         );
 
         return true;
@@ -173,6 +173,11 @@ export const useGroupSessionStore = create<GroupSessionState>()(
 
         set({ activeSession: updatedSession, isLoading: true, error: null });
 
+        // Automatic 6-second timeout safety guard so isLoading CANNOT get stuck on any device
+        const timeoutGuard = setTimeout(() => {
+          set({ isLoading: false });
+        }, 6000);
+
         if (currentParticipant.isCreator) {
           // Host sends message & triggers AI
           peerGroupService.broadcastToAll({ type: 'ROOM_STATE', session: updatedSession });
@@ -183,6 +188,8 @@ export const useGroupSessionStore = create<GroupSessionState>()(
               session.sessionLanguage,
               apiKey
             );
+
+            clearTimeout(timeoutGuard);
 
             const aiMsg: GroupMessage = {
               id: 'msg-ai-' + Date.now(),
@@ -202,6 +209,7 @@ export const useGroupSessionStore = create<GroupSessionState>()(
               peerGroupService.broadcastToAll({ type: 'ROOM_STATE', session: sessionWithAi });
             }
           } catch (err: any) {
+            clearTimeout(timeoutGuard);
             set({ error: err.message || 'AI message error', isLoading: false });
           }
         } else {
@@ -212,12 +220,12 @@ export const useGroupSessionStore = create<GroupSessionState>()(
 
       leaveSession: (participantId) => {
         peerGroupService.leave(participantId);
-        set({ activeSession: null, error: null });
+        set({ activeSession: null, error: null, isLoading: false });
       },
 
       endSession: () => {
         peerGroupService.endRoom();
-        set({ activeSession: null, error: null });
+        set({ activeSession: null, error: null, isLoading: false });
       },
 
       exportSessionToJournal: () => {
