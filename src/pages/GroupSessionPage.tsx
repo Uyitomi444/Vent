@@ -158,7 +158,11 @@ export default function GroupSessionPage() {
 
             {currentParticipant.isCreator ? (
               <button
-                onClick={endSession}
+                onClick={async () => {
+                  if (window.confirm("End this group session for everyone?")) {
+                    await endSession();
+                  }
+                }}
                 className="flex items-center gap-1.5 px-3.5 py-1.5 bg-red-900/80 hover:bg-red-800 text-red-100 font-black text-xs rounded-full border border-red-500 cursor-pointer"
               >
                 <LogOut size={14} />
@@ -166,7 +170,11 @@ export default function GroupSessionPage() {
               </button>
             ) : (
               <button
-                onClick={() => leaveSession(currentParticipant.id)}
+                onClick={() => {
+                  if (window.confirm("Leave this group session?")) {
+                    leaveSession(currentParticipant.id);
+                  }
+                }}
                 className="flex items-center gap-1.5 px-3.5 py-1.5 bg-red-900/80 hover:bg-red-800 text-red-100 font-black text-xs rounded-full border border-red-500 cursor-pointer"
               >
                 <LogOut size={14} />

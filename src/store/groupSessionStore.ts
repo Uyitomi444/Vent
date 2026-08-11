@@ -44,7 +44,7 @@ interface GroupSessionState {
   joinSession: (code: string, displayName: string) => Promise<boolean>;
   sendGroupMessage: (content: string, senderId: string, senderName: string, apiKey: string) => Promise<void>;
   leaveSession: (participantId: string) => void;
-  endSession: () => void;
+  endSession: () => Promise<void>;
   exportSessionToJournal: () => boolean;
   subscribeToRoom: (code: string) => () => void;
 }
@@ -67,7 +67,11 @@ export const useGroupSessionStore = create<GroupSessionState>()(
             
             // Only update if it belongs to the active room
             if (current && current.code === incomingSession.code) {
-              set({ activeSession: incomingSession, error: null });
+              if (incomingSession.status === 'ended') {
+                set({ activeSession: null, error: null });
+              } else {
+                set({ activeSession: incomingSession, error: null });
+              }
             }
           }
         };
@@ -287,24 +291,47 @@ export const useGroupSessionStore = create<GroupSessionState>()(
           const session = get().activeSession;
           if (!session) return;
 
+          const leavingParticipant = session.participants.find(p => p.id === participantId);
           const updatedParticipants = session.participants.filter(p => p.id !== participantId);
-          const updatedSession: GroupSession = { ...session, participants: updatedParticipants };
 
-          if (updatedParticipants.length === 0) {
-            set({ activeSession: null });
-          } else {
-            set({ activeSession: updatedSession });
-          }
+          const leaveMsg: GroupMessage = {
+            id: 'msg-sys-' + Date.now(),
+            senderId: 'system',
+            senderName: 'System',
+            content: `👋 ${leavingParticipant?.displayName || 'A participant'} left the session.`,
+            timestamp: Date.now()
+          };
+
+          const updatedSession: GroupSession = { 
+            ...session, 
+            participants: updatedParticipants,
+            messages: [...session.messages, leaveMsg]
+          };
 
           syncSessionToClients(updatedSession);
+          set({ activeSession: null, error: null });
         },
 
-        endSession: () => {
+        endSession: async () => {
           const session = get().activeSession;
           if (!session) return;
-          const endedSession: GroupSession = { ...session, status: 'ended' };
-          set({ activeSession: endedSession });
-          syncSessionToClients(endedSession);
+
+          const endMsg: GroupMessage = {
+            id: 'msg-sys-' + Date.now(),
+            senderId: 'system',
+            senderName: 'System',
+            content: `🛑 Group session has been ended by the host.`,
+            timestamp: Date.now()
+          };
+
+          const endedSession: GroupSession = { 
+            ...session, 
+            status: 'ended',
+            messages: [...session.messages, endMsg]
+          };
+
+          await syncSessionToClients(endedSession);
+          set({ activeSession: null, error: null });
         },
 
         exportSessionToJournal: () => {
@@ -333,7 +360,11 @@ export const useGroupSessionStore = create<GroupSessionState>()(
               const unsubscribe = onSnapshot(roomRef, (snapshot) => {
                 if (snapshot.exists()) {
                   const remoteSession = snapshot.data() as GroupSession;
-                  set({ activeSession: remoteSession, error: null });
+                  if (remoteSession.status === 'ended') {
+                    set({ activeSession: null, error: null });
+                  } else {
+                    set({ activeSession: remoteSession, error: null });
+                  }
                 }
               });
 
