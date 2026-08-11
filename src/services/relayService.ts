@@ -1,15 +1,20 @@
+import { io, type Socket } from 'socket.io-client';
 import type { GroupSession, GroupParticipant, GroupMessage } from '../store/groupSessionStore';
 
 class RoomRelayService {
   private ws: WebSocket | null = null;
+  private socket: Socket | null = null;
+  private useSocketIO: boolean = false;
   private roomCode: string = '';
   private currentUserId: string = '';
   private onStateUpdateCallback: ((session: GroupSession) => void) | null = null;
   private onEndedCallback: (() => void) | null = null;
-  private isReconnecting: boolean = false;
 
   // Free public PieSocket developer test API key (zero-config, firewall-tolerant pub/sub relay)
   private API_KEY = 'oCdZlQk8Pp874NMZuCmthjMQZjtgUr6glwFDVzo5';
+  
+  // Public Render Backend URL (automatically connects when deployed on Render)
+  private BACKEND_URL = 'https://vent-backend-uyitomi.onrender.com';
 
   public connectRoom(
     code: string,
@@ -23,51 +28,71 @@ class RoomRelayService {
     this.onEndedCallback = onEnded;
     this.disconnect();
 
-    const wsUrl = `wss://demo.piesocket.com/v3/itoura_room_${this.roomCode}?api_key=${this.API_KEY}&notify_self=0`;
-    console.log('[Relay] Connecting to real-time pub/sub relay:', wsUrl);
+    // 1. Try to connect to live Node.js Express/Socket.IO backend on Render
+    console.log('[Relay] Attempting Socket.IO connection to cloud backend...');
+    this.socket = io(this.BACKEND_URL, {
+      transports: ['websocket'],
+      timeout: 4000,
+      reconnectionAttempts: 2
+    });
 
-    try {
-      this.ws = new WebSocket(wsUrl);
+    this.socket.on('connect', () => {
+      console.log('[Relay] Connected to cloud backend via Socket.IO');
+      this.useSocketIO = true;
+      
+      // Request joining the room on the backend server
+      this.socket?.emit('JOIN_ROOM', { code: this.roomCode, displayName: 'User' });
+    });
 
-      this.ws.onopen = () => {
-        console.log('[Relay] Connected successfully to room:', this.roomCode);
-        this.isReconnecting = false;
-      };
+    this.socket.on('ROOM_UPDATED', (data: any) => {
+      if (data.session && this.onStateUpdateCallback) {
+        this.onStateUpdateCallback(data.session);
+      }
+    });
 
-      this.ws.onmessage = (event) => {
-        try {
-          const payload = JSON.parse(event.data);
-          
-          // Ignore self-published events
-          if (payload.senderUserId === this.currentUserId) return;
+    this.socket.on('ROOM_ENDED', () => {
+      if (this.onEndedCallback) this.onEndedCallback();
+    });
 
-          this.handleIncomingEvent(payload);
-        } catch (e) {
-          console.error('[Relay] Error parsing message:', e);
-        }
-      };
+    // 2. Fall back to PieSocket WSS if Socket.IO connection fails or times out
+    const connectFallback = () => {
+      if (this.useSocketIO) return;
+      console.log('[Relay] Socket.IO connection timed out or unavailable. Falling back to public WSS room broker...');
+      
+      // CRITICAL: MUST prefix channel name with "channel_" to enable pub/sub relaying on PieSocket demo server!
+      const wsUrl = `wss://demo.piesocket.com/v3/channel_itoura_${this.roomCode}?api_key=${this.API_KEY}&notify_self=0`;
+      
+      try {
+        this.ws = new WebSocket(wsUrl);
 
-      this.ws.onclose = (e) => {
-        console.log('[Relay] Connection closed:', e.reason);
-        // Auto-reconnect once if disconnected unexpectedly
-        if (!this.isReconnecting) {
-          this.isReconnecting = true;
-          setTimeout(() => {
-            if (this.roomCode) {
-              this.connectRoom(this.roomCode, this.currentUserId, onStateUpdate, onEnded);
-            }
-          }, 3000);
-        }
-      };
+        this.ws.onopen = () => {
+          console.log('[Relay Fallback] Connected to public WSS channel:', this.roomCode);
+        };
 
-      this.ws.onerror = (err) => {
-        console.error('[Relay] WebSocket error:', err);
-      };
-    } catch (err) {
-      console.error('[Relay] Failed to instantiate WebSocket:', err);
-    }
+        this.ws.onmessage = (event) => {
+          try {
+            const payload = JSON.parse(event.data);
+            if (payload.senderUserId === this.currentUserId) return;
+            this.handleIncomingEvent(payload);
+          } catch (e) {}
+        };
+      } catch (err) {
+        console.error('[Relay Fallback] Error establishing WSS connection:', err);
+      }
+    };
+
+    this.socket.on('connect_error', () => {
+      connectFallback();
+    });
+
+    setTimeout(() => {
+      if (!this.useSocketIO && (!this.ws || this.ws.readyState !== WebSocket.OPEN)) {
+        connectFallback();
+      }
+    }, 4500);
   }
 
+  // Handle incoming fallback events
   private handleIncomingEvent(payload: any) {
     if (!this.onStateUpdateCallback) return;
 
@@ -120,7 +145,6 @@ class RoomRelayService {
         this.onStateUpdateCallback!(updatedSession);
         this.publishEvent({ type: 'ROOM_STATE', session: updatedSession });
 
-        // Trigger AI mediation on Host
         if (payload.apiKey) {
           import('./ai').then(async ({ sendGroupMessageToAI }) => {
             try {
@@ -156,15 +180,30 @@ class RoomRelayService {
   }
 
   public publishEvent(payload: any) {
-    if (!this.ws || this.ws.readyState !== WebSocket.OPEN) return;
+    if (this.useSocketIO && this.socket?.connected) {
+      if (payload.type === 'SEND_MESSAGE') {
+        this.socket.emit('SEND_MESSAGE', {
+          code: this.roomCode,
+          content: payload.content,
+          senderId: payload.senderId,
+          senderName: payload.senderName,
+          apiKey: payload.apiKey
+        });
+      } else if (payload.type === 'ROOM_ENDED') {
+        this.socket.emit('END_ROOM', { code: this.roomCode });
+      }
+      return;
+    }
 
-    try {
-      this.ws.send(JSON.stringify({
-        ...payload,
-        senderUserId: this.currentUserId
-      }));
-    } catch (e) {
-      console.error('[Relay] Send event error:', e);
+    if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+      try {
+        this.ws.send(JSON.stringify({
+          ...payload,
+          senderUserId: this.currentUserId
+        }));
+      } catch (e) {
+        console.error('[Relay] WSS Send error:', e);
+      }
     }
   }
 
@@ -175,6 +214,13 @@ class RoomRelayService {
       } catch (e) {}
       this.ws = null;
     }
+    if (this.socket) {
+      try {
+        this.socket.disconnect();
+      } catch (e) {}
+      this.socket = null;
+    }
+    this.useSocketIO = false;
   }
 }
 
