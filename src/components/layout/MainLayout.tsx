@@ -86,17 +86,17 @@ export default function MainLayout() {
       <DailyMessagePopup />
       <PaywallModal />
 
-      {/* Deep Plum Responsive Header */}
-      <header className="sticky top-0 z-40 w-full px-3 sm:px-6 md:px-12 py-3 md:py-4 bg-[#532E60] backdrop-blur-xl border-b-2 border-white/20 shadow-xl">
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-6">
+      {/* Deep Plum Mobile-Optimized Header */}
+      <header className="sticky top-0 z-40 w-full px-2.5 sm:px-6 md:px-12 py-2 sm:py-3 md:py-4 bg-[#532E60] backdrop-blur-xl border-b-2 border-white/20 shadow-xl">
+        <div className="max-w-7xl mx-auto flex items-center justify-between gap-1.5 sm:gap-6">
           
           {/* Logo & Category Dropdown Button */}
-          <div className="flex items-center gap-2 sm:gap-4 md:gap-8 min-w-0">
-            <Link to="/" className="flex items-center gap-2 group shrink-0" title="Go to Welcome Page">
+          <div className="flex items-center gap-1.5 sm:gap-4 md:gap-8 min-w-0">
+            <Link to="/" className="flex items-center gap-1.5 group shrink-0" title="Go to Welcome Page">
               <img 
                 src={itouraLogo} 
                 alt="Itoura" 
-                className="h-8 sm:h-10 md:h-11 object-contain transition-transform group-hover:scale-105 filter brightness-110" 
+                className="h-7 sm:h-10 md:h-11 object-contain transition-transform group-hover:scale-105 filter brightness-110" 
               />
             </Link>
 
@@ -104,19 +104,19 @@ export default function MainLayout() {
             <div className="relative min-w-0" ref={dropdownRef}>
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex items-center gap-2 sm:gap-3.5 px-3.5 sm:px-6 md:px-7 py-2 sm:py-2.5 bg-[#C4B4E2] hover:bg-[#D4C8EC] text-[#532E60] font-black text-xs sm:text-sm md:text-base rounded-full border-2 border-white/80 shadow-xl transition-all cursor-pointer whitespace-nowrap overflow-hidden"
+                className="flex items-center gap-1.5 sm:gap-3 px-2.5 sm:px-6 md:px-7 py-1.5 sm:py-2.5 bg-[#C4B4E2] hover:bg-[#D4C8EC] text-[#532E60] font-black text-[11px] sm:text-sm md:text-base rounded-full border border-white/80 shadow-md transition-all cursor-pointer whitespace-nowrap overflow-hidden"
                 aria-expanded={isDropdownOpen}
               >
-                <span className="font-black text-[#532E60] truncate max-w-[130px] sm:max-w-none">{currentCategory.label}</span>
+                <span className="font-black text-[#532E60] truncate max-w-[90px] xs:max-w-[130px] sm:max-w-none">{currentCategory.label}</span>
                 <ChevronDown 
-                  size={16} 
+                  size={14} 
                   className={`text-[#532E60] shrink-0 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} 
                 />
               </button>
 
               {/* Dropdown Modal */}
               {isDropdownOpen && (
-                <div className="absolute top-full left-0 mt-3 w-[calc(100vw-2rem)] max-w-[340px] sm:max-w-none sm:w-80 md:w-88 bg-[#532E60] backdrop-blur-2xl border-2 border-[#C4B4E2] rounded-3xl p-3 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-200">
+                <div className="absolute top-full left-0 mt-2 w-[calc(100vw-2rem)] max-w-[320px] sm:max-w-none sm:w-80 md:w-88 bg-[#532E60] backdrop-blur-2xl border-2 border-[#C4B4E2] rounded-3xl p-3 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-200">
                   <div className="px-3 py-2 border-b border-white/20 mb-2 flex justify-between items-center">
                     <span className="text-xs font-black tracking-wider text-white uppercase">
                       Select Section
@@ -157,9 +157,9 @@ export default function MainLayout() {
           </div>
 
           {/* Right Header Actions: Language & Remaining Count Badge */}
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+          <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
             {status === 'free' && (
-              <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#613B6E] text-white text-xs font-black rounded-full border border-white/30 shadow-md">
+              <span className="hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#613B6E] text-white text-xs font-black rounded-full border border-white/30 shadow-md">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 {t('paywall.replies_left', { count: remainingResponses })}
               </span>
@@ -170,51 +170,51 @@ export default function MainLayout() {
         </div>
       </header>
 
-      {/* Main Canvas */}
-      <main className="flex-1 w-full max-w-7xl mx-auto p-4 md:p-8 flex flex-col min-h-0">
+      {/* Main Canvas Container */}
+      <main className="flex-1 w-full max-w-7xl mx-auto p-3 sm:p-6 md:p-8 flex flex-col min-h-0 pb-20 md:pb-8">
         <Outlet />
       </main>
 
       {/* Mobile Bottom Quick Navigation Bar */}
-      <nav className="md:hidden sticky bottom-0 z-30 w-full bg-[#532E60] border-t-2 border-white/20 px-2 py-2 flex items-center justify-around shadow-2xl">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 w-full bg-[#532E60] border-t-2 border-white/20 px-1 py-1.5 flex items-center justify-around shadow-2xl">
         <Link 
           to="/chat" 
-          className={`flex flex-col items-center gap-1 p-2 rounded-2xl transition-all ${isActive('/chat') ? 'bg-[#C4B4E2] text-[#532E60] font-black scale-105' : 'text-[#E8DCF8]'}`}
+          className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-xl transition-all ${isActive('/chat') ? 'bg-[#C4B4E2] text-[#532E60] font-black scale-105' : 'text-[#E8DCF8]'}`}
         >
-          <MessageSquare size={18} />
-          <span className="text-[10px] font-extrabold">{t('nav.chat')}</span>
+          <MessageSquare size={16} />
+          <span className="text-[9px] font-extrabold">{t('nav.chat')}</span>
         </Link>
         
         <Link 
           to="/group" 
-          className={`flex flex-col items-center gap-1 p-2 rounded-2xl transition-all ${isActive('/group') ? 'bg-[#C4B4E2] text-[#532E60] font-black scale-105' : 'text-[#E8DCF8]'}`}
+          className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-xl transition-all ${isActive('/group') ? 'bg-[#C4B4E2] text-[#532E60] font-black scale-105' : 'text-[#E8DCF8]'}`}
         >
-          <Users size={18} />
-          <span className="text-[10px] font-extrabold">{t('nav.group')}</span>
+          <Users size={16} />
+          <span className="text-[9px] font-extrabold">{t('nav.group')}</span>
         </Link>
 
         <Link 
           to="/tools" 
-          className={`flex flex-col items-center gap-1 p-2 rounded-2xl transition-all ${isActive('/tools') ? 'bg-[#C4B4E2] text-[#532E60] font-black scale-105' : 'text-[#E8DCF8]'}`}
+          className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-xl transition-all ${isActive('/tools') ? 'bg-[#C4B4E2] text-[#532E60] font-black scale-105' : 'text-[#E8DCF8]'}`}
         >
-          <Sparkles size={18} />
-          <span className="text-[10px] font-extrabold">{t('nav.tools')}</span>
+          <Sparkles size={16} />
+          <span className="text-[9px] font-extrabold">{t('nav.tools')}</span>
         </Link>
 
         <Link 
           to="/progress" 
-          className={`flex flex-col items-center gap-1 p-2 rounded-2xl transition-all ${isActive('/progress') ? 'bg-[#C4B4E2] text-[#532E60] font-black scale-105' : 'text-[#E8DCF8]'}`}
+          className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-xl transition-all ${isActive('/progress') ? 'bg-[#C4B4E2] text-[#532E60] font-black scale-105' : 'text-[#E8DCF8]'}`}
         >
-          <TrendingUp size={18} />
-          <span className="text-[10px] font-extrabold">{t('nav.progress')}</span>
+          <TrendingUp size={16} />
+          <span className="text-[9px] font-extrabold">{t('nav.progress')}</span>
         </Link>
 
         <Link 
           to="/journal" 
-          className={`flex flex-col items-center gap-1 p-2 rounded-2xl transition-all ${isActive('/journal') ? 'bg-[#C4B4E2] text-[#532E60] font-black scale-105' : 'text-[#E8DCF8]'}`}
+          className={`flex flex-col items-center gap-0.5 px-2 py-1 rounded-xl transition-all ${isActive('/journal') ? 'bg-[#C4B4E2] text-[#532E60] font-black scale-105' : 'text-[#E8DCF8]'}`}
         >
-          <BookOpen size={18} />
-          <span className="text-[10px] font-extrabold">{t('nav.journal')}</span>
+          <BookOpen size={16} />
+          <span className="text-[9px] font-extrabold">{t('nav.journal')}</span>
         </Link>
       </nav>
     </div>

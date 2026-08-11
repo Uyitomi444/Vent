@@ -23,17 +23,17 @@ export default function LanguageSelector() {
     <div className="relative inline-block text-left z-30" ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2 px-3 py-1.5 bg-[#C4B4E2] hover:bg-white text-[#532E60] font-black text-xs md:text-sm rounded-full border border-white shadow-md transition-all cursor-pointer"
+        className="flex items-center gap-1 sm:gap-2 px-2.5 sm:px-3 py-1.5 bg-[#C4B4E2] hover:bg-white text-[#532E60] font-black text-xs md:text-sm rounded-full border border-white shadow-md transition-all cursor-pointer"
         title="Select Language"
       >
-        <Globe size={15} className="text-[#532E60]" />
-        <span>{activeLang.nativeName}</span>
-        <ChevronDown size={14} className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
+        <Globe size={14} className="text-[#532E60] shrink-0" />
+        <span className="truncate max-w-[65px] xs:max-w-[90px] sm:max-w-none">{activeLang.nativeName}</span>
+        <ChevronDown size={13} className={`shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-60 bg-[#532E60] border-2 border-white/40 rounded-2xl shadow-2xl overflow-hidden py-1 z-50 animate-in fade-in zoom-in-95 duration-150">
-          <div className="px-4 py-2 border-b border-white/20">
+        <div className="absolute right-0 mt-2 w-52 sm:w-60 bg-[#532E60] border-2 border-white/40 rounded-2xl shadow-2xl overflow-hidden py-1 z-50 animate-in fade-in zoom-in-95 duration-150">
+          <div className="px-3.5 py-2 border-b border-white/20">
             <p className="text-[10px] font-black uppercase text-[#C4B4E2] tracking-wider">Choose Language</p>
           </div>
 
@@ -47,7 +47,7 @@ export default function LanguageSelector() {
                     setLanguage(lang.code as LanguageCode);
                     setIsOpen(false);
                   }}
-                  className={`w-full flex items-center justify-between px-4 py-2.5 text-left text-xs md:text-sm font-black transition-colors cursor-pointer ${
+                  className={`w-full flex items-center justify-between px-3.5 py-2.5 text-left text-xs md:text-sm font-black transition-colors cursor-pointer ${
                     isSelected ? 'bg-[#C4B4E2] text-[#532E60]' : 'text-white hover:bg-[#613B6E]'
                   }`}
                 >
@@ -61,7 +61,7 @@ export default function LanguageSelector() {
                         DRAFT
                       </span>
                     )}
-                    {isSelected && <Check size={16} />}
+                    {isSelected && <Check size={14} />}
                   </div>
                 </button>
               );
