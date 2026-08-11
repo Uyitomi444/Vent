@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { sendGroupMessageToAI } from '../services/ai';
 import { useJournalStore } from './journalStore';
-import { peerGroupService } from '../services/peerService';
+import { nostrRealtimeService } from '../services/nostrService';
 
 export interface GroupParticipant {
   id: string;
@@ -92,11 +92,12 @@ export const useGroupSessionStore = create<GroupSessionState>()(
 
         set({ activeSession: newSession, currentUserId: creatorId, error: null, isLoading: false });
 
-        // Initialize PeerJS P2P WebRTC Host signal
-        peerGroupService.initHost(
+        // Connect room to Nostr Realtime Relay Network
+        nostrRealtimeService.connectRoom(
           code,
+          creatorId,
           (updatedSession) => set({ activeSession: updatedSession, isLoading: false, error: null }),
-          () => get().activeSession
+          () => set({ activeSession: null, isLoading: false })
         );
 
         return newSession;
@@ -127,13 +128,6 @@ export const useGroupSessionStore = create<GroupSessionState>()(
               senderName: 'Itoura',
               content: `Welcome to the session! I am Itoura, present to facilitate a thoughtful group conversation.`,
               timestamp: Date.now()
-            },
-            {
-              id: 'msg-sys-' + Date.now(),
-              senderId: 'system',
-              senderName: 'System',
-              content: `👋 ${newParticipant.displayName} joined the session.`,
-              timestamp: Date.now()
             }
           ],
           status: 'active',
@@ -143,13 +137,22 @@ export const useGroupSessionStore = create<GroupSessionState>()(
 
         set({ activeSession: joinedSession, currentUserId: userId, error: null, isLoading: false });
 
-        // Connect over PeerJS P2P WebRTC to Host
-        peerGroupService.joinRoom(
+        // Connect room to Nostr Realtime Relay Network
+        nostrRealtimeService.connectRoom(
           normalizedCode,
-          newParticipant,
+          userId,
           (updatedSession) => set({ activeSession: updatedSession, isLoading: false, error: null }),
           () => set({ activeSession: null, isLoading: false })
         );
+
+        // Publish PEER_JOIN event over Nostr Network to room host
+        setTimeout(() => {
+          nostrRealtimeService.publishEvent({
+            type: 'PEER_JOIN',
+            code: normalizedCode,
+            participant: newParticipant
+          });
+        }, 500);
 
         return true;
       },
@@ -173,14 +176,14 @@ export const useGroupSessionStore = create<GroupSessionState>()(
 
         set({ activeSession: updatedSession, isLoading: true, error: null });
 
-        // Automatic 6-second timeout safety guard so isLoading CANNOT get stuck on any device
+        // Safety timeout so isLoading resets under any network lag
         const timeoutGuard = setTimeout(() => {
           set({ isLoading: false });
-        }, 6000);
+        }, 8000);
 
         if (currentParticipant.isCreator) {
-          // Host sends message & triggers AI
-          peerGroupService.broadcastToAll({ type: 'ROOM_STATE', session: updatedSession });
+          // Host publishes updated room state directly to all peers
+          nostrRealtimeService.publishEvent({ type: 'ROOM_STATE', session: updatedSession });
 
           try {
             const companionReply = await sendGroupMessageToAI(
@@ -206,25 +209,57 @@ export const useGroupSessionStore = create<GroupSessionState>()(
                 messages: [...curr.messages, aiMsg]
               };
               set({ activeSession: sessionWithAi, isLoading: false });
-              peerGroupService.broadcastToAll({ type: 'ROOM_STATE', session: sessionWithAi });
+              nostrRealtimeService.publishEvent({ type: 'ROOM_STATE', session: sessionWithAi });
             }
           } catch (err: any) {
             clearTimeout(timeoutGuard);
             set({ error: err.message || 'AI message error', isLoading: false });
           }
         } else {
-          // Participant sends via PeerJS WebRTC P2P Data Channel
-          peerGroupService.sendMessage(content, senderId, senderName, apiKey);
+          // Participant publishes user message event to host
+          nostrRealtimeService.publishEvent({
+            type: 'SEND_MESSAGE',
+            code: session.code,
+            content,
+            senderId,
+            senderName,
+            apiKey
+          });
         }
       },
 
       leaveSession: (participantId) => {
-        peerGroupService.leave(participantId);
+        const session = get().activeSession;
+        if (session) {
+          const leavingParticipant = session.participants.find(p => p.id === participantId);
+          const isHost = session.creatorId === participantId;
+
+          if (isHost) {
+            nostrRealtimeService.publishEvent({ type: 'ROOM_ENDED', code: session.code });
+          } else {
+            const updatedParticipants = session.participants.filter(p => p.id !== participantId);
+            const leaveMsg: GroupMessage = {
+              id: 'msg-sys-' + Date.now(),
+              senderId: 'system',
+              senderName: 'System',
+              content: `👋 ${leavingParticipant?.displayName || 'A participant'} left the session.`,
+              timestamp: Date.now()
+            };
+            const updatedSession = { ...session, participants: updatedParticipants, messages: [...session.messages, leaveMsg] };
+            nostrRealtimeService.publishEvent({ type: 'ROOM_STATE', session: updatedSession });
+          }
+        }
+
+        nostrRealtimeService.cleanup();
         set({ activeSession: null, error: null, isLoading: false });
       },
 
       endSession: () => {
-        peerGroupService.endRoom();
+        const session = get().activeSession;
+        if (session) {
+          nostrRealtimeService.publishEvent({ type: 'ROOM_ENDED', code: session.code });
+        }
+        nostrRealtimeService.cleanup();
         set({ activeSession: null, error: null, isLoading: false });
       },
 
@@ -244,7 +279,17 @@ export const useGroupSessionStore = create<GroupSessionState>()(
         return true;
       },
 
-      subscribeToRoom: () => {
+      subscribeToRoom: (code: string) => {
+        const session = get().activeSession;
+        const currentUserId = get().currentUserId;
+        if (session && currentUserId) {
+          nostrRealtimeService.connectRoom(
+            code,
+            currentUserId,
+            (updatedSession) => set({ activeSession: updatedSession, isLoading: false, error: null }),
+            () => set({ activeSession: null, isLoading: false })
+          );
+        }
         return () => {};
       }
     }),
