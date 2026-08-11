@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { sendGroupMessageToAI } from '../services/ai';
 import { useJournalStore } from './journalStore';
-import { nostrRealtimeService } from '../services/nostrService';
+import { roomRelayService } from '../services/relayService';
 
 export interface GroupParticipant {
   id: string;
@@ -92,8 +92,8 @@ export const useGroupSessionStore = create<GroupSessionState>()(
 
         set({ activeSession: newSession, currentUserId: creatorId, error: null, isLoading: false });
 
-        // Connect room to Nostr Realtime Relay Network
-        nostrRealtimeService.connectRoom(
+        // Connect room to real-time pub/sub relay
+        roomRelayService.connectRoom(
           code,
           creatorId,
           (updatedSession) => set({ activeSession: updatedSession, isLoading: false, error: null }),
@@ -137,17 +137,17 @@ export const useGroupSessionStore = create<GroupSessionState>()(
 
         set({ activeSession: joinedSession, currentUserId: userId, error: null, isLoading: false });
 
-        // Connect room to Nostr Realtime Relay Network
-        nostrRealtimeService.connectRoom(
+        // Connect room to real-time pub/sub relay
+        roomRelayService.connectRoom(
           normalizedCode,
           userId,
           (updatedSession) => set({ activeSession: updatedSession, isLoading: false, error: null }),
           () => set({ activeSession: null, isLoading: false })
         );
 
-        // Publish PEER_JOIN event over Nostr Network to room host
+        // Publish PEER_JOIN event over real-time relay to room host
         setTimeout(() => {
-          nostrRealtimeService.publishEvent({
+          roomRelayService.publishEvent({
             type: 'PEER_JOIN',
             code: normalizedCode,
             participant: newParticipant
@@ -183,7 +183,7 @@ export const useGroupSessionStore = create<GroupSessionState>()(
 
         if (currentParticipant.isCreator) {
           // Host publishes updated room state directly to all peers
-          nostrRealtimeService.publishEvent({ type: 'ROOM_STATE', session: updatedSession });
+          roomRelayService.publishEvent({ type: 'ROOM_STATE', session: updatedSession });
 
           try {
             const companionReply = await sendGroupMessageToAI(
@@ -209,7 +209,7 @@ export const useGroupSessionStore = create<GroupSessionState>()(
                 messages: [...curr.messages, aiMsg]
               };
               set({ activeSession: sessionWithAi, isLoading: false });
-              nostrRealtimeService.publishEvent({ type: 'ROOM_STATE', session: sessionWithAi });
+              roomRelayService.publishEvent({ type: 'ROOM_STATE', session: sessionWithAi });
             }
           } catch (err: any) {
             clearTimeout(timeoutGuard);
@@ -217,7 +217,7 @@ export const useGroupSessionStore = create<GroupSessionState>()(
           }
         } else {
           // Participant publishes user message event to host
-          nostrRealtimeService.publishEvent({
+          roomRelayService.publishEvent({
             type: 'SEND_MESSAGE',
             code: session.code,
             content,
@@ -235,7 +235,7 @@ export const useGroupSessionStore = create<GroupSessionState>()(
           const isHost = session.creatorId === participantId;
 
           if (isHost) {
-            nostrRealtimeService.publishEvent({ type: 'ROOM_ENDED', code: session.code });
+            roomRelayService.publishEvent({ type: 'ROOM_ENDED', code: session.code });
           } else {
             const updatedParticipants = session.participants.filter(p => p.id !== participantId);
             const leaveMsg: GroupMessage = {
@@ -246,20 +246,20 @@ export const useGroupSessionStore = create<GroupSessionState>()(
               timestamp: Date.now()
             };
             const updatedSession = { ...session, participants: updatedParticipants, messages: [...session.messages, leaveMsg] };
-            nostrRealtimeService.publishEvent({ type: 'ROOM_STATE', session: updatedSession });
+            roomRelayService.publishEvent({ type: 'ROOM_STATE', session: updatedSession });
           }
         }
 
-        nostrRealtimeService.cleanup();
+        roomRelayService.disconnect();
         set({ activeSession: null, error: null, isLoading: false });
       },
 
       endSession: () => {
         const session = get().activeSession;
         if (session) {
-          nostrRealtimeService.publishEvent({ type: 'ROOM_ENDED', code: session.code });
+          roomRelayService.publishEvent({ type: 'ROOM_ENDED', code: session.code });
         }
-        nostrRealtimeService.cleanup();
+        roomRelayService.disconnect();
         set({ activeSession: null, error: null, isLoading: false });
       },
 
@@ -283,7 +283,7 @@ export const useGroupSessionStore = create<GroupSessionState>()(
         const session = get().activeSession;
         const currentUserId = get().currentUserId;
         if (session && currentUserId) {
-          nostrRealtimeService.connectRoom(
+          roomRelayService.connectRoom(
             code,
             currentUserId,
             (updatedSession) => set({ activeSession: updatedSession, isLoading: false, error: null }),
