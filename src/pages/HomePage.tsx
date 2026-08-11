@@ -1,7 +1,10 @@
 import ChatInterface from '../components/chat/ChatInterface';
 import { motion } from 'framer-motion';
+import { useLanguageStore } from '../i18n';
 
 export default function HomePage() {
+  const { t } = useLanguageStore();
+
   return (
     <div className="h-full flex flex-col max-w-4xl mx-auto space-y-4">
       
@@ -40,14 +43,15 @@ export default function HomePage() {
 
           {/* Compact Main Headline Statement */}
           <h1 className="font-sans text-xl md:text-3xl font-black text-white leading-tight tracking-tight drop-shadow-sm relative z-10 px-3">
-            Emotional clarity without <span className="text-[#C4B4E2] italic font-serif font-normal">burnout</span>
+            {t('hero.title')}{' '}
+            <span className="text-[#C4B4E2] italic font-serif font-normal">{t('hero.title_italic')}</span>
           </h1>
         </div>
 
         {/* Bottom Monospace Editorial Subtitle */}
         <div className="relative z-10 mt-2 space-y-0.5">
           <p className="text-[10px] md:text-[11px] font-mono font-black text-[#C4B4E2] uppercase tracking-[0.2em]">
-            CONVERSATIONS WITH YOUR 24/7 EMOTIONAL WELLBEING COMPANION
+            {t('hero.subtitle')}
           </p>
         </div>
 

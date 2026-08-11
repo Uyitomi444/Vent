@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useChatStore } from '../../store/chatStore';
 import { useMemoryStore } from '../../store/memoryStore';
+import { useLanguageStore } from '../../i18n';
 import { generateSessionSummary } from '../../services/ai';
 import { Send, AlertCircle, Mic, MicOff, Save } from 'lucide-react';
 import itouraMascot from '../../assets/ABLE/itoura-mascot.jpeg';
@@ -9,6 +10,8 @@ import chatBg from '../../assets/ABLE/chat-bg.jpg';
 export default function ChatInterface() {
   const { messages, isLoading, error, sendMessage, clearMessages } = useChatStore();
   const { addMemory } = useMemoryStore();
+  const { t } = useLanguageStore();
+
   const [input, setInput] = useState('');
   const [isRecording, setIsRecording] = useState(false);
   const [isSummarizing, setIsSummarizing] = useState(false);
@@ -115,7 +118,7 @@ export default function ChatInterface() {
             className="px-4 py-2 bg-[#C4B4E2] text-[#532E60] font-black text-xs md:text-sm rounded-full shadow-md hover:bg-white transition-all flex items-center gap-2 disabled:opacity-50 cursor-pointer border border-white"
           >
             <Save size={15} className="text-[#532E60]" />
-            {isSummarizing ? "Saving Memory..." : "Save & Reflect"}
+            {isSummarizing ? t('chat.saving') : t('chat.save_session')}
           </button>
         </div>
       )}
@@ -137,28 +140,35 @@ export default function ChatInterface() {
           </div>
         )}
         
-        {messages.map((msg, idx) => (
-          <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-            {msg.role === 'assistant' && (
-              <img 
-                src={itouraMascot} 
-                alt="Itoura"
-                className="w-9 h-9 rounded-full object-cover mr-3 shrink-0 border border-white/40 shadow-md"
-              />
-            )}
-            
-            {/* Message Bubbles */}
-            <div className={`max-w-[78%] rounded-3xl p-4 md:p-5 shadow-md ${
-              msg.role === 'user' 
-                ? 'bg-[#C4B4E2] text-[#532E60] font-black border border-white rounded-br-none' 
-                : 'bg-[#613B6E] text-white font-bold border border-white/30 rounded-bl-none'
-            }`}>
-              <p className="text-[15px] md:text-base leading-relaxed whitespace-pre-wrap font-bold">
-                {msg.content}
-              </p>
+        {messages.map((msg, idx) => {
+          // If this is the initial message (index 0 and role assistant), dynamically translate it!
+          const displayContent = (idx === 0 && messages.length === 1 && msg.role === 'assistant')
+            ? t('chat.initial_msg')
+            : msg.content;
+
+          return (
+            <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+              {msg.role === 'assistant' && (
+                <img 
+                  src={itouraMascot} 
+                  alt="Itoura"
+                  className="w-9 h-9 rounded-full object-cover mr-3 shrink-0 border border-white/40 shadow-md"
+                />
+              )}
+              
+              {/* Message Bubbles */}
+              <div className={`max-w-[78%] rounded-3xl p-4 md:p-5 shadow-md ${
+                msg.role === 'user' 
+                  ? 'bg-[#C4B4E2] text-[#532E60] font-black border border-white rounded-br-none' 
+                  : 'bg-[#613B6E] text-white font-bold border border-white/30 rounded-bl-none'
+              }`}>
+                <p className="text-[15px] md:text-base leading-relaxed whitespace-pre-wrap font-bold">
+                  {displayContent}
+                </p>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
         
         {(isLoading || isSummarizing) && (
           <div className="flex justify-start items-center">
@@ -187,32 +197,32 @@ export default function ChatInterface() {
       {/* Input Area */}
       <div className="p-4 md:p-6 bg-[#432250]/95 backdrop-blur-xl border-t border-white/20 flex flex-col relative z-20">
         
-        {/* Clean Text Quick Reply Chips */}
+        {/* Quick Reply Chips (Translated) */}
         {messages.length === 1 && !isLoading && !isSummarizing && (
           <div className="flex gap-2.5 overflow-x-auto pb-3 mb-2 w-full hide-scrollbar">
             <button 
-              onClick={() => setInput("I'm feeling pretty anxious today.")} 
+              onClick={() => setInput(t('chip.anxious_prompt'))} 
               className="px-4 py-2 bg-[#C4B4E2] text-[#532E60] font-black border border-white rounded-full text-xs md:text-sm shadow-md hover:bg-white transition-all whitespace-nowrap cursor-pointer"
             >
-              Anxious
+              {t('chip.anxious')}
             </button>
             <button 
-              onClick={() => setInput("I am completely exhausted.")} 
+              onClick={() => setInput(t('chip.exhausted_prompt'))} 
               className="px-4 py-2 bg-[#C4B4E2] text-[#532E60] font-black border border-white rounded-full text-xs md:text-sm shadow-md hover:bg-white transition-all whitespace-nowrap cursor-pointer"
             >
-              Exhausted
+              {t('chip.exhausted')}
             </button>
             <button 
-              onClick={() => setInput("I feel really overwhelmed.")} 
+              onClick={() => setInput(t('chip.overwhelmed_prompt'))} 
               className="px-4 py-2 bg-[#C4B4E2] text-[#532E60] font-black border border-white rounded-full text-xs md:text-sm shadow-md hover:bg-white transition-all whitespace-nowrap cursor-pointer"
             >
-              Overwhelmed
+              {t('chip.overwhelmed')}
             </button>
             <button 
-              onClick={() => setInput("I'm actually doing okay.")} 
+              onClick={() => setInput(t('chip.okay_prompt'))} 
               className="px-4 py-2 bg-[#C4B4E2] text-[#532E60] font-black border border-white rounded-full text-xs md:text-sm shadow-md hover:bg-white transition-all whitespace-nowrap cursor-pointer"
             >
-              Doing Okay
+              {t('chip.okay')}
             </button>
           </div>
         )}
@@ -222,7 +232,7 @@ export default function ChatInterface() {
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Talk to Itoura..."
+            placeholder={t('chat.placeholder')}
             className="flex-1 max-h-32 min-h-[58px] py-4 pl-5 pr-24 bg-transparent outline-none resize-none font-bold text-[#532E60] placeholder:text-[#532E60]/60 text-base"
             onKeyDown={(e) => {
               if (e.key === 'Enter' && !e.shiftKey) {

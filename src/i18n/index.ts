@@ -7,7 +7,7 @@ export interface TranslationMeta {
   code: LanguageCode;
   nativeName: string;
   englishName: string;
-  status: 'VERIFIED' | 'DRAFT'; // DRAFT status flag for machine-translated strings needing human review
+  status: 'VERIFIED' | 'DRAFT';
 }
 
 export const SUPPORTED_LANGUAGES: Record<LanguageCode, TranslationMeta> = {
@@ -18,7 +18,6 @@ export const SUPPORTED_LANGUAGES: Record<LanguageCode, TranslationMeta> = {
   ig: { code: 'ig', nativeName: 'Asụsụ Igbo', englishName: 'Igbo', status: 'VERIFIED' },
 };
 
-// Keyed translation dictionary
 export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
   en: {
     'nav.chat': 'Chat Companion',
@@ -38,12 +37,21 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
     'chat.save_session': 'Save & Reflect',
     'chat.saving': 'Saving Memory...',
     'chat.initial_msg': "Hi there. I'm Itoura. This is a safe space to vent, process your thoughts, or just take a breath. What's on your mind today?",
+    
+    'chip.anxious': 'Anxious',
+    'chip.exhausted': 'Exhausted',
+    'chip.overwhelmed': 'Overwhelmed',
+    'chip.okay': 'Doing Okay',
+    'chip.anxious_prompt': "I'm feeling pretty anxious today.",
+    'chip.exhausted_prompt': "I am completely exhausted.",
+    'chip.overwhelmed_prompt': "I feel really overwhelmed.",
+    'chip.okay_prompt': "I'm actually doing okay.",
 
     'paywall.remaining': '{count} of 5 free responses remaining',
     'paywall.warning_4th': 'You have 1 free companion response remaining.',
     'paywall.title': 'Continue Your Emotional Wellbeing Journey',
     'paywall.desc': 'You have used your 5 free companion responses. Subscribe to unlock unlimited conversations, group sessions, and full access to all tools.',
-    'paywall.subscribe_btn': 'Subscribe with Paystack / Flutterwave',
+    'paywall.subscribe_btn': 'Pay with Paystack (Card / Transfer / USSD)',
     'paywall.price': '₦2,500 / month',
 
     'group.title': 'Shared Group Sessions',
@@ -74,16 +82,25 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
     'hero.title_italic': 'stressing',
     'hero.subtitle': 'TALK WITH YOUR 24/7 WELLBEING PADI',
 
-    'chat.placeholder': 'Gba gbe k\'o sọ fun Itoura...',
+    'chat.placeholder': 'Talk to Itoura...',
     'chat.save_session': 'Save & Think Am',
     'chat.saving': 'Dey Save Memory...',
     'chat.initial_msg': "How far! I be Itoura. Dis na safe place to vent, clear your head, or just breathe. Wetin dey your mind today?",
+
+    'chip.anxious': 'Tension Dey Body',
+    'chip.exhausted': 'Body Don Weak',
+    'chip.overwhelmed': 'Everything Don Full Head',
+    'chip.okay': 'I Dey Okay',
+    'chip.anxious_prompt': "Tension dey my body today.",
+    'chip.exhausted_prompt': "Body don weak me finish.",
+    'chip.overwhelmed_prompt': "Everything just don full my head.",
+    'chip.okay_prompt': "I dey manage, I dey okay.",
 
     'paywall.remaining': '{count} of 5 free replies remain',
     'paywall.warning_4th': 'You get 1 free reply left.',
     'paywall.title': 'Continue Your Journey With Itoura',
     'paywall.desc': 'You don finish your 5 free replies. Subscribe to enjoy unlimited chats, group sessions, and all tools.',
-    'paywall.subscribe_btn': 'Subscribe with Paystack / Flutterwave',
+    'paywall.subscribe_btn': 'Pay with Paystack (Card / Transfer / USSD)',
     'paywall.price': '₦2,500 / month',
 
     'group.title': 'Group Sessions',
@@ -102,13 +119,13 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
   },
   yo: {
     'nav.chat': 'Agbara Ọrọ (Chat)',
-    'nav.tools': 'Awon Irinsẹ Alafia',
-    'nav.progress': 'Aswọn Ìtẹsíwájú',
-    'nav.journal': 'Aba Atọka Aladani',
-    'nav.mood': 'Olùṣọ Ìhùwàsi',
-    'nav.group': 'Apejọ Ẹgbẹ',
-    'nav.faq': 'Ipalẹmọ & FAQ',
-    'nav.settings': 'Awon Eto (Settings)',
+    'nav.tools': 'Awọn Irinṣẹ Alaafia',
+    'nav.progress': 'Awọn Ìtẹsíwájú',
+    'nav.journal': 'Àkọsílẹ̀ Aladani',
+    'nav.mood': 'Olùṣọ́ Ìhùwàsí',
+    'nav.group': 'Àpèjọ Ẹgbẹ́',
+    'nav.faq': 'Ìpalẹmọ́ & FAQ',
+    'nav.settings': 'Awọn Ètò',
 
     'hero.title': 'Alaafia ọkan laisi',
     'hero.title_italic': 'aaji gbe',
@@ -119,11 +136,20 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
     'chat.saving': 'N fi pamọ...',
     'chat.initial_msg': "Ẹ nlẹ o. Emi ni Itoura. Eyi jẹ aaye ailewu lati sọ gbogbo ohun ti o wa lọkan rẹ. Kí ni ó n jẹ ọ lẹnu lónìí?",
 
+    'chip.anxious': 'Ẹrù Ń Ba Mi',
+    'chip.exhausted': 'Aagba Ti Bá Mi',
+    'chip.overwhelmed': 'Ọ̀ràn Pọ̀ Lọ́kàn Mi',
+    'chip.okay': 'Mo Wà Dada',
+    'chip.anxious_prompt': "Ẹrù ń ba mi lọ́jọ́ lónìí.",
+    'chip.exhausted_prompt': "Aagba ti bá mi pátápátá.",
+    'chip.overwhelmed_prompt': "Ọ̀ràn pọ̀ púpọ̀ lọ́kàn mi lónìí.",
+    'chip.okay_prompt': "Mo wà dada, alàáfíà ni.",
+
     'paywall.remaining': 'Idahun {count} ninu 5 ni o ku',
     'paywall.warning_4th': 'Idahun 1 pere ni o ku fun ọ lofe.',
     'paywall.title': 'Tẹsiwaju Irin-ajo Alafia Rẹ',
     'paywall.desc': 'O ti lo idahun lofe 5 rẹ tan. Sanwo lati gbadun ibaraẹnisọrọ alailopin ati gbogbo awọn irinṣẹ.',
-    'paywall.subscribe_btn': 'Sanwo pẹlu Paystack / Flutterwave',
+    'paywall.subscribe_btn': 'Sanwo pẹlu Paystack (Card / Transfer / USSD)',
     'paywall.price': '₦2,500 / osu',
 
     'group.title': 'Apejọ Ẹgbẹ',
@@ -159,11 +185,20 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
     'chat.saving': 'Ajiye...',
     'chat.initial_msg': "Sannu ku da zuwa. Ni ne Itoura. Wannan wuri ne mai aminci don bayyana ra'ayoyinku. Menene ke damunka a yau?",
 
+    'chip.anxious': 'Ruhina Yana Da Damuwa',
+    'chip.exhausted': 'Na Gaji Kwarai',
+    'chip.overwhelmed': 'Matsaloli Sun Yi Yawa',
+    'chip.okay': 'Ina Lafiya',
+    'chip.anxious_prompt': "Ruhina yana cikin tashin hankali a yau.",
+    'chip.exhausted_prompt': "Na gaji kwarai da gaske.",
+    'chip.overwhelmed_prompt': "Tunanina ya cika da matsatsun abubuwa.",
+    'chip.okay_prompt': "Ina lafiya lau.",
+
     'paywall.remaining': 'Sauran amsoshi {count} daga cikin 5 kyauta',
     'paywall.warning_4th': 'Sauran amsa 1 kyauta.',
     'paywall.title': 'Cigaba da Tafiyarka ta Lafiyar Hankali',
     'paywall.desc': 'Ka kammala amsoshi 5 na kyauta. Yi rijista don samun damar magana mara iyaka da duk kayan aiki.',
-    'paywall.subscribe_btn': 'Biya ta Paystack / Flutterwave',
+    'paywall.subscribe_btn': 'Biya ta Paystack (Card / Transfer / USSD)',
     'paywall.price': '₦2,500 / wata',
 
     'group.title': 'Taron Ƙungiya',
@@ -199,6 +234,15 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
     'chat.saving': 'Na-akwakọba...',
     'chat.initial_msg': "Nnọọ. Abụ m Itoura. Nke a bụ ebe nchekwube iji kwuo obi gị. Gịnị na-enye gị nsogbu taa?",
 
+    'chip.anxious': 'Obi Na-ama M Mpaghara',
+    'chip.exhausted': 'Ike Gwụrụ M',
+    'chip.overwhelmed': 'Ihe Ka M Mpaghara',
+    'chip.okay': 'M Mepụrụ Mma',
+    'chip.anxious_prompt': "Obi na-ama m mpaghara taa.",
+    'chip.exhausted_prompt': "Ike gwụrụ m kpam kpam.",
+    'chip.overwhelmed_prompt': "Ihe m na-eche bara ụba ukwuu.",
+    'chip.okay_prompt': "A nọ m nke ọma.",
+
     'paywall.remaining': 'Azịza {count} fọdụrụ n\'ime 5 n\'efu',
     'paywall.warning_4th': 'I nwere azịza 1 n\'efu fọdụrụ.',
     'paywall.title': 'Gaa n\'ihu na njem ahụike gị',
@@ -232,7 +276,9 @@ export const useLanguageStore = create<LanguageState>()(
   persist(
     (set, get) => ({
       currentLanguage: 'en',
-      setLanguage: (lang) => set({ currentLanguage: lang }),
+      setLanguage: (lang) => {
+        set({ currentLanguage: lang });
+      },
       t: (key, params) => {
         const lang = get().currentLanguage;
         let text = TRANSLATIONS[lang]?.[key] || TRANSLATIONS['en']?.[key] || key;

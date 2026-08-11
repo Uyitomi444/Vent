@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSubscriptionStore } from '../../store/subscriptionStore';
 import { useLanguageStore } from '../../i18n';
-import { HeartHandshake, ShieldCheck, X } from 'lucide-react';
+import { HeartHandshake, X } from 'lucide-react';
 
 export default function PaywallModal() {
   const { isPaywallOpen, closePaywall, subscribe } = useSubscriptionStore();
@@ -46,7 +46,7 @@ export default function PaywallModal() {
         </div>
 
         {/* Payment Buttons */}
-        <div className="w-full space-y-3 mb-6">
+        <div className="w-full space-y-3">
           <button
             onClick={() => handleSubscribe('paystack')}
             disabled={isProcessing}
@@ -62,12 +62,6 @@ export default function PaywallModal() {
           >
             Pay with Flutterwave
           </button>
-        </div>
-
-        {/* Free Crisis Guarantee */}
-        <div className="flex items-center gap-2 text-xs text-[#E8DCF8] font-bold bg-[#3D2048] px-4 py-2.5 rounded-full border border-white/20">
-          <ShieldCheck size={16} className="text-[#C4B4E2] shrink-0" />
-          <span>Crisis Helpline & Data Exports remain 100% free always.</span>
         </div>
 
       </div>
