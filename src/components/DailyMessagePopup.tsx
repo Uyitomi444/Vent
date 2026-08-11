@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X } from 'lucide-react';
+import { useLanguageStore } from '../i18n';
 
 import daily1 from '../assets/DAILY/daily-1.jpg';
 import daily2 from '../assets/DAILY/daily-2.jpg';
@@ -24,6 +25,7 @@ const DAILY_MESSAGES = [
 export default function DailyMessagePopup() {
   const [isVisible, setIsVisible] = useState(false);
   const [content, setContent] = useState({ image: '', message: '' });
+  const { t } = useLanguageStore();
 
   useEffect(() => {
     // Check if we've shown the message today
@@ -81,7 +83,7 @@ export default function DailyMessagePopup() {
           {/* Bottom Content Area */}
           <div className="p-6 md:p-8 text-center bg-[#532E60] flex flex-col items-center">
             
-            <h3 className="font-serif text-2xl font-black text-[#C4B4E2] mb-2">Daily Reminder</h3>
+            <h3 className="font-serif text-2xl font-black text-[#C4B4E2] mb-2">{t('daily.reminder')}</h3>
 
             {/* High-Contrast Bold Text Box on Soft Pastel Lilac */}
             <div className="w-full bg-[#C4B4E2] text-[#532E60] p-4 rounded-2xl shadow-md border border-white my-4 text-center">
@@ -95,7 +97,7 @@ export default function DailyMessagePopup() {
               onClick={() => setIsVisible(false)}
               className="mt-2 w-full py-3.5 bg-[#C4B4E2] hover:bg-white text-[#532E60] font-black text-base rounded-full shadow-lg border border-white hover:scale-[1.02] active:scale-95 transition-all cursor-pointer"
             >
-              Start My Day
+              {t('daily.start')}
             </button>
 
           </div>

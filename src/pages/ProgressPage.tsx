@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import { useMoodStore } from '../store/moodStore';
 import { useMemoryStore } from '../store/memoryStore';
+import { useLanguageStore } from '../i18n';
 import MascotPose from '../components/MascotPose';
 
 const MOOD_SCORES = {
@@ -14,6 +15,7 @@ const MOOD_SCORES = {
 export default function ProgressPage() {
   const { entries } = useMoodStore();
   const { memories } = useMemoryStore();
+  const { t } = useLanguageStore();
 
   // 1. Mood Trend over past 7 days
   const last7Days = useMemo(() => {
@@ -71,8 +73,8 @@ export default function ProgressPage() {
   return (
     <div className="space-y-8 animate-fade-in pb-10 max-w-5xl mx-auto">
       <header className="mb-8 space-y-1">
-        <h1 className="font-serif text-3xl md:text-4xl font-black text-[#532E60]">Your Progress</h1>
-        <p className="text-[#532E60]/80 font-bold text-sm md:text-base">Patterns, reflections, and how you're doing over time.</p>
+        <h1 className="font-serif text-3xl md:text-4xl font-black text-[#532E60]">{t('progress.title')}</h1>
+        <p className="text-[#532E60]/80 font-bold text-sm md:text-base">{t('progress.subtitle')}</p>
       </header>
 
       <div className="grid md:grid-cols-3 gap-6">
@@ -81,10 +83,10 @@ export default function ProgressPage() {
         <div className="md:col-span-2 bg-[#532E60] rounded-3xl p-6 md:p-8 shadow-xl border-2 border-white/40">
           <div className="flex justify-between items-center mb-6">
             <h2 className="font-serif font-black text-xl text-white">
-              Mood Trend (Past 7 Days)
+              {t('progress.trend_title')}
             </h2>
             <div className="bg-[#C4B4E2] text-[#532E60] px-4 py-1.5 rounded-full text-xs font-black shadow-sm border border-white">
-              {daysCheckedIn} of 7 days
+              {t('progress.days_count', { count: daysCheckedIn })}
             </div>
           </div>
           
@@ -116,7 +118,7 @@ export default function ProgressPage() {
         {/* Top Themes */}
         <div className="bg-[#532E60] rounded-3xl p-6 md:p-8 shadow-xl border-2 border-white/40">
           <h2 className="font-serif font-black text-xl text-white mb-6">
-            Top Themes
+            {t('progress.top_themes')}
           </h2>
           
           {topThemes.length > 0 ? (
@@ -139,8 +141,7 @@ export default function ProgressPage() {
             </div>
           ) : (
             <div className="text-center py-8 text-[#E8DCF8] font-bold text-sm">
-              <p>No themes recorded yet.</p>
-              <p className="mt-1">Have a chat with Itoura to see patterns.</p>
+              <p>{t('progress.no_themes')}</p>
             </div>
           )}
         </div>
@@ -154,12 +155,12 @@ export default function ProgressPage() {
         </div>
         
         <div className="flex-1 relative z-10 text-center md:text-left">
-          <h2 className="font-serif text-2xl text-white font-black mb-3">Weekly Reflection</h2>
+          <h2 className="font-serif text-2xl text-white font-black mb-3">{t('progress.weekly_reflection')}</h2>
           <p className="text-[#E8DCF8] leading-relaxed font-bold mb-5 text-[15px]">
             {reflection}
           </p>
           <div className="inline-flex items-center gap-2 bg-[#C4B4E2] text-[#532E60] px-4 py-2 rounded-full text-sm font-black shadow-md border border-white">
-            Suggested Next Step
+            {t('progress.next_step')}
           </div>
         </div>
       </div>

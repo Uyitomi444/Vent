@@ -6,40 +6,42 @@ import BreakTool from '../components/tools/BreakTool';
 import { motion, AnimatePresence } from 'framer-motion';
 import SpriteIcon from '../components/SpriteIcon';
 import FourIcons from '../assets/Four_icons.jpeg';
-
-const TOOLS = [
-  {
-    id: 'breathe',
-    title: 'Box Breathing',
-    description: 'A simple technique to quickly regulate your nervous system with equal 4-second intervals.',
-    spriteIndex: 0,
-    duration: '1-5 mins'
-  },
-  {
-    id: 'grounding',
-    title: '5-4-3-2-1 Grounding',
-    description: 'Engage your physical senses to bring yourself back to the present moment.',
-    spriteIndex: 1,
-    duration: '3 mins'
-  },
-  {
-    id: 'meditation',
-    title: 'Mindful Moment',
-    description: 'Guided reflection to help process complex emotions and quiet your mind.',
-    spriteIndex: 2,
-    duration: '5 mins'
-  },
-  {
-    id: 'break',
-    title: 'Take a Break',
-    description: 'Disconnect, rest your eyes, and step away from work screens.',
-    spriteIndex: 3,
-    duration: '10 mins'
-  }
-];
+import { useLanguageStore } from '../i18n';
 
 export default function ToolsPage() {
   const [activeTool, setActiveTool] = useState<string | null>(null);
+  const { t } = useLanguageStore();
+
+  const TOOLS = [
+    {
+      id: 'breathe',
+      title: t('tools.breathe_title'),
+      description: t('tools.breathe_desc'),
+      spriteIndex: 0,
+      duration: '1-5 mins'
+    },
+    {
+      id: 'grounding',
+      title: t('tools.grounding_title'),
+      description: t('tools.grounding_desc'),
+      spriteIndex: 1,
+      duration: '3 mins'
+    },
+    {
+      id: 'meditation',
+      title: t('tools.meditation_title'),
+      description: t('tools.meditation_desc'),
+      spriteIndex: 2,
+      duration: '5 mins'
+    },
+    {
+      id: 'break',
+      title: t('tools.break_title'),
+      description: t('tools.break_desc'),
+      spriteIndex: 3,
+      duration: '10 mins'
+    }
+  ];
 
   const renderActiveTool = () => {
     switch (activeTool) {
@@ -60,9 +62,9 @@ export default function ToolsPage() {
     <div className="p-4 md:p-8 max-w-5xl mx-auto space-y-8 pb-12">
       {/* Header */}
       <header className="space-y-2">
-        <h1 className="font-serif text-3xl md:text-4xl font-black text-[#532E60]">Wellness Tools</h1>
+        <h1 className="font-serif text-3xl md:text-4xl font-black text-[#532E60]">{t('tools.title')}</h1>
         <p className="text-[#532E60]/80 font-bold text-sm md:text-base">
-          Take a moment for yourself. Choose an exercise to help you reset.
+          {t('tools.subtitle')}
         </p>
       </header>
 
@@ -110,7 +112,7 @@ export default function ToolsPage() {
                   
                   <div className="w-full relative z-10 mt-auto">
                     <span className="inline-flex items-center justify-center w-full py-4 bg-[#C4B4E2] text-[#532E60] rounded-2xl font-black text-base border border-white group-hover:bg-white transition-colors shadow-md">
-                      Begin Exercise
+                      {t('tools.begin')}
                     </span>
                   </div>
                 </button>

@@ -4,21 +4,23 @@ import { Trash2 } from 'lucide-react';
 import { useMoodStore, type MoodType } from '../store/moodStore';
 import { useMemoryStore } from '../store/memoryStore';
 import { useJournalStore } from '../store/journalStore';
+import { useLanguageStore } from '../i18n';
 import SpriteIcon from '../components/SpriteIcon';
 import FiveIcons from '../assets/Five_icons.jpeg';
-
-const MOODS: { type: MoodType; spriteIndex: number; label: string }[] = [
-  { type: 'terrible', spriteIndex: 0, label: 'Terrible' },
-  { type: 'bad', spriteIndex: 1, label: 'Bad' },
-  { type: 'okay', spriteIndex: 2, label: 'Okay' },
-  { type: 'good', spriteIndex: 3, label: 'Good' },
-  { type: 'great', spriteIndex: 4, label: 'Great' },
-];
 
 export default function MoodPage() {
   const { entries, addEntry, deleteEntry } = useMoodStore();
   const { memories } = useMemoryStore();
   const { entries: journalEntries } = useJournalStore();
+  const { t } = useLanguageStore();
+
+  const MOODS: { type: MoodType; spriteIndex: number; label: string }[] = [
+    { type: 'terrible', spriteIndex: 0, label: t('mood.terrible') },
+    { type: 'bad', spriteIndex: 1, label: t('mood.bad') },
+    { type: 'okay', spriteIndex: 2, label: t('mood.okay') },
+    { type: 'good', spriteIndex: 3, label: t('mood.good') },
+    { type: 'great', spriteIndex: 4, label: t('mood.great') },
+  ];
   
   const [selectedMood, setSelectedMood] = useState<MoodType | null>(null);
   const [energy, setEnergy] = useState(5);
@@ -53,14 +55,14 @@ export default function MoodPage() {
     <div className="p-4 md:p-8 max-w-4xl mx-auto space-y-10">
       {/* Header */}
       <header className="space-y-2">
-        <h1 className="font-serif text-3xl md:text-4xl font-black text-[#532E60]">Mood Check-in</h1>
-        <p className="text-[#532E60]/80 font-bold text-sm md:text-base">Take a moment to reflect on how you're feeling right now.</p>
+        <h1 className="font-serif text-3xl md:text-4xl font-black text-[#532E60]">{t('mood.title')}</h1>
+        <p className="text-[#532E60]/80 font-bold text-sm md:text-base">{t('mood.subtitle')}</p>
       </header>
       
       {/* Insights & Patterns */}
       {topThemes.length > 0 && (
         <section className="bg-[#532E60] text-white rounded-3xl p-6 shadow-xl border-2 border-white/40">
-          <h2 className="font-serif text-xl font-black text-white mb-2">Recent Patterns</h2>
+          <h2 className="font-serif text-xl font-black text-white mb-2">{t('mood.patterns')}</h2>
           <p className="text-sm font-bold text-[#E8DCF8] mb-4">Based on your recent chats and journal entries, these themes have been on your mind:</p>
           <div className="flex flex-wrap gap-3">
             {topThemes.map((item, i) => (
@@ -77,7 +79,7 @@ export default function MoodPage() {
       <section className="bg-[#532E60] text-white rounded-3xl p-6 md:p-8 shadow-2xl border-2 border-white/40 space-y-8">
         {/* Mood Selection */}
         <div className="space-y-4">
-          <label className="block text-base font-black text-white">How are you feeling?</label>
+          <label className="block text-base font-black text-white">{t('mood.how_feeling')}</label>
           <div className="grid grid-cols-5 gap-2 md:gap-4">
             {MOODS.map(({ type, spriteIndex, label }) => {
               const isSelected = selectedMood === type;
@@ -112,7 +114,7 @@ export default function MoodPage() {
         {/* Energy Slider */}
         <div className="space-y-4">
           <div className="flex justify-between items-center">
-            <label className="block text-base font-black text-white">Energy Level</label>
+            <label className="block text-base font-black text-white">{t('mood.energy_level')}</label>
             <span className="text-sm font-black text-[#532E60] bg-[#C4B4E2] px-4 py-1.5 rounded-full border border-white shadow-sm">{energy}/10</span>
           </div>
           <input
@@ -124,18 +126,18 @@ export default function MoodPage() {
             className="w-full h-3 bg-[#613B6E] rounded-lg appearance-none cursor-pointer accent-[#C4B4E2]"
           />
           <div className="flex justify-between text-xs font-black text-[#E8DCF8]">
-            <span>Exhausted</span>
-            <span>Energized</span>
+            <span>{t('mood.exhausted')}</span>
+            <span>{t('mood.energized')}</span>
           </div>
         </div>
 
         {/* Note */}
         <div className="space-y-4">
-          <label className="block text-base font-black text-white">Add a note (optional)</label>
+          <label className="block text-base font-black text-white">{t('mood.note_label')}</label>
           <textarea
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            placeholder="What's making you feel this way?"
+            placeholder={t('mood.note_placeholder')}
             className="w-full p-4 bg-[#C4B4E2] border-2 border-white rounded-2xl resize-none outline-none focus:border-white transition-colors h-24 text-base font-bold text-[#532E60] placeholder:text-[#532E60]/60"
           />
         </div>
@@ -146,13 +148,13 @@ export default function MoodPage() {
           disabled={!selectedMood}
           className="w-full py-4 rounded-2xl bg-[#C4B4E2] text-[#532E60] font-black text-lg disabled:opacity-40 disabled:cursor-not-allowed hover:bg-white transition-all shadow-xl cursor-pointer border border-white"
         >
-          Save Check-in
+          {t('mood.save_btn')}
         </button>
       </section>
 
       {/* History */}
       <section className="space-y-6">
-        <h2 className="font-serif text-2xl md:text-3xl font-black text-[#532E60]">Recent History</h2>
+        <h2 className="font-serif text-2xl md:text-3xl font-black text-[#532E60]">{t('mood.history')}</h2>
         
         <div className="space-y-4">
           <AnimatePresence>
@@ -162,7 +164,7 @@ export default function MoodPage() {
                 animate={{ opacity: 1 }} 
                 className="text-center p-8 bg-[#532E60] text-white rounded-3xl border-2 border-white/40 shadow-lg"
               >
-                <p className="text-[#E8DCF8] font-bold text-base">No check-ins yet. Start tracking your mood above.</p>
+                <p className="text-[#E8DCF8] font-bold text-base">{t('mood.no_history')}</p>
               </motion.div>
             ) : (
               entries.map((entry) => {

@@ -4,11 +4,13 @@ import { useMoodStore } from '../store/moodStore';
 import { useChatStore } from '../store/chatStore';
 import { useSettingsStore } from '../store/settingsStore';
 import { useMemoryStore } from '../store/memoryStore';
+import { useLanguageStore } from '../i18n';
 
 export default function SettingsPage() {
   const navigate = useNavigate();
   const { notifications, setNotifications } = useSettingsStore();
-  
+  const { t } = useLanguageStore();
+
   const clearJournal = useJournalStore(state => state.clearEntries);
   const clearMoods = useMoodStore(state => state.clearEntries);
   const clearChat = useChatStore(state => state.clearMessages);
@@ -65,14 +67,14 @@ export default function SettingsPage() {
     <div className="max-w-3xl mx-auto space-y-8 pb-12 pt-2 px-4 md:px-8">
       {/* Header */}
       <header className="mb-6 space-y-1">
-        <h1 className="font-serif text-3xl md:text-4xl font-black text-[#532E60]">Settings</h1>
-        <p className="text-[#532E60]/80 font-bold text-sm md:text-base">Manage your account, privacy, and companion memory</p>
+        <h1 className="font-serif text-3xl md:text-4xl font-black text-[#532E60]">{t('settings.title')}</h1>
+        <p className="text-[#532E60]/80 font-bold text-sm md:text-base">{t('settings.subtitle')}</p>
       </header>
 
       {/* Profile Card */}
       <section className="space-y-3">
         <h3 className="font-black text-[#532E60] px-2 uppercase tracking-wider text-xs">
-          Account
+          {t('settings.account')}
         </h3>
         <div className="bg-[#532E60] text-white rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 shadow-xl border-2 border-white/40">
           <div className="flex-1 text-center md:text-left">
@@ -88,7 +90,7 @@ export default function SettingsPage() {
       {/* Confidentiality & Trust */}
       <section className="space-y-3">
         <h3 className="font-black text-[#532E60] px-2 uppercase tracking-wider text-xs">
-          Privacy & Confidentiality
+          {t('settings.privacy')}
         </h3>
         <div className="bg-[#532E60] text-white rounded-3xl p-6 md:p-8 shadow-xl border-2 border-white/40 space-y-4">
           <p className="text-sm text-[#E8DCF8] font-bold leading-relaxed">
@@ -106,7 +108,7 @@ export default function SettingsPage() {
       {/* Memory Section */}
       <section className="space-y-3">
         <h3 className="font-black text-[#532E60] px-2 uppercase tracking-wider text-xs">
-          Companion Memory
+          {t('settings.memory')}
         </h3>
         <div className="bg-[#532E60] text-white rounded-3xl p-6 md:p-8 shadow-xl border-2 border-white/40">
           <div className="flex justify-between items-start mb-4">
@@ -155,7 +157,7 @@ export default function SettingsPage() {
 
       {/* Preferences Section */}
       <section className="space-y-3">
-        <h3 className="font-black text-[#532E60] px-2 uppercase tracking-wider text-xs">Preferences</h3>
+        <h3 className="font-black text-[#532E60] px-2 uppercase tracking-wider text-xs">{t('settings.preferences')}</h3>
         <div className="bg-[#532E60] text-white rounded-3xl overflow-hidden shadow-xl border-2 border-white/40">
           
           <div className="flex items-center justify-between p-5 md:p-6">
@@ -176,7 +178,7 @@ export default function SettingsPage() {
 
       {/* Privacy & Data Section */}
       <section className="space-y-3">
-        <h3 className="font-black text-[#532E60] px-2 uppercase tracking-wider text-xs">Privacy & Local Storage</h3>
+        <h3 className="font-black text-[#532E60] px-2 uppercase tracking-wider text-xs">{t('settings.local_storage')}</h3>
         <div className="bg-[#532E60] text-white rounded-3xl overflow-hidden shadow-xl border-2 border-white/40">
           
           <div className="p-5 md:p-6 border-b border-white/20">

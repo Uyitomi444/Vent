@@ -32,12 +32,12 @@ export default function LanguageSelector() {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-56 bg-[#532E60] border-2 border-white/40 rounded-2xl shadow-2xl overflow-hidden py-1 z-50">
+        <div className="absolute right-0 mt-2 w-60 bg-[#532E60] border-2 border-white/40 rounded-2xl shadow-2xl overflow-hidden py-1 z-50 animate-in fade-in zoom-in-95 duration-150">
           <div className="px-4 py-2 border-b border-white/20">
             <p className="text-[10px] font-black uppercase text-[#C4B4E2] tracking-wider">Choose Language</p>
           </div>
 
-          <div className="max-h-60 overflow-y-auto">
+          <div className="py-1">
             {Object.values(SUPPORTED_LANGUAGES).map((lang) => {
               const isSelected = lang.code === currentLanguage;
               return (

@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { useJournalStore } from '../store/journalStore';
 import type { JournalEntry } from '../store/journalStore';
+import { useLanguageStore } from '../i18n';
 import { Plus, Trash2, ArrowLeft } from 'lucide-react';
 
 export default function JournalPage() {
   const { entries, addEntry, updateEntry, deleteEntry } = useJournalStore();
+  const { t } = useLanguageStore();
+
   const [editingId, setEditingId] = useState<string | 'new' | null>(null);
-  
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
 
@@ -47,13 +49,13 @@ export default function JournalPage() {
             className="flex items-center gap-2 px-4 py-2 bg-[#532E60] text-white rounded-full font-black text-sm hover:bg-[#3D2048] transition-colors shadow-md border border-white/40 cursor-pointer"
           >
             <ArrowLeft size={18} />
-            <span>Back</span>
+            <span>{t('journal.back')}</span>
           </button>
           <button 
             onClick={handleSave}
             className="px-6 py-2.5 bg-[#C4B4E2] text-[#532E60] font-black rounded-full shadow-lg hover:bg-white transition-all cursor-pointer border border-white"
           >
-            Save Entry
+            {t('journal.save_entry')}
           </button>
         </div>
 
@@ -63,7 +65,7 @@ export default function JournalPage() {
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="Give your thoughts a title..."
+            placeholder={t('journal.title_placeholder')}
             className="text-2xl md:text-3xl font-serif font-black text-white bg-transparent border-none outline-none mb-4 placeholder:text-[#E8DCF8]/60"
           />
           <div className="h-px bg-white/20 w-full mb-6"></div>
@@ -71,7 +73,7 @@ export default function JournalPage() {
             <textarea
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              placeholder="What's on your mind? This space is entirely yours..."
+              placeholder={t('journal.content_placeholder')}
               className="flex-1 resize-none bg-transparent border-none outline-none text-[#E8DCF8] font-bold leading-relaxed placeholder:text-[#E8DCF8]/60 text-lg pb-12"
             />
             <button
@@ -105,15 +107,15 @@ export default function JournalPage() {
     <div className="h-full flex flex-col max-w-3xl mx-auto">
       <div className="flex items-end justify-between mb-8 pt-4 shrink-0">
         <div>
-          <h1 className="font-serif text-3xl md:text-4xl font-black text-[#532E60] mb-1">Your Journal</h1>
-          <p className="text-[#532E60]/80 font-bold text-sm">A private space for your thoughts.</p>
+          <h1 className="font-serif text-3xl md:text-4xl font-black text-[#532E60] mb-1">{t('journal.title')}</h1>
+          <p className="text-[#532E60]/80 font-bold text-sm">{t('journal.subtitle')}</p>
         </div>
         <button 
           onClick={handleCreateNew}
           className="flex items-center gap-2 px-5 py-2.5 bg-[#532E60] text-white font-black rounded-full shadow-lg hover:bg-[#3D2048] transition-all hover:scale-105 cursor-pointer border border-white/40"
         >
           <Plus size={18} />
-          <span>New Entry</span>
+          <span>{t('journal.new_entry')}</span>
         </button>
       </div>
 
@@ -127,15 +129,15 @@ export default function JournalPage() {
                 className="w-44 h-44 object-cover mix-blend-screen opacity-90 rounded-2xl"
               />
             </div>
-            <h3 className="text-2xl font-serif font-black text-white mb-2">No entries yet</h3>
+            <h3 className="text-2xl font-serif font-black text-white mb-2">{t('journal.no_entries_title')}</h3>
             <p className="text-[#E8DCF8] font-bold max-w-md mx-auto mb-6">
-              Writing down your feelings is a powerful way to process them. Start your first entry whenever you're ready.
+              {t('journal.no_entries_desc')}
             </p>
             <button 
               onClick={handleCreateNew}
               className="px-6 py-3 bg-[#C4B4E2] text-[#532E60] rounded-full font-black shadow-md hover:bg-white transition-all cursor-pointer"
             >
-              Write First Entry
+              {t('journal.write_first')}
             </button>
           </div>
         ) : (

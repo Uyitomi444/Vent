@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
+import { useLanguageStore } from '../i18n';
 
 interface FAQ {
   question: string;
@@ -133,12 +134,14 @@ function AccordionItem({ item }: { item: FAQ }) {
 }
 
 export default function FAQPage() {
+  const { t } = useLanguageStore();
+
   return (
     <div className="max-w-4xl mx-auto space-y-10 pb-16 pt-4 px-4 md:px-8">
       {/* Header */}
       <header className="text-center space-y-3 mb-10">
-        <h1 className="font-serif text-4xl md:text-5xl text-[#532E60] font-black tracking-tight">Frequently Asked Questions</h1>
-        <p className="text-[#532E60]/80 font-bold text-lg">Everything you need to know about your new companion.</p>
+        <h1 className="font-serif text-4xl md:text-5xl text-[#532E60] font-black tracking-tight">{t('faq.title')}</h1>
+        <p className="text-[#532E60]/80 font-bold text-lg">{t('faq.subtitle')}</p>
       </header>
 
       {/* FAQ Categories */}
@@ -160,7 +163,7 @@ export default function FAQPage() {
       {/* Contact Block */}
       <div className="mt-16 bg-[#532E60] text-white border-2 border-white/40 rounded-3xl p-8 md:p-10 text-center shadow-2xl relative overflow-hidden">
         <div className="relative z-10">
-          <h3 className="font-serif text-2xl font-black text-white mb-3">Still have questions?</h3>
+          <h3 className="font-serif text-2xl font-black text-white mb-3">{t('faq.still_questions')}</h3>
           <p className="text-[#E8DCF8] font-bold mb-6 max-w-md mx-auto">
             We're always here to help you navigate Itoura. Reach out to our support team and we'll get back to you shortly.
           </p>
@@ -168,7 +171,7 @@ export default function FAQPage() {
             href="mailto:support@itoura.com" 
             className="inline-block px-8 py-3.5 bg-[#C4B4E2] text-[#532E60] rounded-full font-black hover:bg-white transition-all shadow-lg hover:scale-105 border border-white"
           >
-            Contact Support
+            {t('faq.contact_support')}
           </a>
         </div>
       </div>
