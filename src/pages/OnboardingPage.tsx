@@ -2,8 +2,11 @@ import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import itouraBrand from '../assets/ABLE/itoura-brand.jpeg';
 import MascotPose from '../components/MascotPose';
+import { useLanguageStore } from '../i18n';
 
 export default function OnboardingPage() {
+  const { t } = useLanguageStore();
+
   return (
     <div className="min-h-screen bg-[#C4B4E2] font-sans text-[#532E60] overflow-x-hidden">
       
@@ -11,15 +14,16 @@ export default function OnboardingPage() {
       <section className="pt-16 pb-16 px-6 md:pt-28 md:pb-24 max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12">
         <div className="flex-1 space-y-8 text-center md:text-left">
           <div className="inline-block px-4 py-1.5 bg-[#532E60] text-white text-xs font-black rounded-full uppercase tracking-widest shadow-md">
-            Welcome to Itoura
+            {t('onboarding.badge')}
           </div>
 
           <h1 className="font-serif text-4xl md:text-6xl text-[#532E60] font-black tracking-tight leading-tight">
-            A quiet place for your <span className="text-white italic font-normal">loudest thoughts.</span>
+            {t('onboarding.hero_title')}{' '}
+            <span className="text-white italic font-normal">{t('onboarding.hero_title_italic')}</span>
           </h1>
 
           <p className="text-lg md:text-xl text-[#532E60]/90 font-bold max-w-2xl leading-relaxed">
-            Meet your dedicated space to vent, process, and untangle the day. Designed for the unique rhythms of everyday workplace stress, Itoura is here whenever you need to breathe.
+            {t('onboarding.hero_desc')}
           </p>
 
           <div className="pt-2">
@@ -27,7 +31,7 @@ export default function OnboardingPage() {
               to="/chat" 
               className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-[#532E60] text-white rounded-full font-black text-lg shadow-xl hover:bg-[#3D2048] hover:scale-105 transition-all border border-[#532E60] cursor-pointer"
             >
-              Get Started <ArrowRight size={22} />
+              {t('onboarding.get_started')} <ArrowRight size={22} />
             </Link>
           </div>
         </div>
@@ -46,40 +50,40 @@ export default function OnboardingPage() {
       <section className="py-20 bg-[#532E60] text-white border-y-2 border-white/20">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-            <h2 className="font-serif text-3xl md:text-4xl text-white font-black">How Itoura supports you</h2>
-            <p className="text-base md:text-lg text-[#E8DCF8] font-bold">A structured path from feeling overwhelmed to feeling grounded.</p>
+            <h2 className="font-serif text-3xl md:text-4xl text-white font-black">{t('onboarding.supports_title')}</h2>
+            <p className="text-base md:text-lg text-[#E8DCF8] font-bold">{t('onboarding.supports_desc')}</p>
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="bg-[#613B6E] p-8 rounded-3xl shadow-xl border border-white/10 flex flex-col">
               <span className="text-xs font-black text-[#C4B4E2] uppercase tracking-widest mb-3">STEP 01</span>
-              <h3 className="text-xl font-serif font-black text-white mb-3">Processing thoughts</h3>
+              <h3 className="text-xl font-serif font-black text-white mb-3">{t('onboarding.step1_title')}</h3>
               <p className="text-[#E8DCF8] leading-relaxed font-bold text-sm">
-                Whether typing or speaking aloud, Itoura provides a non-judgmental space to vent without interruption.
+                {t('onboarding.step1_desc')}
               </p>
             </div>
             
             <div className="bg-[#613B6E] p-8 rounded-3xl shadow-xl border border-white/10 flex flex-col">
               <span className="text-xs font-black text-[#C4B4E2] uppercase tracking-widest mb-3">STEP 02</span>
-              <h3 className="text-xl font-serif font-black text-white mb-3">Continuous memory</h3>
+              <h3 className="text-xl font-serif font-black text-white mb-3">{t('onboarding.step2_title')}</h3>
               <p className="text-[#E8DCF8] leading-relaxed font-bold text-sm">
-                Itoura safely saves session summaries on your device so your companion picks up right where you left off.
+                {t('onboarding.step2_desc')}
               </p>
             </div>
             
             <div className="bg-[#613B6E] p-8 rounded-3xl shadow-xl border border-white/10 flex flex-col">
               <span className="text-xs font-black text-[#C4B4E2] uppercase tracking-widest mb-3">STEP 03</span>
-              <h3 className="text-xl font-serif font-black text-white mb-3">Pattern spotting</h3>
+              <h3 className="text-xl font-serif font-black text-white mb-3">{t('onboarding.step3_title')}</h3>
               <p className="text-[#E8DCF8] leading-relaxed font-bold text-sm">
-                Visualize emotional trends over time to spot recurring themes and build deeper self-awareness.
+                {t('onboarding.step3_desc')}
               </p>
             </div>
             
             <div className="bg-[#613B6E] p-8 rounded-3xl shadow-xl border border-white/10 flex flex-col">
               <span className="text-xs font-black text-[#C4B4E2] uppercase tracking-widest mb-3">STEP 04</span>
-              <h3 className="text-xl font-serif font-black text-white mb-3">Actionable steps</h3>
+              <h3 className="text-xl font-serif font-black text-white mb-3">{t('onboarding.step4_title')}</h3>
               <p className="text-[#E8DCF8] leading-relaxed font-bold text-sm">
-                Pair insights with actionable grounding techniques, breathing exercises, and guided reflections.
+                {t('onboarding.step4_desc')}
               </p>
             </div>
           </div>
@@ -90,29 +94,29 @@ export default function OnboardingPage() {
       <section className="py-20">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
-            <h2 className="font-serif text-3xl md:text-4xl text-[#532E60] font-black">Your safe space stays safe</h2>
-            <p className="text-base text-[#532E60]/90 font-bold">Privacy is foundational at Itoura. Your reflections belong strictly to you.</p>
+            <h2 className="font-serif text-3xl md:text-4xl text-[#532E60] font-black">{t('onboarding.privacy_title')}</h2>
+            <p className="text-base text-[#532E60]/90 font-bold">{t('onboarding.privacy_desc')}</p>
           </div>
           
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-white text-[#532E60] p-8 rounded-3xl shadow-xl border-2 border-white relative overflow-hidden">
-              <h3 className="text-xl font-serif font-black text-[#532E60] mb-3">Technical Protection</h3>
+              <h3 className="text-xl font-serif font-black text-[#532E60] mb-3">{t('onboarding.p1_title')}</h3>
               <p className="text-[#532E60]/80 leading-relaxed text-sm font-bold">
-                Designed to keep data strictly on your device. Journal entries and chat memories are never saved on central servers.
+                {t('onboarding.p1_desc')}
               </p>
             </div>
 
             <div className="bg-white text-[#532E60] p-8 rounded-3xl shadow-xl border-2 border-white relative overflow-hidden">
-              <h3 className="text-xl font-serif font-black text-[#532E60] mb-3">Private by Default</h3>
+              <h3 className="text-xl font-serif font-black text-[#532E60] mb-3">{t('onboarding.p2_title')}</h3>
               <p className="text-[#532E60]/80 leading-relaxed text-sm font-bold">
-                100% confidential. Your employer, HR department, and colleagues cannot read your messages or access your data.
+                {t('onboarding.p2_desc')}
               </p>
             </div>
 
             <div className="bg-white text-[#532E60] p-8 rounded-3xl shadow-xl border-2 border-white relative overflow-hidden">
-              <h3 className="text-xl font-serif font-black text-[#532E60] mb-3">Never Sold or Shared</h3>
+              <h3 className="text-xl font-serif font-black text-[#532E60] mb-3">{t('onboarding.p3_title')}</h3>
               <p className="text-[#532E60]/80 leading-relaxed text-sm font-bold">
-                Your personal reflections are yours alone. We strictly guarantee your private information will never be shared.
+                {t('onboarding.p3_desc')}
               </p>
             </div>
           </div>
@@ -124,17 +128,17 @@ export default function OnboardingPage() {
         <div className="max-w-4xl mx-auto px-6 text-center space-y-8 flex flex-col items-center">
           <MascotPose pose="cheering" className="w-32 h-32 mb-2 drop-shadow-md brightness-110" />
           <h2 className="font-serif text-4xl md:text-5xl text-white font-black">
-            Ready to untangle the day?
+            {t('onboarding.ready_title')}
           </h2>
           <p className="text-lg md:text-xl text-[#E8DCF8] font-bold max-w-2xl mx-auto">
-            Take a breath, open up, and start building a healthier relationship with your emotions today.
+            {t('onboarding.ready_desc')}
           </p>
           <div className="pt-2">
             <Link 
               to="/chat" 
               className="inline-flex items-center justify-center gap-3 px-8 py-4 bg-white text-[#532E60] rounded-full font-black text-lg shadow-xl hover:bg-[#E8DCF8] hover:scale-105 transition-all border border-white cursor-pointer"
             >
-              Get Started <ArrowRight size={22} />
+              {t('onboarding.get_started')} <ArrowRight size={22} />
             </Link>
           </div>
         </div>
@@ -153,9 +157,9 @@ export default function OnboardingPage() {
           <div>
             <h4 className="text-white font-black mb-4 uppercase tracking-wider text-xs">Navigation</h4>
             <ul className="space-y-3 text-sm font-bold">
-              <li><Link to="/chat" className="hover:text-white transition-colors">Chat Companion</Link></li>
-              <li><Link to="/tools" className="hover:text-white transition-colors">Tools</Link></li>
-              <li><Link to="/progress" className="hover:text-white transition-colors">Progress</Link></li>
+              <li><Link to="/chat" className="hover:text-white transition-colors">{t('nav.chat')}</Link></li>
+              <li><Link to="/tools" className="hover:text-white transition-colors">{t('nav.tools')}</Link></li>
+              <li><Link to="/progress" className="hover:text-white transition-colors">{t('nav.progress')}</Link></li>
             </ul>
           </div>
           
@@ -170,8 +174,8 @@ export default function OnboardingPage() {
           <div>
             <h4 className="text-white font-black mb-4 uppercase tracking-wider text-xs">Explore</h4>
             <ul className="space-y-3 text-sm font-bold">
-              <li><Link to="/faq" className="hover:text-white transition-colors">FAQ</Link></li>
-              <li><Link to="/settings" className="hover:text-white transition-colors">Settings</Link></li>
+              <li><Link to="/faq" className="hover:text-white transition-colors">{t('nav.faq')}</Link></li>
+              <li><Link to="/settings" className="hover:text-white transition-colors">{t('nav.settings')}</Link></li>
             </ul>
           </div>
         </div>

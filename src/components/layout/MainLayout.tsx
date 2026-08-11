@@ -161,7 +161,7 @@ export default function MainLayout() {
             {status === 'free' && (
               <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#613B6E] text-white text-xs font-black rounded-full border border-white/30 shadow-md">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                {remainingResponses} free replies left
+                {t('paywall.replies_left', { count: remainingResponses })}
               </span>
             )}
             <LanguageSelector />

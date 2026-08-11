@@ -78,10 +78,10 @@ export default function SettingsPage() {
         </h3>
         <div className="bg-[#532E60] text-white rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 shadow-xl border-2 border-white/40">
           <div className="flex-1 text-center md:text-left">
-            <h2 className="text-2xl font-serif font-black text-white mb-1">Employee Profile</h2>
-            <p className="text-[#E8DCF8] text-xs font-bold mb-4">Linked to Your Organization</p>
+            <h2 className="text-2xl font-serif font-black text-white mb-1">{t('settings.emp_profile')}</h2>
+            <p className="text-[#E8DCF8] text-xs font-bold mb-4">{t('settings.emp_desc')}</p>
             <button className="w-full md:w-auto px-6 py-2.5 bg-[#C4B4E2] text-[#532E60] rounded-full font-black text-sm hover:bg-white transition-all shadow-md cursor-pointer border border-white">
-              Sign in with Work Email
+              {t('settings.emp_btn')}
             </button>
           </div>
         </div>
@@ -94,13 +94,13 @@ export default function SettingsPage() {
         </h3>
         <div className="bg-[#532E60] text-white rounded-3xl p-6 md:p-8 shadow-xl border-2 border-white/40 space-y-4">
           <p className="text-sm text-[#E8DCF8] font-bold leading-relaxed">
-            <strong className="text-white block text-base font-black mb-1">100% Confidential</strong>
-            Your HR department and employer cannot read your messages, view your mood logs, or access your journal entries. Itoura is a secure, judgment-free zone designed solely for your mental wellbeing.
+            <strong className="text-white block text-base font-black mb-1">{t('settings.confidential_title')}</strong>
+            {t('settings.confidential_body')}
           </p>
           <div className="h-px bg-white/20 my-4" />
           <p className="text-sm text-[#E8DCF8] font-bold leading-relaxed">
-            <strong className="text-white block text-base font-black mb-1">Complement, Not Replacement</strong>
-            Itoura is an AI companion designed to complement professional mental health support. It is not a replacement for therapy or psychiatric care. If you are in crisis, please contact local professionals immediately.
+            <strong className="text-white block text-base font-black mb-1">{t('settings.complement_title')}</strong>
+            {t('settings.complement_body')}
           </p>
         </div>
       </section>
@@ -114,7 +114,7 @@ export default function SettingsPage() {
           <div className="flex justify-between items-start mb-4">
             <div>
               <p className="text-sm text-[#E8DCF8] font-bold leading-relaxed max-w-md">
-                Itoura remembers <strong className="font-black text-white">{memories.length}</strong> recent conversation summaries to provide a continuous experience. Click a memory to restore that chat.
+                {t('settings.mem_info', { count: memories.length })}
               </p>
             </div>
             <button 
@@ -122,7 +122,7 @@ export default function SettingsPage() {
               disabled={memories.length === 0}
               className="text-xs font-black text-red-300 hover:bg-red-950 px-3.5 py-1.5 rounded-full border border-red-400 transition-colors disabled:opacity-50 cursor-pointer bg-red-950/60"
             >
-              Clear Memory
+              {t('settings.clear_mem_btn')}
             </button>
           </div>
           {memories.length > 0 && (
@@ -162,8 +162,8 @@ export default function SettingsPage() {
           
           <div className="flex items-center justify-between p-5 md:p-6">
             <div>
-              <p className="font-black text-white">Daily Reminders</p>
-              <p className="text-xs font-bold text-[#E8DCF8]">Receive a gentle nudge to check-in.</p>
+              <p className="font-black text-white">{t('settings.reminders_title')}</p>
+              <p className="text-xs font-bold text-[#E8DCF8]">{t('settings.reminders_desc')}</p>
             </div>
             <button 
               onClick={() => setNotifications(!notifications)}
@@ -183,7 +183,7 @@ export default function SettingsPage() {
           
           <div className="p-5 md:p-6 border-b border-white/20">
             <p className="text-sm font-bold text-[#E8DCF8] leading-relaxed">
-              Your data currently lives entirely on your device. Nothing is sent to external servers.
+              {t('settings.local_info')}
             </p>
           </div>
 
@@ -191,14 +191,14 @@ export default function SettingsPage() {
             onClick={exportData}
             className="w-full flex items-center justify-between p-5 md:p-6 border-b border-white/20 hover:bg-[#613B6E] transition-colors text-left cursor-pointer"
           >
-            <span className="font-black text-white">Export My Data Backup</span>
+            <span className="font-black text-white">{t('settings.export_btn')}</span>
           </button>
 
           <button 
             onClick={handleClearData}
             className="w-full flex items-center justify-between p-5 md:p-6 hover:bg-red-950/80 transition-colors text-left cursor-pointer"
           >
-            <span className="font-black text-red-300">Clear All Local Data</span>
+            <span className="font-black text-red-300">{t('settings.clear_data_btn')}</span>
           </button>
 
         </div>
