@@ -49,7 +49,7 @@ interface GroupSessionState {
   subscribeToRoom: (code: string) => () => void;
 }
 
-// BroadcastChannel for instant cross-tab / cross-window real-time synchronization
+// BroadcastChannel for instant cross-tab real-time synchronization
 const broadcastChannel = typeof window !== 'undefined' && 'BroadcastChannel' in window 
   ? new BroadcastChannel('itoura_group_realtime') 
   : null;
@@ -58,45 +58,131 @@ export const useGroupSessionStore = create<GroupSessionState>()(
   persist(
     (set, get) => {
 
-      // Listen to real-time events from other browser tabs / windows
-      if (broadcastChannel) {
-        broadcastChannel.onmessage = (event) => {
-          if (event.data?.type === 'SYNC_SESSION' && event.data?.session) {
-            const incomingSession: GroupSession = event.data.session;
-            const current = get().activeSession;
-            
-            // Only update if it belongs to the active room
-            if (current && current.code === incomingSession.code) {
-              if (incomingSession.status === 'ended') {
-                set({ activeSession: null, error: null });
-              } else {
-                set({ activeSession: incomingSession, error: null });
-              }
-            }
-          }
-        };
-      }
-
-      const syncSessionToClients = async (session: GroupSession) => {
-        // 1. Broadcast locally to all open browser windows/tabs
+      // Realtime event emitter over BroadcastChannel + LocalStorage Bus + Firestore
+      const emitRealtimeEvent = (eventData: any) => {
         if (broadcastChannel) {
           try {
-            broadcastChannel.postMessage({ type: 'SYNC_SESSION', session });
+            broadcastChannel.postMessage(eventData);
           } catch (e) {
-            console.error('BroadcastChannel sync error:', e);
+            console.error('BroadcastChannel post error:', e);
           }
         }
 
-        // 2. Sync to Firebase Firestore if initialized and configured
-        if (db && import.meta.env.VITE_FIREBASE_PROJECT_ID) {
+        // LocalStorage Event Bus for multi-window / multi-tab cross-browser fallback
+        try {
+          localStorage.setItem('itoura_group_event_bus', JSON.stringify({ ...eventData, _nonce: Math.random() }));
+        } catch (e) {}
+
+        // Firestore real-time doc sync if configured
+        if (db && import.meta.env.VITE_FIREBASE_PROJECT_ID && eventData.session) {
           try {
-            const roomRef = doc(db, 'group_sessions', session.code);
-            await setDoc(roomRef, session, { merge: true });
+            const roomRef = doc(db, 'group_sessions', eventData.session.code);
+            setDoc(roomRef, eventData.session, { merge: true });
           } catch (err) {
-            console.warn('Firestore real-time sync skipped or unavailable:', err);
+            console.warn('Firestore real-time sync skipped:', err);
           }
         }
       };
+
+      // Handler for real-time mesh events
+      const handleIncomingRealtimeEvent = (eventData: any) => {
+        if (!eventData || !eventData.type || !eventData.code) return;
+        const current = get().activeSession;
+        const normalizedEventCode = eventData.code.trim().toUpperCase();
+
+        if (eventData.type === 'PEER_JOIN') {
+          // If this window is hosting or participating in the room, add the new peer
+          if (current && current.code === normalizedEventCode) {
+            const newPeer: GroupParticipant = eventData.participant;
+            const exists = current.participants.some(p => p.displayName.toLowerCase() === newPeer.displayName.toLowerCase());
+            
+            if (!exists && current.participants.length < current.maxParticipants) {
+              const updatedParticipants = [...current.participants, newPeer];
+              const systemJoinMsg: GroupMessage = {
+                id: 'msg-sys-' + Date.now(),
+                senderId: 'system',
+                senderName: 'System',
+                content: `👋 ${newPeer.displayName} joined the session.`,
+                timestamp: Date.now()
+              };
+
+              const updatedSession: GroupSession = {
+                ...current,
+                participants: updatedParticipants,
+                messages: [...current.messages, systemJoinMsg]
+              };
+
+              set({ activeSession: updatedSession, error: null });
+
+              // Broadcast updated room snapshot to all peers (so the joining peer gets the full state)
+              emitRealtimeEvent({
+                type: 'ROOM_SNAPSHOT',
+                code: normalizedEventCode,
+                session: updatedSession
+              });
+            }
+          }
+        } else if (eventData.type === 'ROOM_SNAPSHOT') {
+          if (eventData.session && normalizedEventCode === eventData.code) {
+            const incomingSession: GroupSession = eventData.session;
+            
+            if (incomingSession.status === 'ended') {
+              set({ activeSession: null, error: null });
+            } else {
+              set({ activeSession: incomingSession, error: null });
+            }
+          }
+        } else if (eventData.type === 'END_ROOM') {
+          if (current && current.code === normalizedEventCode) {
+            set({ activeSession: null, error: null });
+          }
+        } else if (eventData.type === 'LEAVE_PEER') {
+          if (current && current.code === normalizedEventCode) {
+            const updatedParticipants = current.participants.filter(p => p.id !== eventData.participantId);
+            const leavingPeer = current.participants.find(p => p.id === eventData.participantId);
+            
+            const leaveMsg: GroupMessage = {
+              id: 'msg-sys-' + Date.now(),
+              senderId: 'system',
+              senderName: 'System',
+              content: `👋 ${leavingPeer?.displayName || 'A participant'} left the session.`,
+              timestamp: Date.now()
+            };
+
+            const updatedSession: GroupSession = {
+              ...current,
+              participants: updatedParticipants,
+              messages: [...current.messages, leaveMsg]
+            };
+
+            set({ activeSession: updatedSession, error: null });
+            emitRealtimeEvent({
+              type: 'ROOM_SNAPSHOT',
+              code: normalizedEventCode,
+              session: updatedSession
+            });
+          }
+        }
+      };
+
+      // Register BroadcastChannel listener
+      if (broadcastChannel) {
+        broadcastChannel.onmessage = (e) => {
+          handleIncomingRealtimeEvent(e.data);
+        };
+      }
+
+      // Register LocalStorage Event Bus listener for cross-window / multi-browser tab sync
+      if (typeof window !== 'undefined') {
+        window.addEventListener('storage', (e) => {
+          if (e.key === 'itoura_group_event_bus' && e.newValue) {
+            try {
+              const eventData = JSON.parse(e.newValue);
+              handleIncomingRealtimeEvent(eventData);
+            } catch (err) {}
+          }
+        });
+      }
 
       return {
         activeSession: null,
@@ -138,23 +224,45 @@ export const useGroupSessionStore = create<GroupSessionState>()(
             creatorId
           };
 
+          // Save room state locally and broadcast
+          try {
+            localStorage.setItem(`itoura_room_${code}`, JSON.stringify(newSession));
+          } catch (e) {}
+
           set({ activeSession: newSession, currentUserId: creatorId, error: null });
-          await syncSessionToClients(newSession);
+          emitRealtimeEvent({ type: 'ROOM_SNAPSHOT', code, session: newSession });
           return newSession;
         },
 
         joinSession: async (code, displayName) => {
           const normalizedCode = code.trim().toUpperCase();
           const userId = 'user-' + Date.now().toString().slice(-4);
+          const newParticipant: GroupParticipant = {
+            id: userId,
+            displayName: displayName.trim() || 'Participant',
+            joinedAt: Date.now(),
+            isCreator: false
+          };
+
           let targetSession: GroupSession | null = null;
 
-          // 1. Check if current active session matches
-          const current = get().activeSession;
-          if (current && current.code === normalizedCode) {
-            targetSession = current;
+          // 1. Check if host room exists in localStorage
+          try {
+            const storedRoom = localStorage.getItem(`itoura_room_${normalizedCode}`);
+            if (storedRoom) {
+              targetSession = JSON.parse(storedRoom);
+            }
+          } catch (e) {}
+
+          // 2. Check if activeSession in memory matches
+          if (!targetSession) {
+            const current = get().activeSession;
+            if (current && current.code === normalizedCode) {
+              targetSession = current;
+            }
           }
 
-          // 2. Try fetching from Firestore if db available
+          // 3. Try fetching from Firestore if db available
           if (!targetSession && db && import.meta.env.VITE_FIREBASE_PROJECT_ID) {
             try {
               const roomRef = doc(db, 'group_sessions', normalizedCode);
@@ -167,7 +275,7 @@ export const useGroupSessionStore = create<GroupSessionState>()(
             }
           }
 
-          // 3. Fallback mock room creation if joining fresh room code
+          // 4. Fallback mock room creation if joining fresh room code
           if (!targetSession) {
             targetSession = {
               id: 'grp-' + Date.now(),
@@ -196,13 +304,6 @@ export const useGroupSessionStore = create<GroupSessionState>()(
             return false;
           }
 
-          const newParticipant: GroupParticipant = {
-            id: userId,
-            displayName: displayName.trim() || 'Participant',
-            joinedAt: Date.now(),
-            isCreator: false
-          };
-
           const systemJoinMsg: GroupMessage = {
             id: 'msg-sys-' + Date.now(),
             senderId: 'system',
@@ -211,8 +312,7 @@ export const useGroupSessionStore = create<GroupSessionState>()(
             timestamp: Date.now()
           };
 
-          // Check if already in participants list
-          const exists = targetSession.participants.some(p => p.displayName === newParticipant.displayName);
+          const exists = targetSession.participants.some(p => p.displayName.toLowerCase() === newParticipant.displayName.toLowerCase());
           const updatedParticipants = exists ? targetSession.participants : [...targetSession.participants, newParticipant];
           const updatedMessages = exists ? targetSession.messages : [...targetSession.messages, systemJoinMsg];
 
@@ -222,8 +322,20 @@ export const useGroupSessionStore = create<GroupSessionState>()(
             messages: updatedMessages
           };
 
+          try {
+            localStorage.setItem(`itoura_room_${normalizedCode}`, JSON.stringify(updatedSession));
+          } catch (e) {}
+
           set({ activeSession: updatedSession, currentUserId: userId, error: null });
-          await syncSessionToClients(updatedSession);
+
+          // Broadcast PEER_JOIN request to host & all room participants
+          emitRealtimeEvent({
+            type: 'PEER_JOIN',
+            code: normalizedCode,
+            participant: newParticipant,
+            session: updatedSession
+          });
+
           return true;
         },
 
@@ -248,7 +360,7 @@ export const useGroupSessionStore = create<GroupSessionState>()(
             error: null
           });
 
-          await syncSessionToClients(sessionWithUserMsg);
+          emitRealtimeEvent({ type: 'ROOM_SNAPSHOT', code: session.code, session: sessionWithUserMsg });
 
           try {
             const companionReply = await sendGroupMessageToAI(
@@ -277,7 +389,7 @@ export const useGroupSessionStore = create<GroupSessionState>()(
                 isLoading: false
               });
 
-              await syncSessionToClients(sessionWithAiMsg);
+              emitRealtimeEvent({ type: 'ROOM_SNAPSHOT', code: currentSess.code, session: sessionWithAiMsg });
             }
           } catch (err: any) {
             set({
@@ -291,24 +403,12 @@ export const useGroupSessionStore = create<GroupSessionState>()(
           const session = get().activeSession;
           if (!session) return;
 
-          const leavingParticipant = session.participants.find(p => p.id === participantId);
-          const updatedParticipants = session.participants.filter(p => p.id !== participantId);
+          emitRealtimeEvent({
+            type: 'LEAVE_PEER',
+            code: session.code,
+            participantId
+          });
 
-          const leaveMsg: GroupMessage = {
-            id: 'msg-sys-' + Date.now(),
-            senderId: 'system',
-            senderName: 'System',
-            content: `👋 ${leavingParticipant?.displayName || 'A participant'} left the session.`,
-            timestamp: Date.now()
-          };
-
-          const updatedSession: GroupSession = { 
-            ...session, 
-            participants: updatedParticipants,
-            messages: [...session.messages, leaveMsg]
-          };
-
-          syncSessionToClients(updatedSession);
           set({ activeSession: null, error: null });
         },
 
@@ -330,7 +430,12 @@ export const useGroupSessionStore = create<GroupSessionState>()(
             messages: [...session.messages, endMsg]
           };
 
-          await syncSessionToClients(endedSession);
+          emitRealtimeEvent({
+            type: 'END_ROOM',
+            code: session.code,
+            session: endedSession
+          });
+
           set({ activeSession: null, error: null });
         },
 
@@ -353,7 +458,7 @@ export const useGroupSessionStore = create<GroupSessionState>()(
         subscribeToRoom: (code: string) => {
           const normalizedCode = code.trim().toUpperCase();
 
-          // 1. Firestore listener if db available and project ID configured
+          // Firestore listener if db available and project ID configured
           if (db && import.meta.env.VITE_FIREBASE_PROJECT_ID) {
             try {
               const roomRef = doc(db, 'group_sessions', normalizedCode);
