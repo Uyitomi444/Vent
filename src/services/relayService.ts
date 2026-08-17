@@ -1,19 +1,21 @@
 import { io, type Socket } from 'socket.io-client';
+import mqtt from 'mqtt';
 import type { GroupSession, GroupParticipant, GroupMessage } from '../store/groupSessionStore';
 
 class RoomRelayService {
-  private ws: WebSocket | null = null;
   private socket: Socket | null = null;
+  private mqttClient: mqtt.MqttClient | null = null;
   private useSocketIO: boolean = false;
+  private useMqtt: boolean = false;
   private roomCode: string = '';
   private currentUserId: string = '';
   private onStateUpdateCallback: ((session: GroupSession) => void) | null = null;
   private onEndedCallback: (() => void) | null = null;
 
-  // Free public PieSocket developer test API key (zero-config, firewall-tolerant pub/sub relay)
-  private API_KEY = 'oCdZlQk8Pp874NMZuCmthjMQZjtgUr6glwFDVzo5';
+  // HiveMQ Public MQTT WebSockets Broker (zero-config, firewall-tolerant, forever free)
+  private MQTT_BROKER_URL = 'wss://broker.hivemq.com:8884/mqtt';
   
-  // Public Render Backend URL (automatically connects when deployed on Render)
+  // Public Render Backend URL (connects when custom Node backend is running)
   private BACKEND_URL = 'https://vent-backend-uyitomi.onrender.com';
 
   public connectRoom(
@@ -32,15 +34,14 @@ class RoomRelayService {
     console.log('[Relay] Attempting Socket.IO connection to cloud backend...');
     this.socket = io(this.BACKEND_URL, {
       transports: ['websocket'],
-      timeout: 4000,
-      reconnectionAttempts: 2
+      timeout: 3000,
+      reconnectionAttempts: 1
     });
 
     this.socket.on('connect', () => {
       console.log('[Relay] Connected to cloud backend via Socket.IO');
       this.useSocketIO = true;
-      
-      // Request joining the room on the backend server
+      this.useMqtt = false;
       this.socket?.emit('JOIN_ROOM', { code: this.roomCode, displayName: 'User' });
     });
 
@@ -54,30 +55,42 @@ class RoomRelayService {
       if (this.onEndedCallback) this.onEndedCallback();
     });
 
-    // 2. Fall back to PieSocket WSS if Socket.IO connection fails or times out
+    // 2. Fall back to HiveMQ MQTT over WSS if Socket.IO is unavailable
     const connectFallback = () => {
-      if (this.useSocketIO) return;
-      console.log('[Relay] Socket.IO connection timed out or unavailable. Falling back to public WSS room broker...');
+      if (this.useSocketIO || this.useMqtt) return;
+      console.log('[Relay] Socket.IO cloud backend unavailable. Falling back to public MQTT WSS broker...');
       
-      // CRITICAL: MUST prefix channel name with "channel_" to enable pub/sub relaying on PieSocket demo server!
-      const wsUrl = `wss://demo.piesocket.com/v3/channel_itoura_${this.roomCode}?api_key=${this.API_KEY}&notify_self=0`;
-      
+      const topic = `itoura/room/${this.roomCode}`;
+      const clientId = `itoura_${this.currentUserId}_${Math.random().toString(16).substring(2, 8)}`;
+
       try {
-        this.ws = new WebSocket(wsUrl);
+        this.mqttClient = mqtt.connect(this.MQTT_BROKER_URL, {
+          clientId,
+          clean: true,
+          connectTimeout: 5000
+        });
 
-        this.ws.onopen = () => {
-          console.log('[Relay Fallback] Connected to public WSS channel:', this.roomCode);
-        };
+        this.mqttClient.on('connect', () => {
+          console.log('[Relay Fallback] Connected to HiveMQ Broker! Subscribing to topic:', topic);
+          this.useMqtt = true;
+          this.mqttClient?.subscribe(topic);
+        });
 
-        this.ws.onmessage = (event) => {
+        this.mqttClient.on('message', (t, message) => {
+          if (t !== topic) return;
           try {
-            const payload = JSON.parse(event.data);
+            const payload = JSON.parse(message.toString());
+            // Ignore self-published events
             if (payload.senderUserId === this.currentUserId) return;
             this.handleIncomingEvent(payload);
           } catch (e) {}
-        };
+        });
+
+        this.mqttClient.on('error', (err) => {
+          console.warn('[Relay Fallback] MQTT Broker error:', err);
+        });
       } catch (err) {
-        console.error('[Relay Fallback] Error establishing WSS connection:', err);
+        console.error('[Relay Fallback] Failed to connect to MQTT:', err);
       }
     };
 
@@ -86,10 +99,10 @@ class RoomRelayService {
     });
 
     setTimeout(() => {
-      if (!this.useSocketIO && (!this.ws || this.ws.readyState !== WebSocket.OPEN)) {
+      if (!this.useSocketIO && !this.useMqtt) {
         connectFallback();
       }
-    }, 4500);
+    }, 3500);
   }
 
   // Handle incoming fallback events
@@ -195,24 +208,25 @@ class RoomRelayService {
       return;
     }
 
-    if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+    if (this.useMqtt && this.mqttClient?.connected) {
+      const topic = `itoura/room/${this.roomCode}`;
       try {
-        this.ws.send(JSON.stringify({
+        this.mqttClient.publish(topic, JSON.stringify({
           ...payload,
           senderUserId: this.currentUserId
         }));
       } catch (e) {
-        console.error('[Relay] WSS Send error:', e);
+        console.error('[Relay] MQTT Publish error:', e);
       }
     }
   }
 
   public disconnect() {
-    if (this.ws) {
+    if (this.mqttClient) {
       try {
-        this.ws.close();
+        this.mqttClient.end();
       } catch (e) {}
-      this.ws = null;
+      this.mqttClient = null;
     }
     if (this.socket) {
       try {
@@ -221,6 +235,7 @@ class RoomRelayService {
       this.socket = null;
     }
     this.useSocketIO = false;
+    this.useMqtt = false;
   }
 }
 
