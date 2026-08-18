@@ -145,14 +145,14 @@ export const useGroupSessionStore = create<GroupSessionState>()(
           () => set({ activeSession: null, isLoading: false })
         );
 
-        // Publish PEER_JOIN event over real-time relay to room host
+        // Publish PEER_JOIN event over real-time relay to all active peers
         setTimeout(() => {
           roomRelayService.publishEvent({
             type: 'PEER_JOIN',
             code: normalizedCode,
             participant: newParticipant
           });
-        }, 500);
+        }, 800);
 
         return true;
       },
@@ -161,10 +161,8 @@ export const useGroupSessionStore = create<GroupSessionState>()(
         const session = get().activeSession;
         if (!session || session.status === 'ended') return;
 
-        const currentParticipant = session.participants.find(p => p.id === senderId) || { isCreator: false };
-
         const userMsg: GroupMessage = {
-          id: 'msg-' + Date.now(),
+          id: 'msg-' + Date.now() + '-' + Math.random().toString(36).substring(2, 5),
           senderId,
           senderName,
           content,
@@ -176,77 +174,58 @@ export const useGroupSessionStore = create<GroupSessionState>()(
 
         set({ activeSession: updatedSession, isLoading: true, error: null });
 
+        // Broadcast user's message to everyone immediately
+        roomRelayService.publishEvent({ type: 'MESSAGE', message: userMsg });
+
         // Safety timeout so isLoading resets under any network lag
         const timeoutGuard = setTimeout(() => {
           set({ isLoading: false });
         }, 8000);
 
-        if (currentParticipant.isCreator) {
-          // Host publishes updated room state directly to all peers
-          roomRelayService.publishEvent({ type: 'ROOM_STATE', session: updatedSession });
-
-          try {
-            const companionReply = await sendGroupMessageToAI(
-              updatedMessages.filter(m => m.senderId !== 'system'),
-              session.sessionLanguage,
-              apiKey
-            );
-
-            clearTimeout(timeoutGuard);
-
-            const aiMsg: GroupMessage = {
-              id: 'msg-ai-' + Date.now(),
-              senderId: 'assistant',
-              senderName: 'Itoura',
-              content: companionReply,
-              timestamp: Date.now()
-            };
-
-            const curr = get().activeSession;
-            if (curr) {
-              const sessionWithAi: GroupSession = {
-                ...curr,
-                messages: [...curr.messages, aiMsg]
-              };
-              set({ activeSession: sessionWithAi, isLoading: false });
-              roomRelayService.publishEvent({ type: 'ROOM_STATE', session: sessionWithAi });
-            }
-          } catch (err: any) {
-            clearTimeout(timeoutGuard);
-            set({ error: err.message || 'AI message error', isLoading: false });
-          }
-        } else {
-          // Participant publishes user message event to host
-          roomRelayService.publishEvent({
-            type: 'SEND_MESSAGE',
-            code: session.code,
-            content,
-            senderId,
-            senderName,
+        // The client that sent the message is responsible for running the AI companion response
+        try {
+          const companionReply = await sendGroupMessageToAI(
+            updatedMessages.filter(m => m.senderId !== 'system'),
+            session.sessionLanguage,
             apiKey
-          });
+          );
+
+          clearTimeout(timeoutGuard);
+
+          const aiMsg: GroupMessage = {
+            id: 'msg-ai-' + Date.now() + '-' + Math.random().toString(36).substring(2, 5),
+            senderId: 'assistant',
+            senderName: 'Itoura',
+            content: companionReply,
+            timestamp: Date.now()
+          };
+
+          const curr = get().activeSession;
+          if (curr) {
+            const sessionWithAi: GroupSession = {
+              ...curr,
+              messages: [...curr.messages, aiMsg]
+            };
+            set({ activeSession: sessionWithAi, isLoading: false });
+            
+            // Broadcast Itoura's reply to everyone
+            roomRelayService.publishEvent({ type: 'MESSAGE', message: aiMsg });
+          }
+        } catch (err: any) {
+          clearTimeout(timeoutGuard);
+          set({ error: err.message || 'AI message error', isLoading: false });
         }
       },
 
       leaveSession: (participantId) => {
         const session = get().activeSession;
         if (session) {
-          const leavingParticipant = session.participants.find(p => p.id === participantId);
           const isHost = session.creatorId === participantId;
 
           if (isHost) {
             roomRelayService.publishEvent({ type: 'ROOM_ENDED', code: session.code });
           } else {
-            const updatedParticipants = session.participants.filter(p => p.id !== participantId);
-            const leaveMsg: GroupMessage = {
-              id: 'msg-sys-' + Date.now(),
-              senderId: 'system',
-              senderName: 'System',
-              content: `👋 ${leavingParticipant?.displayName || 'A participant'} left the session.`,
-              timestamp: Date.now()
-            };
-            const updatedSession = { ...session, participants: updatedParticipants, messages: [...session.messages, leaveMsg] };
-            roomRelayService.publishEvent({ type: 'ROOM_STATE', session: updatedSession });
+            roomRelayService.publishEvent({ type: 'LEAVE', code: session.code, participantId });
           }
         }
 

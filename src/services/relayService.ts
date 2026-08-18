@@ -1,12 +1,8 @@
-import { io, type Socket } from 'socket.io-client';
 import mqtt from 'mqtt';
 import type { GroupSession, GroupParticipant, GroupMessage } from '../store/groupSessionStore';
 
 class RoomRelayService {
-  private socket: Socket | null = null;
   private mqttClient: mqtt.MqttClient | null = null;
-  private useSocketIO: boolean = false;
-  private useMqtt: boolean = false;
   private roomCode: string = '';
   private currentUserId: string = '';
   private onStateUpdateCallback: ((session: GroupSession) => void) | null = null;
@@ -14,9 +10,6 @@ class RoomRelayService {
 
   // HiveMQ Public MQTT WebSockets Broker (zero-config, firewall-tolerant, forever free)
   private MQTT_BROKER_URL = 'wss://broker.hivemq.com:8884/mqtt';
-  
-  // Public Render Backend URL (connects when custom Node backend is running)
-  private BACKEND_URL = 'https://vent-backend-uyitomi.onrender.com';
 
   public connectRoom(
     code: string,
@@ -30,161 +23,108 @@ class RoomRelayService {
     this.onEndedCallback = onEnded;
     this.disconnect();
 
-    // 1. Try to connect to live Node.js Express/Socket.IO backend on Render
-    console.log('[Relay] Attempting Socket.IO connection to cloud backend...');
-    this.socket = io(this.BACKEND_URL, {
-      transports: ['websocket'],
-      timeout: 3000,
-      reconnectionAttempts: 1
-    });
+    const topic = `itoura/room/decentralized_${this.roomCode}`;
+    const clientId = `itoura_${this.currentUserId}_${Math.random().toString(16).substring(2, 8)}`;
+    console.log('[Decentralized Relay] Connecting to MQTT broker...', topic);
 
-    this.socket.on('connect', () => {
-      console.log('[Relay] Connected to cloud backend via Socket.IO');
-      this.useSocketIO = true;
-      this.useMqtt = false;
-      this.socket?.emit('JOIN_ROOM', { code: this.roomCode, displayName: 'User' });
-    });
+    try {
+      this.mqttClient = mqtt.connect(this.MQTT_BROKER_URL, {
+        clientId,
+        clean: true,
+        connectTimeout: 5000
+      });
 
-    this.socket.on('ROOM_UPDATED', (data: any) => {
-      if (data.session && this.onStateUpdateCallback) {
-        this.onStateUpdateCallback(data.session);
-      }
-    });
+      this.mqttClient.on('connect', () => {
+        console.log('[Decentralized Relay] Connected successfully! Subscribing...');
+        this.mqttClient?.subscribe(topic);
 
-    this.socket.on('ROOM_ENDED', () => {
-      if (this.onEndedCallback) this.onEndedCallback();
-    });
+        // Request full state sync from any active peer in the room
+        setTimeout(() => {
+          this.publishEvent({ type: 'REQUEST_SYNC' });
+        }, 1000);
+      });
 
-    // 2. Fall back to HiveMQ MQTT over WSS if Socket.IO is unavailable
-    const connectFallback = () => {
-      if (this.useSocketIO || this.useMqtt) return;
-      console.log('[Relay] Socket.IO cloud backend unavailable. Falling back to public MQTT WSS broker...');
-      
-      const topic = `itoura/room/${this.roomCode}`;
-      const clientId = `itoura_${this.currentUserId}_${Math.random().toString(16).substring(2, 8)}`;
+      this.mqttClient.on('message', (t, message) => {
+        if (t !== topic) return;
+        try {
+          const payload = JSON.parse(message.toString());
+          if (payload.senderUserId === this.currentUserId) return;
+          this.handleIncomingEvent(payload);
+        } catch (e) {
+          console.error('[Decentralized Relay] Error parsing event:', e);
+        }
+      });
 
-      try {
-        this.mqttClient = mqtt.connect(this.MQTT_BROKER_URL, {
-          clientId,
-          clean: true,
-          connectTimeout: 5000
-        });
-
-        this.mqttClient.on('connect', () => {
-          console.log('[Relay Fallback] Connected to HiveMQ Broker! Subscribing to topic:', topic);
-          this.useMqtt = true;
-          this.mqttClient?.subscribe(topic);
-        });
-
-        this.mqttClient.on('message', (t, message) => {
-          if (t !== topic) return;
-          try {
-            const payload = JSON.parse(message.toString());
-            // Ignore self-published events
-            if (payload.senderUserId === this.currentUserId) return;
-            this.handleIncomingEvent(payload);
-          } catch (e) {}
-        });
-
-        this.mqttClient.on('error', (err) => {
-          console.warn('[Relay Fallback] MQTT Broker error:', err);
-        });
-      } catch (err) {
-        console.error('[Relay Fallback] Failed to connect to MQTT:', err);
-      }
-    };
-
-    this.socket.on('connect_error', () => {
-      connectFallback();
-    });
-
-    setTimeout(() => {
-      if (!this.useSocketIO && !this.useMqtt) {
-        connectFallback();
-      }
-    }, 3500);
+      this.mqttClient.on('error', (err) => {
+        console.warn('[Decentralized Relay] Connection error:', err);
+      });
+    } catch (err) {
+      console.error('[Decentralized Relay] Connection failed:', err);
+    }
   }
 
-  // Handle incoming fallback events
   private handleIncomingEvent(payload: any) {
     if (!this.onStateUpdateCallback) return;
 
     import('../store/groupSessionStore').then(({ useGroupSessionStore }) => {
-      const currentSession = useGroupSessionStore.getState().activeSession;
+      const store = useGroupSessionStore.getState();
+      const currentSession = store.activeSession;
       if (!currentSession || currentSession.code !== this.roomCode) return;
 
-      const isHost = currentSession.creatorId === this.currentUserId;
-
-      if (payload.type === 'PEER_JOIN' && isHost) {
+      if (payload.type === 'REQUEST_SYNC') {
+        // Send our state to the newly joined peer if we have messages or participants
+        if (currentSession.participants.length > 1 || currentSession.messages.length > 1) {
+          this.publishEvent({ type: 'SYNC_STATE', session: currentSession });
+        }
+      } else if (payload.type === 'SYNC_STATE') {
+        // Sync our local state with the room state from the peer
+        this.onStateUpdateCallback!(payload.session);
+      } else if (payload.type === 'PEER_JOIN') {
         const newPeer: GroupParticipant = payload.participant;
         const exists = currentSession.participants.some(p => p.id === newPeer.id);
-
-        if (!exists && currentSession.participants.length < currentSession.maxParticipants) {
+        if (!exists) {
           const updatedParticipants = [...currentSession.participants, newPeer];
           const sysMsg: GroupMessage = {
-            id: 'msg-sys-' + Date.now(),
+            id: 'msg-sys-' + Date.now() + '-' + Math.random().toString(36).substring(2, 5),
             senderId: 'system',
             senderName: 'System',
             content: `👋 ${newPeer.displayName} joined the session.`,
             timestamp: Date.now()
           };
-          const updatedSession: GroupSession = {
+          const updatedSession = {
             ...currentSession,
             participants: updatedParticipants,
             messages: [...currentSession.messages, sysMsg]
           };
-
           this.onStateUpdateCallback!(updatedSession);
-          this.publishEvent({ type: 'ROOM_STATE', session: updatedSession });
         }
-      } else if (payload.type === 'ROOM_STATE') {
-        if (payload.session.status === 'ended') {
-          if (this.onEndedCallback) this.onEndedCallback();
-        } else {
-          this.onStateUpdateCallback!(payload.session);
+      } else if (payload.type === 'MESSAGE') {
+        const exists = currentSession.messages.some(m => m.id === payload.message.id);
+        if (!exists) {
+          const updatedSession = {
+            ...currentSession,
+            messages: [...currentSession.messages, payload.message]
+          };
+          this.onStateUpdateCallback!(updatedSession);
         }
-      } else if (payload.type === 'SEND_MESSAGE' && isHost) {
-        const userMsg: GroupMessage = {
-          id: 'msg-' + Date.now(),
-          senderId: payload.senderId,
-          senderName: payload.senderName,
-          content: payload.content,
-          timestamp: Date.now()
-        };
-
-        const updatedMessages = [...currentSession.messages, userMsg];
-        const updatedSession = { ...currentSession, messages: updatedMessages };
-        
-        this.onStateUpdateCallback!(updatedSession);
-        this.publishEvent({ type: 'ROOM_STATE', session: updatedSession });
-
-        if (payload.apiKey) {
-          import('./ai').then(async ({ sendGroupMessageToAI }) => {
-            try {
-              const companionReply = await sendGroupMessageToAI(
-                updatedMessages.filter(m => m.senderId !== 'system'),
-                currentSession.sessionLanguage,
-                payload.apiKey
-              );
-
-              const aiMsg: GroupMessage = {
-                id: 'msg-ai-' + Date.now(),
-                senderId: 'assistant',
-                senderName: 'Itoura',
-                content: companionReply,
-                timestamp: Date.now()
-              };
-
-              const sessWithAi = {
-                ...updatedSession,
-                messages: [...updatedSession.messages, aiMsg]
-              };
-              this.onStateUpdateCallback!(sessWithAi);
-              this.publishEvent({ type: 'ROOM_STATE', session: sessWithAi });
-            } catch (err) {
-              console.error("AI error:", err);
-            }
-          });
+      } else if (payload.type === 'LEAVE') {
+        const leavingId = payload.participantId;
+        const leavingPeer = currentSession.participants.find(p => p.id === leavingId);
+        if (leavingPeer) {
+          const updatedParticipants = currentSession.participants.filter(p => p.id !== leavingId);
+          const sysMsg: GroupMessage = {
+            id: 'msg-sys-' + Date.now() + '-' + Math.random().toString(36).substring(2, 5),
+            senderId: 'system',
+            senderName: 'System',
+            content: `👋 ${leavingPeer.displayName} left the session.`,
+            timestamp: Date.now()
+          };
+          const updatedSession = {
+            ...currentSession,
+            participants: updatedParticipants,
+            messages: [...currentSession.messages, sysMsg]
+          };
+          this.onStateUpdateCallback!(updatedSession);
         }
       } else if (payload.type === 'ROOM_ENDED') {
         if (this.onEndedCallback) this.onEndedCallback();
@@ -193,31 +133,15 @@ class RoomRelayService {
   }
 
   public publishEvent(payload: any) {
-    if (this.useSocketIO && this.socket?.connected) {
-      if (payload.type === 'SEND_MESSAGE') {
-        this.socket.emit('SEND_MESSAGE', {
-          code: this.roomCode,
-          content: payload.content,
-          senderId: payload.senderId,
-          senderName: payload.senderName,
-          apiKey: payload.apiKey
-        });
-      } else if (payload.type === 'ROOM_ENDED') {
-        this.socket.emit('END_ROOM', { code: this.roomCode });
-      }
-      return;
-    }
-
-    if (this.useMqtt && this.mqttClient?.connected) {
-      const topic = `itoura/room/${this.roomCode}`;
-      try {
-        this.mqttClient.publish(topic, JSON.stringify({
-          ...payload,
-          senderUserId: this.currentUserId
-        }));
-      } catch (e) {
-        console.error('[Relay] MQTT Publish error:', e);
-      }
+    if (!this.mqttClient?.connected) return;
+    const topic = `itoura/room/decentralized_${this.roomCode}`;
+    try {
+      this.mqttClient.publish(topic, JSON.stringify({
+        ...payload,
+        senderUserId: this.currentUserId
+      }));
+    } catch (e) {
+      console.error('[Decentralized Relay] Publish event failed:', e);
     }
   }
 
@@ -228,14 +152,6 @@ class RoomRelayService {
       } catch (e) {}
       this.mqttClient = null;
     }
-    if (this.socket) {
-      try {
-        this.socket.disconnect();
-      } catch (e) {}
-      this.socket = null;
-    }
-    this.useSocketIO = false;
-    this.useMqtt = false;
   }
 }
 
