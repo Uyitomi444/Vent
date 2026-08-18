@@ -3,6 +3,7 @@ import { persist } from 'zustand/middleware';
 import { sendGroupMessageToAI } from '../services/ai';
 import { useJournalStore } from './journalStore';
 import { roomRelayService } from '../services/relayService';
+import { firestoreGroupService } from '../services/firebaseSync';
 
 export interface GroupParticipant {
   id: string;
@@ -92,7 +93,16 @@ export const useGroupSessionStore = create<GroupSessionState>()(
 
         set({ activeSession: newSession, currentUserId: creatorId, error: null, isLoading: false });
 
-        // Connect room to real-time pub/sub relay
+        // Connect Recommendation 2 Firestore Realtime DB Sync
+        if (firestoreGroupService.isAvailable()) {
+          firestoreGroupService.createSession(
+            newSession,
+            (updatedSession) => set({ activeSession: updatedSession, isLoading: false, error: null }),
+            () => set({ activeSession: null, isLoading: false })
+          );
+        }
+
+        // Connect Pub/Sub WSS Relay as backup
         roomRelayService.connectRoom(
           code,
           creatorId,
@@ -137,7 +147,17 @@ export const useGroupSessionStore = create<GroupSessionState>()(
 
         set({ activeSession: joinedSession, currentUserId: userId, error: null, isLoading: false });
 
-        // Connect room to real-time pub/sub relay
+        // Connect Recommendation 2 Firestore Realtime DB Sync
+        if (firestoreGroupService.isAvailable()) {
+          firestoreGroupService.joinSession(
+            normalizedCode,
+            newParticipant,
+            (updatedSession) => set({ activeSession: updatedSession, isLoading: false, error: null }),
+            () => set({ activeSession: null, isLoading: false })
+          );
+        }
+
+        // Connect Pub/Sub WSS Relay as backup
         roomRelayService.connectRoom(
           normalizedCode,
           userId,
@@ -145,7 +165,6 @@ export const useGroupSessionStore = create<GroupSessionState>()(
           () => set({ activeSession: null, isLoading: false })
         );
 
-        // Publish PEER_JOIN event over real-time relay to all active peers
         setTimeout(() => {
           roomRelayService.publishEvent({
             type: 'PEER_JOIN',
@@ -174,15 +193,16 @@ export const useGroupSessionStore = create<GroupSessionState>()(
 
         set({ activeSession: updatedSession, isLoading: true, error: null });
 
-        // Broadcast user's message to everyone immediately
+        // Broadcast to Firestore / WSS immediately
+        if (firestoreGroupService.isAvailable()) {
+          firestoreGroupService.updateSession(updatedSession);
+        }
         roomRelayService.publishEvent({ type: 'MESSAGE', message: userMsg });
 
-        // Safety timeout so isLoading resets under any network lag
         const timeoutGuard = setTimeout(() => {
           set({ isLoading: false });
         }, 8000);
 
-        // The client that sent the message is responsible for running the AI companion response
         try {
           const companionReply = await sendGroupMessageToAI(
             updatedMessages.filter(m => m.senderId !== 'system'),
@@ -207,8 +227,10 @@ export const useGroupSessionStore = create<GroupSessionState>()(
               messages: [...curr.messages, aiMsg]
             };
             set({ activeSession: sessionWithAi, isLoading: false });
-            
-            // Broadcast Itoura's reply to everyone
+
+            if (firestoreGroupService.isAvailable()) {
+              firestoreGroupService.updateSession(sessionWithAi);
+            }
             roomRelayService.publishEvent({ type: 'MESSAGE', message: aiMsg });
           }
         } catch (err: any) {
@@ -223,12 +245,16 @@ export const useGroupSessionStore = create<GroupSessionState>()(
           const isHost = session.creatorId === participantId;
 
           if (isHost) {
+            if (firestoreGroupService.isAvailable()) {
+              firestoreGroupService.endSession(session.code);
+            }
             roomRelayService.publishEvent({ type: 'ROOM_ENDED', code: session.code });
           } else {
             roomRelayService.publishEvent({ type: 'LEAVE', code: session.code, participantId });
           }
         }
 
+        firestoreGroupService.disconnect();
         roomRelayService.disconnect();
         set({ activeSession: null, error: null, isLoading: false });
       },
@@ -236,8 +262,12 @@ export const useGroupSessionStore = create<GroupSessionState>()(
       endSession: () => {
         const session = get().activeSession;
         if (session) {
+          if (firestoreGroupService.isAvailable()) {
+            firestoreGroupService.endSession(session.code);
+          }
           roomRelayService.publishEvent({ type: 'ROOM_ENDED', code: session.code });
         }
+        firestoreGroupService.disconnect();
         roomRelayService.disconnect();
         set({ activeSession: null, error: null, isLoading: false });
       },
@@ -262,6 +292,14 @@ export const useGroupSessionStore = create<GroupSessionState>()(
         const session = get().activeSession;
         const currentUserId = get().currentUserId;
         if (session && currentUserId) {
+          if (firestoreGroupService.isAvailable()) {
+            firestoreGroupService.joinSession(
+              code,
+              { id: currentUserId, displayName: 'User', joinedAt: Date.now(), isCreator: false },
+              (updatedSession) => set({ activeSession: updatedSession, isLoading: false, error: null }),
+              () => set({ activeSession: null, isLoading: false })
+            );
+          }
           roomRelayService.connectRoom(
             code,
             currentUserId,

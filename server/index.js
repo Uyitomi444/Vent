@@ -19,6 +19,13 @@ const rooms = new Map();
 
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
+function cleanAiOutput(rawText) {
+  let text = rawText || '';
+  text = text.replace(/<think>[\s\S]*?<\/think>/gi, '').trim();
+  text = text.replace(/^\[?Itoura\]?:?\s*/i, '').trim();
+  return text;
+}
+
 async function sendGroupMessageToAI(messages, language, apiKey) {
   if (!apiKey) return "Thank you for sharing with the group. Let's keep supporting one another.";
 
@@ -41,7 +48,7 @@ CRITICAL CONVERSATIONAL RULES (STRICTLY ENFORCED):
         'Authorization': `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: 'qwen/qwen3.6-27b',
+        model: 'openai/gpt-oss-20b',
         messages: [
           { role: 'system', content: GROUP_SYSTEM_PROMPT },
           { role: 'user', content: `Group Discussion Log:\n${formattedLog}\n\nRespond briefly as Itoura (max 2-3 sentences):` }
@@ -52,8 +59,7 @@ CRITICAL CONVERSATIONAL RULES (STRICTLY ENFORCED):
 
     if (!response.ok) return "I hear you all. Let's take a moment together.";
     const data = await response.json();
-    let text = data.choices[0].message.content || '';
-    return text.replace(/^\[?Itoura\]?:?\s*/i, '').trim();
+    return cleanAiOutput(data.choices[0].message.content);
   } catch (err) {
     console.error("AI service error:", err);
     return "Thank you for sharing with the group. Let me know how everyone is feeling.";

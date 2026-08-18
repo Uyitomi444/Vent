@@ -57,6 +57,15 @@ export function detectCrisisLanguage(text: string): boolean {
   return crisisKeywords.some(kw => lower.includes(kw));
 }
 
+function cleanAiOutput(rawText: string): string {
+  let text = rawText || '';
+  // Strip DeepSeek / Qwen reasoning <think>...</think> blocks
+  text = text.replace(/<think>[\s\S]*?<\/think>/gi, '').trim();
+  // Strip stray prefixes like "[Itoura]: " or "Itoura:"
+  text = text.replace(/^\[?Itoura\]?:?\s*/i, '').trim();
+  return text;
+}
+
 export async function sendMessageToAI(
   messages: ChatMessage[],
   apiKey: string,
@@ -75,7 +84,7 @@ export async function sendMessageToAI(
   }
   
   const payload = {
-    model: 'qwen/qwen3.6-27b',
+    model: 'openai/gpt-oss-20b',
     messages: [
       { role: 'system', content: finalSystemPrompt },
       ...userAndAssistantMessages
@@ -98,7 +107,7 @@ export async function sendMessageToAI(
   }
 
   const data = await response.json();
-  return data.choices[0].message.content;
+  return cleanAiOutput(data.choices[0].message.content);
 }
 
 // Dedicated Group Companion AI Service (STRICT ISOLATION - ZERO PERSONAL MEMORY - CONCISE FRIENDLY BREVITY)
@@ -122,7 +131,7 @@ CRITICAL CONVERSATIONAL RULES (STRICTLY ENFORCED):
   const formattedLog = groupMessages.map(m => `[${m.senderName}]: ${m.content}`).join('\n');
 
   const payload = {
-    model: 'qwen/qwen3.6-27b',
+    model: 'openai/gpt-oss-20b',
     messages: [
       { role: 'system', content: GROUP_SYSTEM_PROMPT },
       { role: 'user', content: `Group Discussion Log:\n${formattedLog}\n\nRespond briefly as Itoura (max 2-3 sentences):` }
@@ -145,12 +154,7 @@ CRITICAL CONVERSATIONAL RULES (STRICTLY ENFORCED):
   }
 
   const data = await response.json();
-  let text = data.choices[0].message.content || '';
-  
-  // Clean up any stray prefixes like "[Itoura]: " or "Itoura:"
-  text = text.replace(/^\[?Itoura\]?:?\s*/i, '').trim();
-
-  return text;
+  return cleanAiOutput(data.choices[0].message.content);
 }
 
 export async function generateSessionSummary(messages: ChatMessage[], apiKey: string): Promise<{ summary: string, themes: string[] } | null> {
@@ -178,7 +182,7 @@ Format your output strictly as a JSON object:
         'Authorization': `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: 'qwen/qwen3.6-27b',
+        model: 'openai/gpt-oss-20b',
         messages: [
           { role: 'system', content: 'You are an expert mental health analyst. Output strictly valid JSON.' },
           ...userAndAssistantMessages,
@@ -191,7 +195,7 @@ Format your output strictly as a JSON object:
     if (!response.ok) return null;
 
     const data = await response.json();
-    const content = data.choices[0].message.content;
+    const content = cleanAiOutput(data.choices[0].message.content);
     const jsonMatch = content.match(/\{[\s\S]*\}/);
     if (!jsonMatch) return null;
 
