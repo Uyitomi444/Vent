@@ -21,8 +21,23 @@ const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
 function cleanAiOutput(rawText) {
   let text = rawText || '';
-  text = text.replace(/<think>[\s\S]*?<\/think>/gi, '').trim();
+
+  if (text.includes('</think>')) {
+    text = text.substring(text.lastIndexOf('</think>') + 8).trim();
+  } else if (text.includes('<think>')) {
+    const draftMatch = text.match(/(?:Draft Generation|Final Output|Refinement|Draft \d+).*?\n+([^\n]+(?:\n+[^\n]+)*)$/is);
+    if (draftMatch && draftMatch[1]) {
+      text = draftMatch[1].trim();
+    } else {
+      const paragraphs = text.split('\n\n').map(p => p.trim()).filter(Boolean);
+      text = paragraphs[paragraphs.length - 1] || text;
+    }
+  }
+
+  text = text.replace(/^["'“]|["'”]$/g, '').trim();
   text = text.replace(/^\[?Itoura\]?:?\s*/i, '').trim();
+  text = text.replace(/^\*?\*?(?:Draft|Final Output|Response):?\*?\*?\s*/i, '').trim();
+
   return text;
 }
 

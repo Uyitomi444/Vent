@@ -57,12 +57,29 @@ export function detectCrisisLanguage(text: string): boolean {
   return crisisKeywords.some(kw => lower.includes(kw));
 }
 
-function cleanAiOutput(rawText: string): string {
+export function cleanAiOutput(rawText: string): string {
   let text = rawText || '';
-  // Strip DeepSeek / Qwen reasoning <think>...</think> blocks
-  text = text.replace(/<think>[\s\S]*?<\/think>/gi, '').trim();
-  // Strip stray prefixes like "[Itoura]: " or "Itoura:"
+
+  // 1. If </think> exists, take everything after </think>
+  if (text.includes('</think>')) {
+    text = text.substring(text.lastIndexOf('</think>') + 8).trim();
+  } 
+  // 2. If <think> exists but NO </think> (incomplete/truncated reasoning block)
+  else if (text.includes('<think>')) {
+    const draftMatch = text.match(/(?:Draft Generation|Final Output|Refinement|Draft \d+).*?\n+([^\n]+(?:\n+[^\n]+)*)$/is);
+    if (draftMatch && draftMatch[1]) {
+      text = draftMatch[1].trim();
+    } else {
+      const paragraphs = text.split('\n\n').map(p => p.trim()).filter(Boolean);
+      text = paragraphs[paragraphs.length - 1] || text;
+    }
+  }
+
+  // 3. Clean up formatting markers like quotes or prefixes
+  text = text.replace(/^["'“]|["'”]$/g, '').trim();
   text = text.replace(/^\[?Itoura\]?:?\s*/i, '').trim();
+  text = text.replace(/^\*?\*?(?:Draft|Final Output|Response):?\*?\*?\s*/i, '').trim();
+
   return text;
 }
 
@@ -76,7 +93,7 @@ export async function sendMessageToAI(
   
   const userAndAssistantMessages = messages.filter(m => m.role !== 'system');
   
-  let finalSystemPrompt = `${SYSTEM_PROMPT}\n\n${LANGUAGE_PROMPT_INSTRUCTIONS[language]}`;
+  let finalSystemPrompt = `${SYSTEM_PROMPT}\n\n${LANGUAGE_PROMPT_INSTRUCTIONS[language]}\n\nCRITICAL OUTPUT RULE: Output ONLY your direct conversational words to the user. DO NOT write reasoning, thinking process, or <think> tags.`;
 
   if (context?.pastMemories?.length) {
     const memoryString = context.pastMemories.map((m, i) => `${i + 1}. ${m}`).join('\n');
@@ -89,7 +106,7 @@ export async function sendMessageToAI(
       { role: 'system', content: finalSystemPrompt },
       ...userAndAssistantMessages
     ],
-    temperature: 0.7
+    temperature: 0.6
   };
 
   const response = await fetch(GROQ_API_URL, {
@@ -126,7 +143,8 @@ CRITICAL CONVERSATIONAL RULES (STRICTLY ENFORCED):
 3. WARM HUMAN TONALITY: Speak naturally like a caring friend sitting in the room. Be warm, supportive, and grounded.
 4. NEUTRAL FACILITATION: Never take sides, pick favorites, or declare who is right or wrong.
 5. SELF-CONTAINED: Never reference private personal memories or individual past chats.
-6. ${LANGUAGE_PROMPT_INSTRUCTIONS[language]}`;
+6. NO THINKING PROCESS: DO NOT write any reasoning, <think> tags, or analysis. Start your response IMMEDIATELY with your direct words to the group.
+7. ${LANGUAGE_PROMPT_INSTRUCTIONS[language]}`;
 
   const formattedLog = groupMessages.map(m => `[${m.senderName}]: ${m.content}`).join('\n');
 
@@ -136,7 +154,7 @@ CRITICAL CONVERSATIONAL RULES (STRICTLY ENFORCED):
       { role: 'system', content: GROUP_SYSTEM_PROMPT },
       { role: 'user', content: `Group Discussion Log:\n${formattedLog}\n\nRespond briefly as Itoura (max 2-3 sentences):` }
     ],
-    temperature: 0.7
+    temperature: 0.6
   };
 
   const response = await fetch(GROQ_API_URL, {

@@ -18,7 +18,18 @@ class RoomRelayService {
     onStateUpdate: (session: GroupSession) => void,
     onEnded: () => void
   ) {
-    this.roomCode = code.toUpperCase();
+    const formattedCode = code.toUpperCase();
+
+    // If already connected to the same room, preserve connection and queue!
+    if (this.mqttClient?.connected && this.roomCode === formattedCode) {
+      console.log('[Decentralized Relay] Already connected to room:', formattedCode);
+      this.onStateUpdateCallback = onStateUpdate;
+      this.onEndedCallback = onEnded;
+      this.flushOutgoingQueue();
+      return;
+    }
+
+    this.roomCode = formattedCode;
     this.currentUserId = userId;
     this.onStateUpdateCallback = onStateUpdate;
     this.onEndedCallback = onEnded;
@@ -36,7 +47,7 @@ class RoomRelayService {
       });
 
       this.mqttClient.on('connect', () => {
-        console.log('[Decentralized Relay] Connected successfully! Subscribing...');
+        console.log('[Decentralized Relay] Connected successfully! Subscribing to topic:', topic);
         this.mqttClient?.subscribe(topic);
 
         // Flush any queued outgoing events (e.g. PEER_JOIN)
@@ -71,6 +82,7 @@ class RoomRelayService {
     while (this.outgoingQueue.length > 0) {
       const payload = this.outgoingQueue.shift();
       try {
+        console.log('[Decentralized Relay] Flushing queued event:', payload.type);
         this.mqttClient.publish(topic, JSON.stringify({
           ...payload,
           senderUserId: this.currentUserId
@@ -92,7 +104,6 @@ class RoomRelayService {
         this.publishEvent({ type: 'SYNC_STATE', session: currentSession });
       } else if (payload.type === 'SYNC_STATE') {
         const incoming: GroupSession = payload.session;
-        // Merge participants and messages intelligently
         const mergedParticipantsMap = new Map<string, GroupParticipant>();
         currentSession.participants.forEach(p => mergedParticipantsMap.set(p.id, p));
         incoming.participants.forEach(p => mergedParticipantsMap.set(p.id, p));
@@ -185,7 +196,6 @@ class RoomRelayService {
   }
 
   public disconnect() {
-    this.outgoingQueue = [];
     if (this.mqttClient) {
       try {
         this.mqttClient.end();
