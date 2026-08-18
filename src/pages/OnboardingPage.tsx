@@ -90,6 +90,24 @@ export default function OnboardingPage() {
         </div>
       </section>
 
+      {/* Video Demonstration Section */}
+      <section className="relative -mt-12 mb-12 z-20 px-6 max-w-4xl mx-auto">
+        <div className="bg-[#532E60] border-4 border-white rounded-[2.5rem] overflow-hidden shadow-2xl relative">
+          <video 
+            className="w-full h-auto object-cover block"
+            autoPlay 
+            loop 
+            muted 
+            playsInline
+            controls
+          >
+            <source src="/Mascot_walks_into_frame_waves_202608181447.mov" type="video/quicktime" />
+            <source src="/Mascot_walks_into_frame_waves_202608181447.mov" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </section>
+
       {/* 3. PRIVACY SECTION */}
       <section className="py-20">
         <div className="max-w-6xl mx-auto px-6">
