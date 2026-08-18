@@ -79,8 +79,8 @@ export default function MainLayout() {
       <DailyMessagePopup />
       <PaywallModal />
 
-      {/* Header with Category Dropdown */}
-      <header className="sticky top-0 z-50 w-full px-3 sm:px-6 md:px-12 py-2.5 sm:py-3.5 bg-[#532E60] backdrop-blur-xl border-b-2 border-white/20 shadow-xl shrink-0">
+      {/* Fixed Top Header Bar - Anchored Firmly at Viewport Top */}
+      <header className="fixed top-0 left-0 right-0 z-50 w-full px-3 sm:px-6 md:px-12 py-2.5 sm:py-3.5 bg-[#532E60] border-b-2 border-white/20 shadow-xl">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-2">
           
           {/* Logo & Category Dropdown */}
@@ -163,8 +163,8 @@ export default function MainLayout() {
         </div>
       </header>
 
-      {/* Main Page Canvas - Natural Scrolling */}
-      <main className="flex-1 w-full max-w-7xl mx-auto p-3 sm:p-6 md:p-8 flex flex-col">
+      {/* Main Page Canvas - Offsets Fixed Top Header Cleanly */}
+      <main className="flex-1 w-full max-w-7xl mx-auto p-3 sm:p-6 md:p-8 flex flex-col pt-16 sm:pt-20">
         <Outlet />
       </main>
     </div>
