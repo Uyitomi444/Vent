@@ -75,7 +75,7 @@ export async function sendMessageToAI(
   }
   
   const payload = {
-    model: 'llama-3.1-8b-instant',
+    model: 'qwen/qwen3.6-27b',
     messages: [
       { role: 'system', content: finalSystemPrompt },
       ...userAndAssistantMessages
@@ -122,7 +122,7 @@ CRITICAL CONVERSATIONAL RULES (STRICTLY ENFORCED):
   const formattedLog = groupMessages.map(m => `[${m.senderName}]: ${m.content}`).join('\n');
 
   const payload = {
-    model: 'llama-3.1-8b-instant',
+    model: 'qwen/qwen3.6-27b',
     messages: [
       { role: 'system', content: GROUP_SYSTEM_PROMPT },
       { role: 'user', content: `Group Discussion Log:\n${formattedLog}\n\nRespond briefly as Itoura (max 2-3 sentences):` }
@@ -178,7 +178,7 @@ Format your output strictly as a JSON object:
         'Authorization': `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: 'llama-3.1-8b-instant',
+        model: 'qwen/qwen3.6-27b',
         messages: [
           { role: 'system', content: 'You are an expert mental health analyst. Output strictly valid JSON.' },
           ...userAndAssistantMessages,

@@ -41,7 +41,7 @@ CRITICAL CONVERSATIONAL RULES (STRICTLY ENFORCED):
         'Authorization': `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: 'llama-3.1-8b-instant',
+        model: 'qwen/qwen3.6-27b',
         messages: [
           { role: 'system', content: GROUP_SYSTEM_PROMPT },
           { role: 'user', content: `Group Discussion Log:\n${formattedLog}\n\nRespond briefly as Itoura (max 2-3 sentences):` }
