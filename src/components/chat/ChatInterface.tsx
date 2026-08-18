@@ -3,7 +3,7 @@ import { useChatStore } from '../../store/chatStore';
 import { useMemoryStore } from '../../store/memoryStore';
 import { useLanguageStore } from '../../i18n';
 import { generateSessionSummary } from '../../services/ai';
-import { Send, AlertCircle, Mic, MicOff, Save } from 'lucide-react';
+import { Send, AlertCircle, Mic, MicOff, Save, Sparkles } from 'lucide-react';
 import itouraMascot from '../../assets/ABLE/itoura-mascot.jpeg';
 import chatBg from '../../assets/ABLE/chat-bg.jpg';
 
@@ -105,43 +105,52 @@ export default function ChatInterface() {
 
   return (
     <div 
-      className="flex flex-col h-full bg-[#532E60] rounded-3xl overflow-hidden shadow-2xl border-2 border-white/40 relative bg-cover bg-center"
+      className="flex-1 h-full min-h-0 flex flex-col bg-[#532E60] rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border-2 border-white/40 relative bg-cover bg-center"
       style={{ backgroundImage: `linear-gradient(to bottom, rgba(83, 46, 96, 0.90), rgba(61, 32, 72, 0.95)), url(${chatBg})` }}
     >
       
-      {/* Save Session Header Button */}
-      {messages.length >= 3 && (
-        <div className="absolute top-4 right-4 z-10">
+      {/* Dedicated Chat Top Header Bar */}
+      <div className="px-3.5 sm:px-5 py-2.5 sm:py-3 bg-[#432250]/90 backdrop-blur-md flex items-center justify-between border-b border-white/20 shrink-0 z-10">
+        <div className="flex items-center gap-2">
+          <img 
+            src={itouraMascot} 
+            alt="Itoura Mascot" 
+            className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover border border-white/40"
+          />
+          <span className="font-serif font-black text-sm sm:text-base text-white tracking-wide">Itoura Companion</span>
+        </div>
+
+        {messages.length >= 3 && (
           <button 
             onClick={handleSaveSession}
             disabled={isSummarizing || isLoading}
-            className="px-4 py-2 bg-[#C4B4E2] text-[#532E60] font-black text-xs md:text-sm rounded-full shadow-md hover:bg-white transition-all flex items-center gap-2 disabled:opacity-50 cursor-pointer border border-white"
+            className="px-3 py-1.5 bg-[#C4B4E2] text-[#532E60] font-black text-xs sm:text-sm rounded-full shadow-md hover:bg-white transition-all flex items-center gap-1.5 disabled:opacity-50 cursor-pointer border border-white"
           >
-            <Save size={15} className="text-[#532E60]" />
-            {isSummarizing ? t('chat.saving') : t('chat.save_session')}
+            <Save size={14} className="text-[#532E60]" />
+            <span>{isSummarizing ? t('chat.saving') : t('chat.save_session')}</span>
           </button>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* Chat Messages Area */}
-      <div className="flex-1 overflow-y-auto p-5 md:p-8 space-y-6">
+      <div className="flex-1 overflow-y-auto p-3.5 sm:p-5 md:p-8 space-y-4 sm:space-y-6">
         {messages.length === 1 && (
-          <div className="flex flex-col items-center justify-center mb-6 mt-4">
-            <div className="p-2 bg-[#613B6E] rounded-full border border-white/40 shadow-inner mb-3">
+          <div className="flex flex-col items-center justify-center mb-4 mt-2">
+            <div className="p-2 bg-[#613B6E] rounded-full border border-white/40 shadow-inner mb-2.5">
               <img 
                 src={itouraMascot} 
                 alt="Itoura Mascot" 
-                className="w-36 h-36 md:w-44 md:h-44 object-cover mix-blend-screen opacity-90 rounded-full"
+                className="w-28 h-28 sm:w-36 sm:h-36 md:w-44 md:h-44 object-cover mix-blend-screen opacity-90 rounded-full"
               />
             </div>
-            <p className="text-[#E8DCF8] font-black text-xs tracking-widest uppercase">
+            <p className="text-[#E8DCF8] font-black text-[11px] sm:text-xs tracking-widest uppercase flex items-center gap-1">
+              <Sparkles size={13} className="text-[#C4B4E2]" />
               ITOURA COMPANION
             </p>
           </div>
         )}
         
         {messages.map((msg, idx) => {
-          // If this is the initial message (index 0 and role assistant), dynamically translate it!
           const displayContent = (idx === 0 && messages.length === 1 && msg.role === 'assistant')
             ? t('chat.initial_msg')
             : msg.content;
@@ -152,17 +161,16 @@ export default function ChatInterface() {
                 <img 
                   src={itouraMascot} 
                   alt="Itoura"
-                  className="w-9 h-9 rounded-full object-cover mr-3 shrink-0 border border-white/40 shadow-md"
+                  className="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover mr-2 sm:mr-3 shrink-0 border border-white/40 shadow-md"
                 />
               )}
               
-              {/* Message Bubbles */}
-              <div className={`max-w-[78%] rounded-3xl p-4 md:p-5 shadow-md ${
+              <div className={`max-w-[85%] sm:max-w-[78%] rounded-2xl sm:rounded-3xl p-3.5 sm:p-5 shadow-md ${
                 msg.role === 'user' 
                   ? 'bg-[#C4B4E2] text-[#532E60] font-black border border-white rounded-br-none' 
                   : 'bg-[#613B6E] text-white font-bold border border-white/30 rounded-bl-none'
               }`}>
-                <p className="text-[15px] md:text-base leading-relaxed whitespace-pre-wrap font-bold">
+                <p className="text-sm sm:text-base md:text-lg leading-relaxed whitespace-pre-wrap font-bold">
                   {displayContent}
                 </p>
               </div>
@@ -175,19 +183,19 @@ export default function ChatInterface() {
             <img 
               src={itouraMascot} 
               alt="Itoura thinking"
-              className="w-9 h-9 rounded-full object-cover mr-3 shrink-0 border border-white/40 shadow-md"
+              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover mr-2 sm:mr-3 shrink-0 border border-white/40 shadow-md"
             />
-            <div className="bg-[#613B6E] border border-white/30 rounded-3xl rounded-bl-none p-4 flex gap-1.5 items-center h-[52px] shadow-md">
-              <div className="w-2.5 h-2.5 bg-[#C4B4E2] rounded-full animate-bounce"></div>
-              <div className="w-2.5 h-2.5 bg-[#C4B4E2] rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
-              <div className="w-2.5 h-2.5 bg-[#C4B4E2] rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
+            <div className="bg-[#613B6E] border border-white/30 rounded-2xl rounded-bl-none p-3 sm:p-4 flex gap-1.5 items-center h-[46px] sm:h-[52px] shadow-md">
+              <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 bg-[#C4B4E2] rounded-full animate-bounce"></div>
+              <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 bg-[#C4B4E2] rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+              <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 bg-[#C4B4E2] rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></div>
             </div>
           </div>
         )}
         
         {error && (
-          <div className="bg-red-950 text-red-100 font-bold border border-red-700 p-4 rounded-2xl text-sm flex items-start gap-2 max-w-[85%] mx-auto mt-4 shadow-md">
-            <AlertCircle size={20} className="shrink-0 text-red-400 mt-0.5" />
+          <div className="bg-red-950 text-red-100 font-bold border border-red-700 p-3.5 rounded-2xl text-xs sm:text-sm flex items-start gap-2 max-w-[90%] mx-auto mt-3 shadow-md">
+            <AlertCircle size={18} className="shrink-0 text-red-400 mt-0.5" />
             <p className="font-bold">{error}</p>
           </div>
         )}
@@ -195,32 +203,32 @@ export default function ChatInterface() {
       </div>
 
       {/* Input Area */}
-      <div className="p-4 md:p-6 bg-[#432250]/95 backdrop-blur-xl border-t border-white/20 flex flex-col relative z-20">
+      <div className="p-3 sm:p-5 bg-[#432250]/95 backdrop-blur-xl border-t border-white/20 flex flex-col relative z-20 shrink-0">
         
-        {/* Quick Reply Chips (Translated) */}
+        {/* Quick Reply Chips */}
         {messages.length === 1 && !isLoading && !isSummarizing && (
-          <div className="flex gap-2.5 overflow-x-auto pb-3 mb-2 w-full hide-scrollbar">
+          <div className="flex gap-2 overflow-x-auto pb-2.5 mb-1.5 w-full hide-scrollbar">
             <button 
               onClick={() => setInput(t('chip.anxious_prompt'))} 
-              className="px-4 py-2 bg-[#C4B4E2] text-[#532E60] font-black border border-white rounded-full text-xs md:text-sm shadow-md hover:bg-white transition-all whitespace-nowrap cursor-pointer"
+              className="px-3.5 py-1.5 bg-[#C4B4E2] text-[#532E60] font-black border border-white rounded-full text-xs sm:text-sm shadow-md hover:bg-white transition-all whitespace-nowrap cursor-pointer"
             >
               {t('chip.anxious')}
             </button>
             <button 
               onClick={() => setInput(t('chip.exhausted_prompt'))} 
-              className="px-4 py-2 bg-[#C4B4E2] text-[#532E60] font-black border border-white rounded-full text-xs md:text-sm shadow-md hover:bg-white transition-all whitespace-nowrap cursor-pointer"
+              className="px-3.5 py-1.5 bg-[#C4B4E2] text-[#532E60] font-black border border-white rounded-full text-xs sm:text-sm shadow-md hover:bg-white transition-all whitespace-nowrap cursor-pointer"
             >
               {t('chip.exhausted')}
             </button>
             <button 
               onClick={() => setInput(t('chip.overwhelmed_prompt'))} 
-              className="px-4 py-2 bg-[#C4B4E2] text-[#532E60] font-black border border-white rounded-full text-xs md:text-sm shadow-md hover:bg-white transition-all whitespace-nowrap cursor-pointer"
+              className="px-3.5 py-1.5 bg-[#C4B4E2] text-[#532E60] font-black border border-white rounded-full text-xs sm:text-sm shadow-md hover:bg-white transition-all whitespace-nowrap cursor-pointer"
             >
               {t('chip.overwhelmed')}
             </button>
             <button 
               onClick={() => setInput(t('chip.okay_prompt'))} 
-              className="px-4 py-2 bg-[#C4B4E2] text-[#532E60] font-black border border-white rounded-full text-xs md:text-sm shadow-md hover:bg-white transition-all whitespace-nowrap cursor-pointer"
+              className="px-3.5 py-1.5 bg-[#C4B4E2] text-[#532E60] font-black border border-white rounded-full text-xs sm:text-sm shadow-md hover:bg-white transition-all whitespace-nowrap cursor-pointer"
             >
               {t('chip.okay')}
             </button>
@@ -233,7 +241,7 @@ export default function ChatInterface() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder={t('chat.placeholder')}
-            className="flex-1 max-h-32 min-h-[58px] py-4 pl-5 pr-24 bg-transparent outline-none resize-none font-bold text-[#532E60] placeholder:text-[#532E60]/60 text-base"
+            className="flex-1 max-h-32 min-h-[52px] py-3.5 pl-4 pr-24 bg-transparent outline-none resize-none font-bold text-[#532E60] placeholder:text-[#532E60]/60 text-base sm:text-lg"
             onKeyDown={(e) => {
               if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
@@ -241,7 +249,7 @@ export default function ChatInterface() {
               }
             }}
           />
-          <div className="absolute right-2 bottom-2 flex items-center gap-1.5">
+          <div className="absolute right-2 bottom-1.5 flex items-center gap-1.5">
             <button
               type="button"
               onClick={toggleRecording}

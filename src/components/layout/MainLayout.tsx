@@ -75,12 +75,12 @@ export default function MainLayout() {
   const remainingResponses = Math.max(0, maxFreeResponses - responseCount);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#C4B4E2] relative font-sans text-[#532E60] selection:bg-[#532E60] selection:text-white touch-manipulation">
+    <div className="h-screen h-[100dvh] w-full flex flex-col bg-[#C4B4E2] relative font-sans text-[#532E60] selection:bg-[#532E60] selection:text-white overflow-hidden touch-manipulation">
       <DailyMessagePopup />
       <PaywallModal />
 
-      {/* Fixed Top Header Bar - Anchored Firmly at Viewport Top */}
-      <header className="fixed top-0 left-0 right-0 z-50 w-full px-3 sm:px-6 md:px-12 py-2.5 sm:py-3.5 bg-[#532E60] border-b-2 border-white/20 shadow-xl">
+      {/* Top Header - Permanent Flex Child (Never moves, never overlaps, nothing can scroll above it) */}
+      <header className="w-full shrink-0 z-50 px-2.5 sm:px-6 md:px-12 py-2 sm:py-3.5 bg-[#532E60] border-b-2 border-white/20 shadow-xl">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-2">
           
           {/* Logo & Category Dropdown */}
@@ -89,7 +89,7 @@ export default function MainLayout() {
               <img 
                 src={itouraLogo} 
                 alt="Itoura" 
-                className="h-8 sm:h-10 md:h-11 object-contain transition-transform group-hover:scale-105 filter brightness-110" 
+                className="h-7 sm:h-10 md:h-11 object-contain transition-transform group-hover:scale-105 filter brightness-110" 
               />
             </Link>
 
@@ -97,19 +97,19 @@ export default function MainLayout() {
             <div className="relative min-w-0" ref={dropdownRef}>
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex items-center gap-2 px-3.5 sm:px-6 md:px-7 py-2 sm:py-2.5 bg-[#C4B4E2] hover:bg-white text-[#532E60] font-black text-xs sm:text-sm md:text-base rounded-full border-2 border-white shadow-lg transition-all cursor-pointer whitespace-nowrap overflow-hidden"
+                className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-6 md:px-7 py-1.5 sm:py-2.5 bg-[#C4B4E2] hover:bg-white text-[#532E60] font-black text-xs sm:text-sm md:text-base rounded-full border-2 border-white shadow-lg transition-all cursor-pointer whitespace-nowrap overflow-hidden"
                 aria-expanded={isDropdownOpen}
               >
-                <span className="font-black text-[#532E60] truncate max-w-[130px] xs:max-w-[170px] sm:max-w-none text-xs sm:text-sm md:text-base">{currentCategory.label}</span>
+                <span className="font-black text-[#532E60] truncate max-w-[120px] xs:max-w-[170px] sm:max-w-none text-xs sm:text-sm md:text-base">{currentCategory.label}</span>
                 <ChevronDown 
-                  size={16} 
+                  size={15} 
                   className={`text-[#532E60] shrink-0 transition-transform duration-300 ${isDropdownOpen ? 'rotate-180' : ''}`} 
                 />
               </button>
 
               {/* Dropdown Menu Modal */}
               {isDropdownOpen && (
-                <div className="absolute top-full left-0 mt-2.5 w-[calc(100vw-2rem)] max-w-[340px] sm:max-w-none sm:w-88 md:w-96 bg-[#532E60] border-2 border-white/80 rounded-3xl p-3 sm:p-4 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-200">
+                <div className="absolute top-full left-0 mt-2.5 w-[calc(100vw-1.5rem)] max-w-[340px] sm:max-w-none sm:w-88 md:w-96 bg-[#532E60] border-2 border-white/80 rounded-3xl p-3 sm:p-4 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-200">
                   <div className="px-3 py-2 border-b border-white/20 mb-2 flex justify-between items-center">
                     <span className="text-xs sm:text-sm font-black tracking-wider text-white uppercase">
                       Select Section
@@ -119,7 +119,7 @@ export default function MainLayout() {
                     </span>
                   </div>
 
-                  <div className="space-y-1.5 max-h-[70vh] overflow-y-auto pr-1">
+                  <div className="space-y-1.5 max-h-[65vh] overflow-y-auto pr-1">
                     {navCategories.map((item) => {
                       const selected = isActive(item.path);
                       return (
@@ -127,7 +127,7 @@ export default function MainLayout() {
                           key={item.path}
                           to={item.path}
                           onClick={() => setIsDropdownOpen(false)}
-                          className={`flex flex-col p-3.5 sm:p-4 rounded-2xl transition-all ${
+                          className={`flex flex-col p-3 sm:p-4 rounded-2xl transition-all ${
                             selected 
                               ? 'bg-[#C4B4E2] text-[#532E60] font-black shadow-md border-2 border-white' 
                               : 'hover:bg-[#613B6E] text-white hover:text-white'
@@ -137,7 +137,7 @@ export default function MainLayout() {
                             {item.label}
                             {selected && <span className="w-2.5 h-2.5 rounded-full bg-[#532E60]" />}
                           </span>
-                          <span className={`text-xs sm:text-sm mt-1 font-bold ${selected ? 'text-[#532E60]/80' : 'text-[#E8DCF8]'}`}>
+                          <span className={`text-xs sm:text-sm mt-0.5 font-bold ${selected ? 'text-[#532E60]/80' : 'text-[#E8DCF8]'}`}>
                             {item.description}
                           </span>
                         </Link>
@@ -163,8 +163,8 @@ export default function MainLayout() {
         </div>
       </header>
 
-      {/* Main Page Canvas - Offsets Fixed Top Header Cleanly */}
-      <main className="flex-1 w-full max-w-7xl mx-auto p-3 sm:p-6 md:p-8 flex flex-col pt-16 sm:pt-20">
+      {/* Main Page Body Container - Internal Scroll Only */}
+      <main className="flex-1 w-full max-w-7xl mx-auto p-2 sm:p-6 md:p-8 flex flex-col overflow-y-auto min-h-0">
         <Outlet />
       </main>
     </div>
