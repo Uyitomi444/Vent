@@ -75,15 +75,15 @@ export default function MainLayout() {
   const remainingResponses = Math.max(0, maxFreeResponses - responseCount);
 
   return (
-    <div className="h-screen h-[100dvh] flex flex-col bg-[#C4B4E2] relative font-sans text-[#532E60] selection:bg-[#532E60] selection:text-white overflow-hidden touch-manipulation">
+    <div className="min-h-screen flex flex-col bg-[#C4B4E2] relative font-sans text-[#532E60] selection:bg-[#532E60] selection:text-white touch-manipulation">
       <DailyMessagePopup />
       <PaywallModal />
 
-      {/* Header with Prominent Category Dropdown */}
+      {/* Header with Category Dropdown */}
       <header className="sticky top-0 z-50 w-full px-3 sm:px-6 md:px-12 py-2.5 sm:py-3.5 bg-[#532E60] backdrop-blur-xl border-b-2 border-white/20 shadow-xl shrink-0">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-2">
           
-          {/* Logo & Top Category Dropdown */}
+          {/* Logo & Category Dropdown */}
           <div className="flex items-center gap-2 sm:gap-4 md:gap-8 min-w-0">
             <Link to="/" className="flex items-center gap-1.5 group shrink-0" title="Go to Welcome Page">
               <img 
@@ -163,8 +163,8 @@ export default function MainLayout() {
         </div>
       </header>
 
-      {/* Main Container */}
-      <main className="flex-1 w-full max-w-7xl mx-auto p-3 sm:p-6 md:p-8 flex flex-col overflow-y-auto min-h-0">
+      {/* Main Page Canvas - Natural Scrolling */}
+      <main className="flex-1 w-full max-w-7xl mx-auto p-3 sm:p-6 md:p-8 flex flex-col">
         <Outlet />
       </main>
     </div>
