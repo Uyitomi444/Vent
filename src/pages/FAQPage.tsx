@@ -34,7 +34,7 @@ const FAQ_DATA: FAQCategory[] = [
       },
       {
         question: "Who is Itoura for?",
-        answer: "Itoura is for anyone navigating daily stressors, looking to build emotional resilience, or just needing a safe space to vent. It's especially tailored to understand and relate to the unique cultural context and lived experiences of everyday workplace dynamics."
+        answer: "Itoura is for anyone navigating daily stressors, looking to build emotional resilience, or just needing a safe space to vent. It's especially tailored to understand and relate to the unique cultural context and lived experiences of everyday life dynamics."
       }
     ]
   },
