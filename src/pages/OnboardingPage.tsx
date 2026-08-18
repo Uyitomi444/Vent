@@ -49,11 +49,29 @@ export default function OnboardingPage() {
       {/* 2. FEATURE EXPLAINER */}
       <section className="py-20 bg-[#532E60] text-white border-y-2 border-white/20">
         <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center max-w-3xl mx-auto mb-16 space-y-3">
+          <div className="text-center max-w-3xl mx-auto mb-12 space-y-3">
             <h2 className="font-serif text-3xl md:text-4xl text-white font-black">{t('onboarding.supports_title')}</h2>
             <p className="text-base md:text-lg text-[#E8DCF8] font-bold">{t('onboarding.supports_desc')}</p>
           </div>
           
+          {/* Mascot Video Intro (Aligned, Size-Reduced, Theme Border) */}
+          <div className="max-w-md mx-auto mb-16 relative z-10 px-4">
+            <div className="bg-[#532E60] border-4 border-[#C4B4E2] rounded-[2rem] overflow-hidden shadow-2xl relative">
+              <video 
+                className="w-full h-auto object-cover block"
+                autoPlay 
+                loop 
+                muted 
+                playsInline
+                controls
+              >
+                <source src="/Mascot_walks_into_frame_waves_202608181447.mov" type="video/quicktime" />
+                <source src="/Mascot_walks_into_frame_waves_202608181447.mov" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             <div className="bg-[#613B6E] p-8 rounded-3xl shadow-xl border border-white/10 flex flex-col">
               <span className="text-xs font-black text-[#C4B4E2] uppercase tracking-widest mb-3">STEP 01</span>
@@ -90,23 +108,6 @@ export default function OnboardingPage() {
         </div>
       </section>
 
-      {/* Video Demonstration Section */}
-      <section className="relative -mt-12 mb-12 z-20 px-6 max-w-4xl mx-auto">
-        <div className="bg-[#532E60] border-4 border-white rounded-[2.5rem] overflow-hidden shadow-2xl relative">
-          <video 
-            className="w-full h-auto object-cover block"
-            autoPlay 
-            loop 
-            muted 
-            playsInline
-            controls
-          >
-            <source src="/Mascot_walks_into_frame_waves_202608181447.mov" type="video/quicktime" />
-            <source src="/Mascot_walks_into_frame_waves_202608181447.mov" />
-            Your browser does not support the video tag.
-          </video>
-        </div>
-      </section>
 
       {/* 3. PRIVACY SECTION */}
       <section className="py-20">
