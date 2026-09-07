@@ -1,15 +1,22 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useJournalStore } from '../store/journalStore';
 import { useMoodStore } from '../store/moodStore';
 import { useChatStore } from '../store/chatStore';
 import { useSettingsStore } from '../store/settingsStore';
 import { useMemoryStore } from '../store/memoryStore';
+import { useProfileStore } from '../store/profileStore';
 import { useLanguageStore } from '../i18n';
+import { Camera, Edit3 } from 'lucide-react';
+import ProfileEditorModal from '../components/profile/ProfileEditorModal';
 
 export default function SettingsPage() {
   const navigate = useNavigate();
   const { notifications, setNotifications } = useSettingsStore();
+  const { profile } = useProfileStore();
   const { t } = useLanguageStore();
+
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   const clearJournal = useJournalStore(state => state.clearEntries);
   const clearMoods = useMoodStore(state => state.clearEntries);
@@ -76,13 +83,68 @@ export default function SettingsPage() {
         <h3 className="font-black text-[#532E60] px-2 uppercase tracking-wider text-xs">
           {t('settings.account')}
         </h3>
-        <div className="bg-[#532E60] text-white rounded-3xl p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 shadow-xl border-2 border-white/40">
-          <div className="flex-1 text-center md:text-left">
-            <h2 className="text-2xl font-serif font-black text-white mb-1">{t('settings.emp_profile')}</h2>
-            <p className="text-[#E8DCF8] text-xs font-bold mb-4">{t('settings.emp_desc')}</p>
-            <button className="w-full md:w-auto px-6 py-2.5 bg-[#C4B4E2] text-[#532E60] rounded-full font-black text-sm hover:bg-white transition-all shadow-md cursor-pointer border border-white">
-              {t('settings.emp_btn')}
+        <div className="bg-[#532E60] text-white rounded-3xl p-6 md:p-8 shadow-xl border-2 border-white/40 flex flex-col sm:flex-row items-center sm:items-start gap-6 relative overflow-hidden">
+          {/* Avatar with Camera Overlay */}
+          <div className="relative group shrink-0">
+            <img
+              src={profile.avatarUrl}
+              alt={profile.name}
+              className="w-20 h-20 sm:w-24 sm:h-24 rounded-full object-cover border-4 border-white shadow-xl bg-[#613B6E]"
+            />
+            <button
+              onClick={() => setIsProfileModalOpen(true)}
+              className="absolute bottom-0 right-0 p-2 bg-[#C4B4E2] hover:bg-white text-[#532E60] rounded-full shadow-md border-2 border-white transition-all cursor-pointer"
+              title="Change Photo"
+            >
+              <Camera size={13} />
             </button>
+          </div>
+
+          <div className="flex-1 text-center sm:text-left space-y-3">
+            <div>
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-1">
+                <h2 className="text-2xl font-serif font-black text-white">{profile.name}</h2>
+                {profile.nickname && profile.nickname !== profile.name && (
+                  <span className="text-xs font-black bg-[#C4B4E2] text-[#532E60] px-2.5 py-0.5 rounded-full self-center sm:self-auto border border-white">
+                    Called "{profile.nickname}"
+                  </span>
+                )}
+                {profile.pronouns && (
+                  <span className="text-xs font-bold text-[#E8DCF8] bg-white/10 px-2 py-0.5 rounded-full border border-white/20 self-center sm:self-auto">
+                    {profile.pronouns}
+                  </span>
+                )}
+              </div>
+              {profile.bio && (
+                <p className="text-sm font-bold text-[#E8DCF8] italic leading-relaxed">
+                  "{profile.bio}"
+                </p>
+              )}
+            </div>
+
+            {/* Wellbeing Goals */}
+            {profile.goals && profile.goals.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 justify-center sm:justify-start">
+                {profile.goals.map((g) => (
+                  <span
+                    key={g}
+                    className="px-2.5 py-0.5 bg-white/10 text-[#E8DCF8] text-[11px] rounded-full font-black border border-white/20"
+                  >
+                    {g}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            <div className="pt-1">
+              <button
+                onClick={() => setIsProfileModalOpen(true)}
+                className="w-full sm:w-auto px-6 py-2.5 bg-[#C4B4E2] text-[#532E60] rounded-full font-black text-xs sm:text-sm hover:bg-white transition-all shadow-md cursor-pointer border border-white flex items-center justify-center gap-2"
+              >
+                <Edit3 size={15} />
+                <span>Edit Profile Details</span>
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -203,6 +265,11 @@ export default function SettingsPage() {
 
         </div>
       </section>
+
+      {/* Profile Editor Modal */}
+      {isProfileModalOpen && (
+        <ProfileEditorModal onClose={() => setIsProfileModalOpen(false)} />
+      )}
     </div>
   );
 }

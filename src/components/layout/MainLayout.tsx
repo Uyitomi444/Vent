@@ -5,6 +5,7 @@ import { useSubscriptionStore } from '../../store/subscriptionStore';
 import LanguageSelector from '../LanguageSelector';
 import PaywallModal from '../paywall/PaywallModal';
 import DailyMessagePopup from '../DailyMessagePopup';
+import AmbientSoundMixer from '../audio/AmbientSoundMixer';
 import itouraLogo from '../../assets/ABLE/logo.png';
 import { ChevronDown } from 'lucide-react';
 
@@ -32,7 +33,7 @@ export default function MainLayout() {
     {
       path: '/chat',
       label: t('nav.chat'),
-      description: 'AI companion chat, empathetic venting, & reflection',
+      description: 'AI companion chat, voice notes, & reflections',
     },
     {
       path: '/group',
@@ -40,19 +41,24 @@ export default function MainLayout() {
       description: 'Shared real-time group sessions for families & friends',
     },
     {
+      path: '/ocean',
+      label: 'Bottled Ocean',
+      description: 'Anonymous bottled messages & empathy reactions',
+    },
+    {
       path: '/tools',
       label: t('nav.tools'),
-      description: 'Box breathing, grounding, & mindful exercises',
+      description: 'Vent Lab, Burn Worry, Bubble Wrap, & box breathing',
     },
     {
       path: '/progress',
       label: t('nav.progress'),
-      description: '7-day mood trends, top themes, & reflections',
+      description: '7-day mood trends, Weekly AI Digest, & reflection',
     },
     {
       path: '/journal',
       label: t('nav.journal'),
-      description: 'Encrypted local journal entries & reflections',
+      description: 'PIN encrypted local journal entries & reflections',
     },
     {
       path: '/mood',
@@ -78,6 +84,7 @@ export default function MainLayout() {
     <div className="h-screen h-[100dvh] w-full flex flex-col bg-[#C4B4E2] relative font-sans text-[#532E60] selection:bg-[#532E60] selection:text-white overflow-hidden touch-manipulation">
       <DailyMessagePopup />
       <PaywallModal />
+      <AmbientSoundMixer />
 
       {/* Top Header - Permanent Flex Child (Never moves, never overlaps, nothing can scroll above it) */}
       <header className="w-full shrink-0 z-50 px-2.5 sm:px-6 md:px-12 py-2 sm:py-3.5 bg-[#532E60] border-b-2 border-white/20 shadow-xl">
@@ -115,7 +122,7 @@ export default function MainLayout() {
                       Select Section
                     </span>
                     <span className="text-xs font-black bg-[#C4B4E2] text-[#532E60] px-3 py-1 rounded-full shadow-sm">
-                      8 Sections
+                      9 Sections
                     </span>
                   </div>
 

@@ -1,43 +1,98 @@
-import { useState } from 'react';
-import { useJournalStore } from '../store/journalStore';
+import { useState, useEffect } from 'react';
+import { useJournalStore, getDecryptedEntryContent } from '../store/journalStore';
 import type { JournalEntry } from '../store/journalStore';
 import { useLanguageStore } from '../i18n';
-import { Plus, Trash2, ArrowLeft } from 'lucide-react';
+import { Plus, Trash2, ArrowLeft, Lock, Shield, ShieldCheck } from 'lucide-react';
+import JournalLockModal from '../components/journal/JournalLockModal';
+import JournalSecuritySettings from '../components/journal/JournalSecuritySettings';
 
 export default function JournalPage() {
-  const { entries, addEntry, updateEntry, deleteEntry } = useJournalStore();
+  const {
+    entries,
+    isLocked,
+    pinHash,
+    activePinSession,
+    addEntry,
+    updateEntry,
+    deleteEntry,
+    lockVault,
+    checkAutoLock,
+    touchActivity,
+  } = useJournalStore();
   const { t } = useLanguageStore();
 
   const [editingId, setEditingId] = useState<string | 'new' | null>(null);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [showSecurityModal, setShowSecurityModal] = useState(false);
+  const [decryptedMap, setDecryptedMap] = useState<Record<string, string>>({});
+
+  // Auto lock heartbeat & activity listener
+  useEffect(() => {
+    const interval = setInterval(() => {
+      checkAutoLock();
+    }, 15000);
+
+    const onUserActivity = () => touchActivity();
+    window.addEventListener('mousemove', onUserActivity);
+    window.addEventListener('keydown', onUserActivity);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('mousemove', onUserActivity);
+      window.removeEventListener('keydown', onUserActivity);
+    };
+  }, [checkAutoLock, touchActivity]);
+
+  // Decrypt previews when unlocked
+  useEffect(() => {
+    if (!isLocked) {
+      entries.forEach(async (entry) => {
+        const text = await getDecryptedEntryContent(entry, activePinSession);
+        setDecryptedMap((prev) => ({ ...prev, [entry.id]: text }));
+      });
+    }
+  }, [entries, isLocked, activePinSession]);
 
   const handleCreateNew = () => {
     setTitle('');
     setContent('');
     setEditingId('new');
+    touchActivity();
   };
 
-  const handleEdit = (entry: JournalEntry) => {
+  const handleEdit = async (entry: JournalEntry) => {
+    const plainText = await getDecryptedEntryContent(entry, activePinSession);
     setTitle(entry.title);
-    setContent(entry.content);
+    setContent(plainText);
     setEditingId(entry.id);
+    touchActivity();
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!title.trim() && !content.trim()) return;
 
     if (editingId === 'new') {
-      addEntry({ title: title || 'Untitled', content });
+      await addEntry({ title: title || 'Untitled', content });
     } else if (editingId) {
-      updateEntry(editingId, { title: title || 'Untitled', content });
+      await updateEntry(editingId, { title: title || 'Untitled', content });
     }
     setEditingId(null);
+    touchActivity();
   };
 
   const formatDate = (ts: number) => {
     return new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(ts));
   };
+
+  // If PIN protection is enabled and vault is currently locked, show Lock Screen
+  if (pinHash && isLocked) {
+    return (
+      <div className="h-full flex items-center justify-center">
+        <JournalLockModal />
+      </div>
+    );
+  }
 
   // Editor View
   if (editingId) {
@@ -51,12 +106,23 @@ export default function JournalPage() {
             <ArrowLeft size={18} />
             <span>{t('journal.back')}</span>
           </button>
-          <button 
-            onClick={handleSave}
-            className="px-6 py-2.5 bg-[#C4B4E2] text-[#532E60] font-black rounded-full shadow-lg hover:bg-white transition-all cursor-pointer border border-white"
-          >
-            {t('journal.save_entry')}
-          </button>
+          <div className="flex items-center gap-2">
+            {pinHash && (
+              <button
+                onClick={lockVault}
+                title="Lock Journal Immediately"
+                className="p-2.5 bg-[#532E60] text-[#C4B4E2] hover:text-white rounded-full border border-white/30 shadow-md cursor-pointer"
+              >
+                <Lock size={18} />
+              </button>
+            )}
+            <button 
+              onClick={handleSave}
+              className="px-6 py-2.5 bg-[#C4B4E2] text-[#532E60] font-black rounded-full shadow-lg hover:bg-white transition-all cursor-pointer border border-white"
+            >
+              {t('journal.save_entry')}
+            </button>
+          </div>
         </div>
 
         {/* Editor Card */}
@@ -64,7 +130,10 @@ export default function JournalPage() {
           <input
             type="text"
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={(e) => {
+              setTitle(e.target.value);
+              touchActivity();
+            }}
             placeholder={t('journal.title_placeholder')}
             className="text-2xl md:text-3xl font-serif font-black text-white bg-transparent border-none outline-none mb-4 placeholder:text-[#E8DCF8]/60"
           />
@@ -72,7 +141,10 @@ export default function JournalPage() {
           <div className="flex-1 relative flex flex-col">
             <textarea
               value={content}
-              onChange={(e) => setContent(e.target.value)}
+              onChange={(e) => {
+                setContent(e.target.value);
+                touchActivity();
+              }}
               placeholder={t('journal.content_placeholder')}
               className="flex-1 resize-none bg-transparent border-none outline-none text-[#E8DCF8] font-bold leading-relaxed placeholder:text-[#E8DCF8]/60 text-lg pb-12"
             />
@@ -88,6 +160,7 @@ export default function JournalPage() {
                 recognition.interimResults = false;
                 recognition.onresult = (event: any) => {
                   setContent(prev => prev + (prev.endsWith(' ') || prev.length === 0 ? '' : ' ') + event.results[0][0].transcript);
+                  touchActivity();
                 };
                 recognition.start();
               }}
@@ -107,16 +180,48 @@ export default function JournalPage() {
     <div className="h-full flex flex-col max-w-3xl mx-auto">
       <div className="flex items-end justify-between mb-8 pt-4 shrink-0">
         <div>
-          <h1 className="font-serif text-3xl md:text-4xl font-black text-[#532E60] mb-1">{t('journal.title')}</h1>
+          <div className="flex items-center gap-2">
+            <h1 className="font-serif text-3xl md:text-4xl font-black text-[#532E60] mb-1">{t('journal.title')}</h1>
+            {pinHash ? (
+              <span className="inline-flex items-center gap-1 text-[11px] font-black bg-emerald-600 text-white px-2.5 py-0.5 rounded-full shadow-sm">
+                <ShieldCheck size={12} /> Encrypted Vault
+              </span>
+            ) : null}
+          </div>
           <p className="text-[#532E60]/80 font-bold text-sm">{t('journal.subtitle')}</p>
         </div>
-        <button 
-          onClick={handleCreateNew}
-          className="flex items-center gap-2 px-5 py-2.5 bg-[#532E60] text-white font-black rounded-full shadow-lg hover:bg-[#3D2048] transition-all hover:scale-105 cursor-pointer border border-white/40"
-        >
-          <Plus size={18} />
-          <span>{t('journal.new_entry')}</span>
-        </button>
+
+        <div className="flex items-center gap-2">
+          {/* Security PIN Lock Settings button */}
+          <button
+            onClick={() => setShowSecurityModal(true)}
+            className="flex items-center gap-1.5 px-3.5 py-2.5 bg-[#532E60] text-white font-black rounded-full shadow-md hover:bg-[#3D2048] transition-all cursor-pointer border border-white/30 text-xs"
+            title="Configure PIN Security"
+          >
+            <Shield size={16} />
+            <span className="hidden sm:inline">{pinHash ? 'Vault Security' : 'Set PIN'}</span>
+          </button>
+
+          {/* Quick Lock Button */}
+          {pinHash && (
+            <button
+              onClick={lockVault}
+              className="flex items-center gap-1.5 px-3.5 py-2.5 bg-[#532E60] text-[#C4B4E2] hover:text-white font-black rounded-full shadow-md hover:bg-[#3D2048] transition-all cursor-pointer border border-white/30 text-xs"
+              title="Lock Vault Now"
+            >
+              <Lock size={16} />
+              <span className="hidden sm:inline">Lock</span>
+            </button>
+          )}
+
+          <button 
+            onClick={handleCreateNew}
+            className="flex items-center gap-2 px-5 py-2.5 bg-[#532E60] text-white font-black rounded-full shadow-lg hover:bg-[#3D2048] transition-all hover:scale-105 cursor-pointer border border-white/40 text-sm"
+          >
+            <Plus size={18} />
+            <span>{t('journal.new_entry')}</span>
+          </button>
+        </div>
       </div>
 
       <div className="flex-1 overflow-y-auto pb-8 min-h-0">
@@ -161,16 +266,25 @@ export default function JournalPage() {
                   </button>
                 </div>
                 <p className="text-[#E8DCF8] font-bold line-clamp-2 mb-4 text-sm leading-relaxed">
-                  {entry.content}
+                  {decryptedMap[entry.id] || (entry.isEncrypted ? '•••••••• Encrypted Entry ••••••••' : entry.content)}
                 </p>
-                <div className="mt-auto flex items-center text-xs text-[#C4B4E2] font-extrabold">
-                  {formatDate(entry.createdAt)}
+                <div className="mt-auto flex items-center justify-between text-xs text-[#C4B4E2] font-extrabold">
+                  <span>{formatDate(entry.createdAt)}</span>
+                  {entry.isEncrypted && (
+                    <span className="flex items-center gap-1 text-[11px] text-emerald-300">
+                      <Lock size={12} /> Encrypted
+                    </span>
+                  )}
                 </div>
               </div>
             ))}
           </div>
         )}
       </div>
+
+      {showSecurityModal && (
+        <JournalSecuritySettings onClose={() => setShowSecurityModal(false)} />
+      )}
     </div>
   );
 }

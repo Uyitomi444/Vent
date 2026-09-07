@@ -1,4 +1,5 @@
 import type { LanguageCode } from '../i18n';
+import { useProfileStore } from '../store/profileStore';
 
 export interface ChatMessage {
   id: string;
@@ -91,13 +92,33 @@ export async function sendMessageToAI(
 ): Promise<string> {
   const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
   
-  const userAndAssistantMessages = messages.filter(m => m.role !== 'system');
+  const userAndAssistantMessages = messages
+    .filter(m => m.role !== 'system')
+    .map(m => ({ role: m.role, content: m.content }));
   
   let finalSystemPrompt = `${SYSTEM_PROMPT}\n\n${LANGUAGE_PROMPT_INSTRUCTIONS[language]}\n\nCRITICAL OUTPUT RULE: Output ONLY your direct conversational words to the user. DO NOT write reasoning, thinking process, or <think> tags.`;
 
   if (context?.pastMemories?.length) {
     const memoryString = context.pastMemories.map((m, i) => `${i + 1}. ${m}`).join('\n');
     finalSystemPrompt += `\n\nPast Session Memories (use these naturally, don't force them):\n${memoryString}`;
+  }
+
+  const profile = useProfileStore.getState().profile;
+  if (profile) {
+    finalSystemPrompt += `\n\nUser Profile Context:
+- User's name: ${profile.name}${profile.nickname ? ` (preferred nickname: "${profile.nickname}")` : ''}. Address them warmly and naturally.
+${profile.pronouns ? `- User pronouns: ${profile.pronouns}` : ''}
+${profile.bio ? `- Personal mantra/note: "${profile.bio}"` : ''}
+${profile.goals?.length ? `- Wellbeing focus areas: ${profile.goals.join(', ')}` : ''}
+- Desired Companion Tone: ${
+      profile.companionTone === 'grounding'
+        ? 'Steady, calm, breath-focused, and anchoring.'
+        : profile.companionTone === 'uplifting'
+        ? 'Hopeful, encouraging, celebrating micro-wins.'
+        : profile.companionTone === 'direct'
+        ? 'Thoughtful, concise, practical, and clear.'
+        : 'Deeply gentle, empathetic, warm, and soft-spoken.'
+    }`;
   }
   
   const payload = {
@@ -178,7 +199,9 @@ CRITICAL CONVERSATIONAL RULES (STRICTLY ENFORCED):
 export async function generateSessionSummary(messages: ChatMessage[], apiKey: string): Promise<{ summary: string, themes: string[] } | null> {
   const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
   
-  const userAndAssistantMessages = messages.filter(m => m.role !== 'system');
+  const userAndAssistantMessages = messages
+    .filter(m => m.role !== 'system')
+    .map(m => ({ role: m.role, content: m.content }));
   if (userAndAssistantMessages.length === 0) return null;
 
   const prompt = `Analyze this conversation transcript between a user and an empathetic AI companion (Itoura).
@@ -220,6 +243,145 @@ Format your output strictly as a JSON object:
     return JSON.parse(jsonMatch[0]);
   } catch (err) {
     console.error("Summary generation error:", err);
+    return null;
+  }
+}
+
+export interface CbtReframeResult {
+  distortions: string[];
+  reframes: string[];
+  microStep: string;
+  compassionateInsight: string;
+}
+
+export async function reframeThought(
+  thoughtText: string,
+  apiKey: string,
+  language: LanguageCode = 'en'
+): Promise<CbtReframeResult | null> {
+  const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+
+  const prompt = `You are a warm, certified Cognitive Behavioral Therapy (CBT) expert.
+A user shares this distressing, automatic negative thought:
+"${thoughtText}"
+
+Analyze this thought using evidence-based CBT cognitive restructuring:
+1. Identify 1 to 3 cognitive distortions present (e.g. "Catastrophizing", "All-or-Nothing Thinking", "Mind Reading", "Emotional Reasoning", "Overgeneralization", "Should Statements").
+2. Provide 3 gentle, realistic, balanced reframes (compassionate alternative perspectives that reduce cognitive distortion).
+3. Provide 1 actionable micro-step (e.g. "Take a 2-minute stretch", "Write down one fact that contradicts this worry").
+4. A short warm compassionate insight (1 sentence).
+
+Language instruction: ${LANGUAGE_PROMPT_INSTRUCTIONS[language]}
+
+Return ONLY a valid JSON object:
+{
+  "distortions": ["...", "..."],
+  "reframes": [
+    "...",
+    "...",
+    "..."
+  ],
+  "microStep": "...",
+  "compassionateInsight": "..."
+}`;
+
+  try {
+    const response = await fetch(GROQ_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: 'openai/gpt-oss-20b',
+        messages: [
+          { role: 'system', content: 'You are a warm CBT mental health specialist. Output strictly valid JSON without markdown fences.' },
+          { role: 'user', content: prompt }
+        ],
+        temperature: 0.3
+      })
+    });
+
+    if (!response.ok) return null;
+
+    const data = await response.json();
+    const content = cleanAiOutput(data.choices[0].message.content);
+    const jsonMatch = content.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) return null;
+
+    return JSON.parse(jsonMatch[0]);
+  } catch (err) {
+    console.error("CBT Reframe error:", err);
+    return null;
+  }
+}
+
+export interface WeeklyWellnessDigest {
+  headline: string;
+  emotionalSummary: string;
+  topTriggers: string[];
+  growthHighlights: string[];
+  wellnessAdvice: string;
+}
+
+export async function generateWeeklyWellnessDigest(
+  journalSnippets: string[],
+  moodLogs: { mood: string; date: string }[],
+  apiKey: string,
+  language: LanguageCode = 'en'
+): Promise<WeeklyWellnessDigest | null> {
+  const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+
+  const dataContext = `Recent Moods: ${JSON.stringify(moodLogs)}\nRecent Journal Reflections: ${JSON.stringify(journalSnippets)}`;
+
+  const prompt = `You are Itoura, analyzing the user's weekly emotional history:
+${dataContext}
+
+Generate a personalized, encouraging Weekly Wellness Digest:
+1. "headline": An uplifting, validating title for their week (e.g. "A Week of Navigating Pressure with Resilience").
+2. "emotionalSummary": A warm 2-3 sentence overview of their emotional trajectory.
+3. "topTriggers": 2-3 recurring challenges or themes noticed.
+4. "growthHighlights": 2-3 positive resilience moments, coping attempts, or wins.
+5. "wellnessAdvice": A gentle, customized recommendation for the coming week.
+
+Language instruction: ${LANGUAGE_PROMPT_INSTRUCTIONS[language]}
+
+Output strictly valid JSON:
+{
+  "headline": "...",
+  "emotionalSummary": "...",
+  "topTriggers": ["...", "..."],
+  "growthHighlights": ["...", "..."],
+  "wellnessAdvice": "..."
+}`;
+
+  try {
+    const response = await fetch(GROQ_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: 'openai/gpt-oss-20b',
+        messages: [
+          { role: 'system', content: 'You are a warm wellness analyst. Output strictly valid JSON.' },
+          { role: 'user', content: prompt }
+        ],
+        temperature: 0.3
+      })
+    });
+
+    if (!response.ok) return null;
+
+    const data = await response.json();
+    const content = cleanAiOutput(data.choices[0].message.content);
+    const jsonMatch = content.match(/\{[\s\S]*\}/);
+    if (!jsonMatch) return null;
+
+    return JSON.parse(jsonMatch[0]);
+  } catch (err) {
+    console.error("Weekly digest error:", err);
     return null;
   }
 }

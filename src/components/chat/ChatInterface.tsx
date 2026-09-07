@@ -3,9 +3,10 @@ import { useChatStore } from '../../store/chatStore';
 import { useMemoryStore } from '../../store/memoryStore';
 import { useLanguageStore } from '../../i18n';
 import { generateSessionSummary } from '../../services/ai';
-import { Send, AlertCircle, Mic, MicOff, Save, Sparkles } from 'lucide-react';
+import { Send, AlertCircle, Mic, MicOff, Save, Sparkles, AudioWaveform } from 'lucide-react';
 import itouraMascot from '../../assets/ABLE/itoura-mascot.jpeg';
 import chatBg from '../../assets/ABLE/chat-bg.jpg';
+import VoiceNoteModal from './VoiceNoteModal';
 
 export default function ChatInterface() {
   const { messages, isLoading, error, sendMessage, clearMessages } = useChatStore();
@@ -15,6 +16,8 @@ export default function ChatInterface() {
   const [input, setInput] = useState('');
   const [isRecording, setIsRecording] = useState(false);
   const [isSummarizing, setIsSummarizing] = useState(false);
+  const [isVoiceNoteOpen, setIsVoiceNoteOpen] = useState(false);
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
   
@@ -81,6 +84,11 @@ export default function ChatInterface() {
     await sendMessage(userMsg, apiKey);
   };
 
+  const handleSendVoiceTranscript = async (transcriptText: string) => {
+    if (!transcriptText.trim() || isLoading || isSummarizing) return;
+    await sendMessage(transcriptText.trim(), apiKey);
+  };
+
   const handleSaveSession = async () => {
     if (messages.length < 3 || isSummarizing) return;
 
@@ -119,20 +127,32 @@ export default function ChatInterface() {
           />
           <div>
             <h2 className="font-serif font-black text-sm sm:text-base text-white tracking-wide leading-none">Itoura Companion</h2>
-            <p className="text-[10px] text-[#C4B4E2] font-bold mt-0.5">24/7 Emotional Wellbeing</p>
+            <p className="text-[10px] text-[#C4B4E2] font-bold mt-0.5">24/7 Empathetic Space</p>
           </div>
         </div>
 
-        {messages.length >= 3 && (
-          <button 
-            onClick={handleSaveSession}
-            disabled={isSummarizing || isLoading}
-            className="px-3.5 py-1.5 bg-[#C4B4E2] text-[#532E60] font-black text-xs rounded-full shadow-md hover:bg-white transition-all flex items-center gap-1.5 disabled:opacity-50 cursor-pointer border border-white"
+        <div className="flex items-center gap-2">
+          {/* Voice Note Modal trigger */}
+          <button
+            onClick={() => setIsVoiceNoteOpen(true)}
+            className="px-3 py-1.5 bg-[#613B6E] hover:bg-[#724582] text-white font-black text-xs rounded-full border border-white/30 shadow-sm transition-all flex items-center gap-1.5 cursor-pointer"
+            title="Voice Note Mode"
           >
-            <Save size={14} className="text-[#532E60]" />
-            <span>{isSummarizing ? t('chat.saving') : t('chat.save_session')}</span>
+            <AudioWaveform size={13} className="text-[#C4B4E2]" />
+            <span className="hidden sm:inline">Audio</span>
           </button>
-        )}
+
+          {messages.length >= 3 && (
+            <button 
+              onClick={handleSaveSession}
+              disabled={isSummarizing || isLoading}
+              className="px-3.5 py-1.5 bg-[#C4B4E2] text-[#532E60] font-black text-xs rounded-full shadow-md hover:bg-white transition-all flex items-center gap-1.5 disabled:opacity-50 cursor-pointer border border-white"
+            >
+              <Save size={14} className="text-[#532E60]" />
+              <span>{isSummarizing ? t('chat.saving') : t('chat.save_session')}</span>
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Chat Messages Log */}
@@ -159,23 +179,25 @@ export default function ChatInterface() {
             : msg.content;
 
           return (
-            <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+            <div key={idx} className={`flex group ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
               {msg.role === 'assistant' && (
                 <img 
                   src={itouraMascot} 
-                  alt="Itoura"
+                  alt="Itoura" 
                   className="w-8 h-8 rounded-full object-cover mr-2.5 shrink-0 border border-white/40 shadow-md mt-1"
                 />
               )}
               
-              <div className={`max-w-[85%] sm:max-w-[78%] rounded-2xl sm:rounded-3xl p-4 shadow-md ${
-                msg.role === 'user' 
-                  ? 'bg-[#C4B4E2] text-[#532E60] font-black border border-white rounded-br-none' 
-                  : 'bg-[#613B6E] text-white font-bold border border-white/30 rounded-bl-none'
-              }`}>
-                <p className="text-sm sm:text-base leading-relaxed whitespace-pre-wrap font-bold">
-                  {displayContent}
-                </p>
+              <div className="relative max-w-[85%] sm:max-w-[78%]">
+                <div className={`rounded-2xl sm:rounded-3xl p-4 shadow-md ${
+                  msg.role === 'user' 
+                    ? 'bg-[#C4B4E2] text-[#532E60] font-black border border-white rounded-br-none' 
+                    : 'bg-[#613B6E] text-white font-bold border border-white/30 rounded-bl-none'
+                }`}>
+                  <p className="text-sm sm:text-base leading-relaxed whitespace-pre-wrap font-bold">
+                    {displayContent}
+                  </p>
+                </div>
               </div>
             </div>
           );
@@ -278,6 +300,14 @@ export default function ChatInterface() {
           </p>
         )}
       </div>
+
+      {/* Voice Note Venting Modal */}
+      {isVoiceNoteOpen && (
+        <VoiceNoteModal
+          onClose={() => setIsVoiceNoteOpen(false)}
+          onSendTranscript={handleSendVoiceTranscript}
+        />
+      )}
     </div>
   );
 }
