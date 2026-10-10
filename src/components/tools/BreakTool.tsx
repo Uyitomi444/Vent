@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Sparkles, Coffee } from 'lucide-react';
+import { X, RotateCcw, Coffee } from 'lucide-react';
 
 const BREAK_ACRONYM = [
   { letter: 'B', title: 'reathe', desc: 'Take 5 deep, slow breaths.' },
@@ -99,7 +99,7 @@ export default function BreakTool({ onClose }: { onClose: () => void }) {
             onClick={suggestActivity}
             className="flex items-center gap-2 px-6 py-2.5 bg-itoura-primary text-white rounded-full font-medium hover:bg-itoura-dark transition-colors shadow-sm w-full justify-center"
           >
-            <Sparkles className="w-4 h-4" />
+            <RotateCcw className="w-4 h-4" />
             {activity ? 'Give me another idea' : 'Suggest an Activity'}
           </button>
         </div>

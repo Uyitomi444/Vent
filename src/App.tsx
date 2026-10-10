@@ -10,17 +10,31 @@ import OnboardingPage from './pages/OnboardingPage';
 import FAQPage from './pages/FAQPage';
 import GroupSessionPage from './pages/GroupSessionPage';
 import OceanPage from './pages/OceanPage';
+import AuthPage from './pages/AuthPage';
+import AuthGuard from './components/auth/AuthGuard';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Welcome Page is ALWAYS shown when opening the site root (/) */}
+        {/* Welcome Page */}
         <Route path="/" element={<OnboardingPage />} />
         <Route path="/welcome" element={<OnboardingPage />} />
         
-        {/* App Main Layout Routes */}
-        <Route element={<MainLayout />}>
+        {/* Authentication Routes (Register / Sign In) */}
+        <Route path="/auth" element={<AuthPage />} />
+        <Route path="/register" element={<Navigate to="/auth?mode=register" replace />} />
+        <Route path="/login" element={<Navigate to="/auth?mode=signin" replace />} />
+        <Route path="/signin" element={<Navigate to="/auth?mode=signin" replace />} />
+
+        {/* App Protected Routes - Requires user to be registered / authenticated */}
+        <Route
+          element={
+            <AuthGuard>
+              <MainLayout />
+            </AuthGuard>
+          }
+        >
           <Route path="/chat" element={<HomePage />} />
           <Route path="/group" element={<GroupSessionPage />} />
           <Route path="/ocean" element={<OceanPage />} />

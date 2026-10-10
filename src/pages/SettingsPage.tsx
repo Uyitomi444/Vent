@@ -6,17 +6,26 @@ import { useChatStore } from '../store/chatStore';
 import { useSettingsStore } from '../store/settingsStore';
 import { useMemoryStore } from '../store/memoryStore';
 import { useProfileStore } from '../store/profileStore';
+import { useAuthStore } from '../store/authStore';
 import { useLanguageStore } from '../i18n';
-import { Camera, Edit3 } from 'lucide-react';
+import { Camera, Edit3, LogOut, UserPlus } from 'lucide-react';
 import ProfileEditorModal from '../components/profile/ProfileEditorModal';
 
 export default function SettingsPage() {
   const navigate = useNavigate();
   const { notifications, setNotifications } = useSettingsStore();
   const { profile } = useProfileStore();
+  const { currentUser, logout } = useAuthStore();
   const { t } = useLanguageStore();
 
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+
+  const handleLogout = async () => {
+    if (window.confirm('Are you sure you want to sign out?')) {
+      await logout();
+      navigate('/');
+    }
+  };
 
   const clearJournal = useJournalStore(state => state.clearEntries);
   const clearMoods = useMoodStore(state => state.clearEntries);
@@ -102,16 +111,16 @@ export default function SettingsPage() {
 
           <div className="flex-1 text-center sm:text-left space-y-3">
             <div>
-              <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-1">
+              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mb-1">
                 <h2 className="text-2xl font-serif font-black text-white">{profile.name}</h2>
-                {profile.nickname && profile.nickname !== profile.name && (
-                  <span className="text-xs font-black bg-[#C4B4E2] text-[#532E60] px-2.5 py-0.5 rounded-full self-center sm:self-auto border border-white">
-                    Called "{profile.nickname}"
+                {currentUser?.username && (
+                  <span className="text-xs font-mono font-black bg-[#3D2048] text-[#C4B4E2] px-2.5 py-0.5 rounded-full border border-white/30">
+                    @{currentUser.username}
                   </span>
                 )}
-                {profile.pronouns && (
-                  <span className="text-xs font-bold text-[#E8DCF8] bg-white/10 px-2 py-0.5 rounded-full border border-white/20 self-center sm:self-auto">
-                    {profile.pronouns}
+                {profile.nickname && profile.nickname !== profile.name && profile.nickname !== currentUser?.username && (
+                  <span className="text-xs font-black bg-[#C4B4E2] text-[#532E60] px-2.5 py-0.5 rounded-full border border-white">
+                    Called "{profile.nickname}"
                   </span>
                 )}
               </div>
@@ -136,13 +145,29 @@ export default function SettingsPage() {
               </div>
             )}
 
-            <div className="pt-1">
+            <div className="pt-2 flex flex-wrap gap-2.5 justify-center sm:justify-start">
               <button
                 onClick={() => setIsProfileModalOpen(true)}
                 className="w-full sm:w-auto px-6 py-2.5 bg-[#C4B4E2] text-[#532E60] rounded-full font-black text-xs sm:text-sm hover:bg-white transition-all shadow-md cursor-pointer border border-white flex items-center justify-center gap-2"
               >
                 <Edit3 size={15} />
                 <span>Edit Profile Details</span>
+              </button>
+
+              <button
+                onClick={() => navigate('/auth?mode=register&force=true')}
+                className="w-full sm:w-auto px-5 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-full font-bold text-xs sm:text-sm transition-all border border-white/20 flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <UserPlus size={15} />
+                <span>Switch / Register New</span>
+              </button>
+
+              <button
+                onClick={handleLogout}
+                className="w-full sm:w-auto px-5 py-2.5 bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 rounded-full font-bold text-xs sm:text-sm transition-all border border-rose-400/30 flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <LogOut size={15} />
+                <span>Sign Out</span>
               </button>
             </div>
           </div>

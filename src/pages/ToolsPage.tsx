@@ -10,7 +10,7 @@ import SpriteIcon from '../components/SpriteIcon';
 import FourIcons from '../assets/Four_icons.jpeg';
 import { useLanguageStore } from '../i18n';
 import { useSoundStore } from '../store/soundStore';
-import { Flame, Sparkles, Music } from 'lucide-react';
+import { Flame, CircleDot, Music } from 'lucide-react';
 
 export default function ToolsPage() {
   const [activeTool, setActiveTool] = useState<string | null>(null);
@@ -65,7 +65,7 @@ export default function ToolsPage() {
       id: 'bubble',
       title: '🫧 Tactile Bubble Wrap',
       description: 'Squishy sensory popping board with realistic ASMR audio feedback and haptic tension release.',
-      icon: <Sparkles size={32} className="text-[#C4B4E2]" />,
+      icon: <CircleDot size={32} className="text-[#C4B4E2]" />,
       duration: 'Instant',
       badge: 'De-Stress'
     },

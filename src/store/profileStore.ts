@@ -5,7 +5,6 @@ export interface UserProfile {
   name: string;
   nickname: string;
   avatarUrl: string; // preset path or base64 data URL
-  pronouns: string;
   bio: string;
   goals: string[];
   companionTone: 'gentle' | 'grounding' | 'uplifting' | 'direct';
@@ -61,7 +60,6 @@ const DEFAULT_PROFILE: UserProfile = {
   name: 'Kind Wanderer',
   nickname: 'Friend',
   avatarUrl: PRESET_AVATARS[0].url,
-  pronouns: 'they/them',
   bio: 'Taking it one breath at a time.',
   goals: ['Relieve Daily Stress', 'Safe Space to Vent', 'Emotional Clarity'],
   companionTone: 'gentle',

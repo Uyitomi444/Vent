@@ -3,7 +3,7 @@ import { useChatStore } from '../../store/chatStore';
 import { useMemoryStore } from '../../store/memoryStore';
 import { useLanguageStore } from '../../i18n';
 import { generateSessionSummary } from '../../services/ai';
-import { Send, AlertCircle, Mic, MicOff, Save, Sparkles, AudioWaveform } from 'lucide-react';
+import { Send, AlertCircle, Mic, MicOff, Save, Shield, AudioWaveform } from 'lucide-react';
 import itouraMascot from '../../assets/ABLE/itoura-mascot.jpeg';
 import chatBg from '../../assets/ABLE/chat-bg.jpg';
 import VoiceNoteModal from './VoiceNoteModal';
@@ -167,7 +167,7 @@ export default function ChatInterface() {
               />
             </div>
             <p className="text-[#E8DCF8] font-black text-xs tracking-widest uppercase flex items-center gap-1.5">
-              <Sparkles size={14} className="text-[#C4B4E2]" />
+              <Shield size={14} className="text-[#C4B4E2]" />
               SAFE SPACE TO VENT & REFLECT
             </p>
           </div>

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useGroupSessionStore } from '../store/groupSessionStore';
 import { useLanguageStore } from '../i18n';
+import { useAuthStore } from '../store/authStore';
 import { Users, Shield, Send, LogOut, Download, Plus, ArrowRight, Copy, Check, Mic, MicOff } from 'lucide-react';
 import itouraMascot from '../assets/ABLE/itoura-mascot.jpeg';
 
@@ -22,9 +23,12 @@ export default function GroupSessionPage() {
   } = useGroupSessionStore();
 
   const { t, currentLanguage } = useLanguageStore();
+  const { currentUser } = useAuthStore();
 
   const [createTitle, setCreateTitle] = useState('');
-  const [displayName, setDisplayName] = useState('');
+  const [displayName, setDisplayName] = useState(
+    currentUser?.displayName || (currentUser?.username ? `@${currentUser.username}` : '')
+  );
   const [joinCode, setJoinCode] = useState('');
   const [inputMsg, setInputMsg] = useState('');
   const [copiedCode, setCopiedCode] = useState(false);

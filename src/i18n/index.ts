@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
 
 export type LanguageCode = 'en' | 'pcm' | 'yo' | 'ha' | 'ig';
 
@@ -187,7 +186,49 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
     'onboarding.p3_title': 'Never Sold or Shared',
     'onboarding.p3_desc': 'Your personal reflections are yours alone. We strictly guarantee your private information will never be shared.',
     'onboarding.ready_title': 'Ready to untangle the day?',
-    'onboarding.ready_desc': 'Take a breath, open up, and start building a healthier relationship with your emotions today.'
+    'onboarding.ready_desc': 'Take a breath, open up, and start building a healthier relationship with your emotions today.',
+
+    // Auth
+    'auth.back_welcome': 'Back to Welcome',
+    'auth.badge_register': 'Get Started • Create Account',
+    'auth.badge_signin': 'Welcome Back • Sign In',
+    'auth.title_register': 'Register first to continue',
+    'auth.title_signin': 'Sign in to your space',
+    'auth.desc_register': 'Create your account with your username, email, and password to begin.',
+    'auth.desc_signin': 'Enter your email or username and password to access your space.',
+    'auth.tab_register': 'Create Account',
+    'auth.tab_signin': 'Sign In',
+    'auth.username': 'Username',
+    'auth.username_placeholder': 'e.g. adanna_vibes',
+    'auth.username_hint': 'Your unique username across your private chats and group sessions.',
+    'auth.fullname': 'Full Name / Display Name',
+    'auth.fullname_placeholder': 'e.g. Adanna Okoro',
+    'auth.email': 'Email Address',
+    'auth.email_placeholder': 'you@example.com',
+    'auth.password': 'Password',
+    'auth.password_placeholder': 'Min 6 characters',
+    'auth.avatar_label': 'Choose Your Avatar',
+    'auth.avatar_upload': 'Upload Custom',
+    'auth.tone_label': 'Companion Tone',
+    'auth.tone_gentle': 'Gentle',
+    'auth.tone_gentle_desc': 'Warm, soft-spoken, and empathetic',
+    'auth.tone_grounding': 'Grounding',
+    'auth.tone_grounding_desc': 'Calm, steady, and breath-focused',
+    'auth.tone_uplifting': 'Uplifting',
+    'auth.tone_uplifting_desc': 'Encouraging, hopeful, celebrating small wins',
+    'auth.tone_direct': 'Direct',
+    'auth.tone_direct_desc': 'Clear, concise, and structured',
+    'auth.register_btn': 'Complete Registration & Begin',
+    'auth.privacy_note': 'Your identity and journal stay 100% private to you on this device.',
+    'auth.accounts_on_device': 'Accounts registered on this device',
+    'auth.signin_id': 'Email or Username',
+    'auth.signin_id_placeholder': 'Enter your email or username',
+    'auth.signin_password': 'Password',
+    'auth.signin_password_placeholder': 'Enter your password',
+    'auth.signin_btn': 'Sign In',
+    'auth.switch_register': "Don't have an account yet? Register here first",
+    'auth.success_register': 'Welcome to Itoura!',
+    'auth.success_signin': 'Welcome Back!'
   },
   pcm: {
     // Nav
@@ -357,7 +398,49 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
     'onboarding.p3_title': 'No Selling Data',
     'onboarding.p3_desc': 'Nobody go ever sell or share your private data.',
     'onboarding.ready_title': 'You ready to rest your mind?',
-    'onboarding.ready_desc': 'Take deep breath, start today.'
+    'onboarding.ready_desc': 'Take deep breath, start today.',
+
+    // Auth
+    'auth.back_welcome': 'Go Back to Welcome',
+    'auth.badge_register': 'Fara Yanzu • Create Account',
+    'auth.badge_signin': 'Welcome Back • Log In',
+    'auth.title_register': 'Register first before you continue',
+    'auth.title_signin': 'Log in to your private room',
+    'auth.desc_register': 'Create your account with your username, email, and password make you fit start.',
+    'auth.desc_signin': 'Put your email or username and password to enter your safe space.',
+    'auth.tab_register': 'Create Account',
+    'auth.tab_signin': 'Sign In',
+    'auth.username': 'Username',
+    'auth.username_placeholder': 'e.g. chidi_vibes',
+    'auth.username_hint': 'Your unique username wey people and Itoura go use know you.',
+    'auth.fullname': 'Your Full Name / Display Name',
+    'auth.fullname_placeholder': 'e.g. Chidi Okonkwo',
+    'auth.email': 'Email Address',
+    'auth.email_placeholder': 'you@example.com',
+    'auth.password': 'Password',
+    'auth.password_placeholder': 'Minimum 6 letters',
+    'auth.avatar_label': 'Pick Your Avatar',
+    'auth.avatar_upload': 'Upload Custom Photo',
+    'auth.tone_label': 'How Itoura go dey follow you talk',
+    'auth.tone_gentle': 'Gentle',
+    'auth.tone_gentle_desc': 'Warm, soft, with plenty care',
+    'auth.tone_grounding': 'Grounding',
+    'auth.tone_grounding_desc': 'Calm, steady, breath focus',
+    'auth.tone_uplifting': 'Uplifting',
+    'auth.tone_uplifting_desc': 'Dey push you up, celebrate wins',
+    'auth.tone_direct': 'Direct',
+    'auth.tone_direct_desc': 'Straightforward, clear and sharp',
+    'auth.register_btn': 'Finish Registration & Start',
+    'auth.privacy_note': 'Your secret and journal dey 100% safe on your phone/laptop.',
+    'auth.accounts_on_device': 'Accounts wey dey this device already',
+    'auth.signin_id': 'Email or Username',
+    'auth.signin_id_placeholder': 'Enter your email or username',
+    'auth.signin_password': 'Password',
+    'auth.signin_password_placeholder': 'Enter your password',
+    'auth.signin_btn': 'Sign In',
+    'auth.switch_register': 'You never get account? Register here first',
+    'auth.success_register': 'Welcome to Itoura!',
+    'auth.success_signin': 'Welcome Back!'
   },
   yo: {
     // Nav
@@ -527,7 +610,49 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
     'onboarding.p3_title': 'Kò Sí Tità Àṣírí',
     'onboarding.p3_desc': 'Kò sí eniyan kankan ti a le ta àṣírí rẹ fún.',
     'onboarding.ready_title': 'Ṣé o ṣe tán lati pèsè àlàáfíà?',
-    'onboarding.ready_desc': 'Gba èémí nla, bẹ̀rẹ̀ lónìí.'
+    'onboarding.ready_desc': 'Gba èémí nla, bẹ̀rẹ̀ lónìí.',
+
+    // Auth
+    'auth.back_welcome': 'Pada si Oju-iwe Akọkọ',
+    'auth.badge_register': 'Bẹrẹ • Ṣẹda Akọọlẹ',
+    'auth.badge_signin': 'Kaabọ Pada • Wọle',
+    'auth.title_register': 'Forukọsilẹ lakọkọ lati tẹsiwaju',
+    'auth.title_signin': 'Wọle si aye alaafia rẹ',
+    'auth.desc_register': 'Ṣẹda akọọlẹ rẹ pẹlu orukọ olumulo, imeeli, ati ọrọ igbaniwọle rẹ lati bẹrẹ.',
+    'auth.desc_signin': 'Tẹ imeeli tabi orukọ olumulo ati ọrọ igbaniwọle rẹ lati wọle.',
+    'auth.tab_register': 'Ṣẹda Akọọlẹ',
+    'auth.tab_signin': 'Wọle (Sign In)',
+    'auth.username': 'Orukọ Olumulo (Username)',
+    'auth.username_placeholder': 'apẹẹrẹ: adanna_vibes',
+    'auth.username_hint': 'Orukọ olumulo alailẹgbẹ rẹ fun awọn ifọrọwanilẹnuwo ati apejọpọ.',
+    'auth.fullname': 'Orukọ Kikun / Orukọ Ifihan',
+    'auth.fullname_placeholder': 'apẹẹrẹ: Adanna Okoro',
+    'auth.email': 'Adirẹsi Imeeli',
+    'auth.email_placeholder': 'you@example.com',
+    'auth.password': 'Ọrọ Igbaniwọle (Password)',
+    'auth.password_placeholder': 'O kere ju lẹta 6',
+    'auth.avatar_label': 'Yan Aworan Rẹ (Avatar)',
+    'auth.avatar_upload': 'Gbe Fọto Wọle',
+    'auth.tone_label': 'Ohun ati Iwa Itoura',
+    'auth.tone_gentle': 'Pẹlẹbẹ (Gentle)',
+    'auth.tone_gentle_desc': 'Oninuure, ifẹ, ati ọrọ ifọkanbalẹ',
+    'auth.tone_grounding': 'Ifọkanbalẹ (Grounding)',
+    'auth.tone_grounding_desc': 'Idakẹjẹ, ifarada, ati èémí idakẹrọrọ',
+    'auth.tone_uplifting': 'Igbega Ọkan (Uplifting)',
+    'auth.tone_uplifting_desc': 'Iretí, iwuri, ati ayọ fun iṣẹgun kọọkan',
+    'auth.tone_direct': 'Kedere (Direct)',
+    'auth.tone_direct_desc': 'Ọrọ to mọ, to taara, to wulo',
+    'auth.register_btn': 'Pari Iforukọsilẹ & Bẹrẹ',
+    'auth.privacy_note': 'Idanimọ ati iwe-akọọlẹ rẹ jẹ 100% aṣiri lori ẹrọ yii nikan.',
+    'auth.accounts_on_device': 'Awọn akọọlẹ ti o forukọsilẹ lori ẹrọ yii',
+    'auth.signin_id': 'Imeeli tabi Orukọ Olumulo',
+    'auth.signin_id_placeholder': 'Tẹ imeeli tabi orukọ olumulo rẹ',
+    'auth.signin_password': 'Ọrọ Igbaniwọle',
+    'auth.signin_password_placeholder': 'Tẹ ọrọ igbaniwọle rẹ',
+    'auth.signin_btn': 'Wọle',
+    'auth.switch_register': 'Ṣe o ko tii ni akọọlẹ? Forukọsilẹ nihin lakọkọ',
+    'auth.success_register': 'Ẹ ku abọ si Itoura!',
+    'auth.success_signin': 'Ẹ ku abọ pada!'
   },
   ha: {
     // Nav
@@ -697,7 +822,49 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
     'onboarding.p3_title': 'Ba A Sayar Da Bayanai',
     'onboarding.p3_desc': 'Ba za a taba sayar da sirrinka ba.',
     'onboarding.ready_title': 'Shirya don samun natsuwa?',
-    'onboarding.ready_desc': 'Yi dogon numfashi, fara a yau.'
+    'onboarding.ready_desc': 'Yi dogon numfashi, fara a yau.',
+
+    // Auth
+    'auth.back_welcome': 'Koma Zuwa Shafin Farko',
+    'auth.badge_register': 'Fara Yanzu • Buɗe Asusun',
+    'auth.badge_signin': 'Barka Da Dawowa • Shiga Ciki',
+    'auth.title_register': 'Yi rajista da farko kafin ka ci gaba',
+    'auth.title_signin': 'Shiga cikin dakin sirrinka',
+    'auth.desc_register': 'Ƙirƙiri asusunka tare da sunan mai amfani, imel, da kalmar sirri don farawa.',
+    'auth.desc_signin': 'Shigar da imel ko sunan mai amfani da kalmar sirri don samun dama.',
+    'auth.tab_register': 'Buɗe Asusun',
+    'auth.tab_signin': 'Shiga Ciki (Sign In)',
+    'auth.username': 'Sunan Mai Amfani (Username)',
+    'auth.username_placeholder': 'misali: zainab_natsuwa',
+    'auth.username_hint': 'Sunan mai amfani na musamman don hira da taro.',
+    'auth.fullname': 'Cikakken Suna',
+    'auth.fullname_placeholder': 'misali: Zainab Bello',
+    'auth.email': 'Adireshin Imel',
+    'auth.email_placeholder': 'you@example.com',
+    'auth.password': 'Kalmar Sirri (Password)',
+    'auth.password_placeholder': 'Aƙalla haruffa 6',
+    'auth.avatar_label': 'Zaɓi Hotonka (Avatar)',
+    'auth.avatar_upload': 'Sanya Sabon Hoto',
+    'auth.tone_label': 'Muryar Abokin Hira',
+    'auth.tone_gentle': 'Mai Tausayi (Gentle)',
+    'auth.tone_gentle_desc': 'Dumi, taushi, da cikakkiyar kulawa',
+    'auth.tone_grounding': 'Mai Natsuwa (Grounding)',
+    'auth.tone_grounding_desc': 'Kwanciyar hankali da numfashi',
+    'auth.tone_uplifting': 'Mai Ƙarfafawa (Uplifting)',
+    'auth.tone_uplifting_desc': 'Fata, kwarin gwiwa, murna ga nasarori',
+    'auth.tone_direct': 'Madaidaici (Direct)',
+    'auth.tone_direct_desc': 'Bayyananne, a takaice kuma a bayyane',
+    'auth.register_btn': 'Kammala Rajista & Fara',
+    'auth.privacy_note': 'Bayananka da mujallarka suna nan 100% a sirrinka kan wannan na\'urar.',
+    'auth.accounts_on_device': 'Asusun da aka riga aka buɗe a wannan na\'ura',
+    'auth.signin_id': 'Imel ko Sunan Mai Amfani',
+    'auth.signin_id_placeholder': 'Shigar da imel ko sunan mai amfani',
+    'auth.signin_password': 'Kalmar Sirri',
+    'auth.signin_password_placeholder': 'Shigar da kalmar sirri',
+    'auth.signin_btn': 'Shiga Ciki',
+    'auth.switch_register': 'Ba ka da asusu tukuna? Yi rajista anan da farko',
+    'auth.success_register': 'Barka da zuwa Itoura!',
+    'auth.success_signin': 'Barka da dawowa!'
   },
   ig: {
     // Nav
@@ -867,7 +1034,49 @@ export const TRANSLATIONS: Record<LanguageCode, Record<string, string>> = {
     'onboarding.p3_title': 'A Gaghị Ere Nzuzo Gị',
     'onboarding.p3_desc': 'A gaghị ere ma ọ bụ zipu nzuzo gị gaa ebe ọzọ.',
     'onboarding.ready_title': 'Ị mechaala njikere iji nweta udo?',
-    'onboarding.ready_desc': 'Nara ume nla, fọrọ taa.'
+    'onboarding.ready_desc': 'Nara ume nla, fọrọ taa.',
+
+    // Auth
+    'auth.back_welcome': 'Laghachi na Mbido',
+    'auth.badge_register': 'Bido Ugbu a • Mepee Akaụntụ',
+    'auth.badge_signin': 'Nnọọ Nlaghachi • Banye',
+    'auth.title_register': 'Debanye aha mbụ tupu ị gaa n\'ihu',
+    'auth.title_signin': 'Banye n\'ebe udo gị',
+    'auth.desc_register': 'Mepụta akaụntụ gị jiri aha njirimara, ozi-e, na okwuntughe gị bido.',
+    'auth.desc_signin': 'Tinye ozi-e ma ọ bụ aha njirimara na okwuntughe gị iji banye.',
+    'auth.tab_register': 'Mepụta Akaụntụ',
+    'auth.tab_signin': 'Banye (Sign In)',
+    'auth.username': 'Aha Njirimara (Username)',
+    'auth.username_placeholder': 'ọmụmaatụ: chidi_udo',
+    'auth.username_hint': 'Aha njirimara pụrụ iche maka mkparịta ụka nzuzo gị na nnọkọ.',
+    'auth.fullname': 'Aha Gị zuru oke',
+    'auth.fullname_placeholder': 'ọmụmaatụ: Chidi Okonkwo',
+    'auth.email': 'Adreesị Ozi-e (Email)',
+    'auth.email_placeholder': 'you@example.com',
+    'auth.password': 'Okwuntughe (Password)',
+    'auth.password_placeholder': 'Ọ dịkarịa ala mkpụrụedemede 6',
+    'auth.avatar_label': 'Họrọ Foto Gị (Avatar)',
+    'auth.avatar_upload': 'Bulite Foto nke Gị',
+    'auth.tone_label': 'Ụda Olu Onye Enyemaka',
+    'auth.tone_gentle': 'Nwayọọ (Gentle)',
+    'auth.tone_gentle_desc': 'Ịhụnanya, nwayọọ, na nlekọta miri emi',
+    'auth.tone_grounding': 'Ndakpọ Udo (Grounding)',
+    'auth.tone_grounding_desc': 'Udo, nkwụsi ike, na itinye uche na ume',
+    'auth.tone_uplifting': 'Nkwalite Mkpụrụ Obi (Uplifting)',
+    'auth.tone_uplifting_desc': 'Olileanya, agbamume, na ịṅụrị ọṅụ',
+    'auth.tone_direct': 'Kpọmkwem (Direct)',
+    'auth.tone_direct_desc': 'Kedo anya, dị mkpirikpi, ma baa uru',
+    'auth.register_btn': 'Mechaa Ndebanye Aha & Bido',
+    'auth.privacy_note': 'Njirimara gị na akwụkwọ ndekọ gị nọ 100% na nzuzo na ngwaọrụ a naanị.',
+    'auth.accounts_on_device': 'Akaụntụ ndị debanyere aha na ngwaọrụ a',
+    'auth.signin_id': 'Ozi-e ma ọ bụ Aha Njirimara',
+    'auth.signin_id_placeholder': 'Tinye ozi-e ma ọ bụ aha njirimara gị',
+    'auth.signin_password': 'Okwuntughe',
+    'auth.signin_password_placeholder': 'Tinye okwuntughe gị',
+    'auth.signin_btn': 'Banye',
+    'auth.switch_register': 'Ị nwebeghị akaụntụ? Debanye aha ebe a mbụ',
+    'auth.success_register': 'Nnọọ na Itoura!',
+    'auth.success_signin': 'Nnọọ nlaghachi!'
   }
 };
 
@@ -878,25 +1087,19 @@ interface LanguageState {
 }
 
 export const useLanguageStore = create<LanguageState>()(
-  persist(
-    (set, get) => ({
-      currentLanguage: 'en',
-      setLanguage: (lang) => {
-        set({ currentLanguage: lang });
-      },
-      t: (key, params) => {
-        const lang = get().currentLanguage;
-        let text = TRANSLATIONS[lang]?.[key] || TRANSLATIONS['en']?.[key] || key;
-        if (params) {
-          Object.entries(params).forEach(([k, v]) => {
-            text = text.replace(`{${k}}`, String(v));
-          });
-        }
-        return text;
+  (set) => ({
+    currentLanguage: 'en',
+    setLanguage: () => {
+      set({ currentLanguage: 'en' });
+    },
+    t: (key, params) => {
+      let text = TRANSLATIONS['en']?.[key] || key;
+      if (params) {
+        Object.entries(params).forEach(([k, v]) => {
+          text = text.replace(`{${k}}`, String(v));
+        });
       }
-    }),
-    {
-      name: 'itoura-language-settings'
+      return text;
     }
-  )
+  })
 );

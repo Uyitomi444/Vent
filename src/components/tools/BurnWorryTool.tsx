@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Flame, RotateCcw, ArrowLeft, CheckCircle2, Sparkles } from 'lucide-react';
+import { Flame, RotateCcw, ArrowLeft, CheckCircle2 } from 'lucide-react';
 import { soundEngine } from '../../services/soundEngine';
 
 interface BurnWorryToolProps {
@@ -195,7 +195,7 @@ export default function BurnWorryTool({ onClose }: BurnWorryToolProps) {
               </motion.div>
 
               <p className="text-base font-black text-[#E8DCF8] animate-pulse flex items-center gap-2">
-                <Sparkles size={18} className="text-[#C4B4E2]" />
+                <Flame size={18} className="text-amber-400" />
                 <span>Releasing and letting go...</span>
               </p>
             </motion.div>

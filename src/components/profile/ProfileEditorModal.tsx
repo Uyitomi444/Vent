@@ -1,7 +1,8 @@
 import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { X, Camera, Upload, Check, Sparkles, User, Heart, MessageSquareQuote } from 'lucide-react';
+import { X, Camera, Upload, Check, User, Heart, MessageSquareQuote } from 'lucide-react';
 import { useProfileStore, PRESET_AVATARS, AVAILABLE_GOALS } from '../../store/profileStore';
+import { useAuthStore } from '../../store/authStore';
 
 interface ProfileEditorModalProps {
   onClose: () => void;
@@ -9,11 +10,11 @@ interface ProfileEditorModalProps {
 
 export default function ProfileEditorModal({ onClose }: ProfileEditorModalProps) {
   const { profile, updateProfile } = useProfileStore();
+  const { updateCurrentUser } = useAuthStore();
 
   const [name, setName] = useState(profile.name);
   const [nickname, setNickname] = useState(profile.nickname);
   const [avatarUrl, setAvatarUrl] = useState(profile.avatarUrl);
-  const [pronouns, setPronouns] = useState(profile.pronouns);
   const [bio, setBio] = useState(profile.bio);
   const [goals, setGoals] = useState<string[]>(profile.goals || []);
   const [companionTone, setCompanionTone] = useState(profile.companionTone);
@@ -74,9 +75,14 @@ export default function ProfileEditorModal({ onClose }: ProfileEditorModalProps)
       name: name.trim() || 'Kind Wanderer',
       nickname: nickname.trim() || name.trim() || 'Friend',
       avatarUrl,
-      pronouns: pronouns.trim() || 'they/them',
       bio: bio.trim(),
       goals,
+      companionTone,
+    });
+
+    updateCurrentUser({
+      displayName: name.trim() || 'Kind Wanderer',
+      avatarUrl,
       companionTone,
     });
 
@@ -86,8 +92,6 @@ export default function ProfileEditorModal({ onClose }: ProfileEditorModalProps)
       onClose();
     }, 700);
   };
-
-  const PRONOUN_PRESETS = ['they/them', 'she/her', 'he/him', 'prefer not to say'];
 
   return (
     <div
@@ -240,40 +244,7 @@ export default function ProfileEditorModal({ onClose }: ProfileEditorModalProps)
             </div>
           </div>
 
-          {/* 3. Pronouns */}
-          <div className="space-y-2">
-            <label className="text-xs font-black uppercase tracking-wider text-[#E8DCF8]">
-              Pronouns
-            </label>
-            <div className="flex flex-wrap gap-2 mb-2">
-              {PRONOUN_PRESETS.map((p) => {
-                const active = pronouns === p;
-                return (
-                  <button
-                    key={p}
-                    type="button"
-                    onClick={() => setPronouns(p)}
-                    className={`px-3.5 py-1.5 rounded-full text-xs font-black transition-all cursor-pointer border ${
-                      active
-                        ? 'bg-[#C4B4E2] text-[#532E60] border-white shadow-md'
-                        : 'bg-white/10 text-white border-white/20 hover:bg-white/20'
-                    }`}
-                  >
-                    {p}
-                  </button>
-                );
-              })}
-            </div>
-            <input
-              type="text"
-              value={pronouns}
-              onChange={(e) => setPronouns(e.target.value)}
-              placeholder="Or enter custom pronouns..."
-              className="w-full px-4 py-2.5 bg-[#613B6E] text-white rounded-2xl border border-white/30 font-bold placeholder:text-white/40 focus:outline-none focus:border-white transition-all text-xs"
-            />
-          </div>
-
-          {/* 4. Personal Mantra / Bio */}
+          {/* 3. Personal Mantra / Bio */}
           <div className="space-y-2">
             <label className="text-xs font-black uppercase tracking-wider text-[#E8DCF8] flex items-center gap-1.5">
               <MessageSquareQuote size={15} />
@@ -319,7 +290,7 @@ export default function ProfileEditorModal({ onClose }: ProfileEditorModalProps)
           {/* 6. Companion Tone */}
           <div className="space-y-2.5">
             <label className="text-xs font-black uppercase tracking-wider text-[#E8DCF8] flex items-center gap-1.5">
-              <Sparkles size={15} />
+              <Heart size={15} />
               <span>Preferred Itoura Voice & Tone</span>
             </label>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">

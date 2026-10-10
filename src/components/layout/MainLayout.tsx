@@ -1,26 +1,37 @@
 import { useState, useRef, useEffect } from 'react';
-import { Link, useLocation, Outlet } from 'react-router-dom';
+import { Link, useLocation, useNavigate, Outlet, Navigate } from 'react-router-dom';
 import { useLanguageStore } from '../../i18n';
 import { useSubscriptionStore } from '../../store/subscriptionStore';
-import LanguageSelector from '../LanguageSelector';
+import { useAuthStore } from '../../store/authStore';
 import PaywallModal from '../paywall/PaywallModal';
 import DailyMessagePopup from '../DailyMessagePopup';
 import AmbientSoundMixer from '../audio/AmbientSoundMixer';
 import itouraLogo from '../../assets/ABLE/logo.png';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, LogOut, Settings, User } from 'lucide-react';
 
 export default function MainLayout() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const userMenuRef = useRef<HTMLDivElement>(null);
   
   const { t } = useLanguageStore();
   const { status, responseCount, maxFreeResponses } = useSubscriptionStore();
+  const { currentUser, logout, isAuthenticated } = useAuthStore();
+
+  if (!isAuthenticated || !currentUser?.username || !currentUser?.email) {
+    return <Navigate to={`/auth?redirect=${encodeURIComponent(location.pathname)}`} replace />;
+  }
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsDropdownOpen(false);
+      }
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
+        setIsUserMenuOpen(false);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
@@ -28,6 +39,12 @@ export default function MainLayout() {
   }, []);
 
   const isActive = (path: string) => location.pathname === path;
+
+  const handleLogout = async () => {
+    setIsUserMenuOpen(false);
+    await logout();
+    navigate('/', { replace: true });
+  };
 
   const navCategories = [
     {
@@ -86,8 +103,8 @@ export default function MainLayout() {
       <PaywallModal />
       <AmbientSoundMixer />
 
-      {/* Top Header - Permanent Flex Child (Never moves, never overlaps, nothing can scroll above it) */}
-      <header className="w-full shrink-0 z-50 px-2.5 sm:px-6 md:px-12 py-2 sm:py-3.5 bg-[#532E60] border-b-2 border-white/20 shadow-xl">
+      {/* Top Header - Permanent Flex Child */}
+      <header className="w-full shrink-0 relative z-50 px-2.5 sm:px-6 md:px-12 py-2 sm:py-3.5 bg-[#532E60] border-b-2 border-white/20 shadow-xl">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-2">
           
           {/* Logo & Category Dropdown */}
@@ -164,7 +181,79 @@ export default function MainLayout() {
                 {t('paywall.replies_left', { count: remainingResponses })}
               </span>
             )}
-            <LanguageSelector />
+
+            {/* User Account Button & Dropdown */}
+            {currentUser && (
+              <div className="relative" ref={userMenuRef}>
+                <button
+                  type="button"
+                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                  className="flex items-center gap-1.5 sm:gap-2 p-1 sm:pr-3 bg-[#613B6E] hover:bg-[#6c427b] text-white rounded-full border border-white/30 transition-all cursor-pointer shadow-md"
+                  title={`Signed in as @${currentUser.username}`}
+                >
+                  <img
+                    src={currentUser.avatarUrl}
+                    alt={currentUser.displayName}
+                    className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover border border-white/50"
+                  />
+                  <span className="hidden md:inline font-black text-xs sm:text-sm max-w-[100px] truncate text-white">
+                    @{currentUser.username}
+                  </span>
+                  <ChevronDown size={14} className={`text-[#C4B4E2] transition-transform ${isUserMenuOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                {/* Account Menu Popover */}
+                {isUserMenuOpen && (
+                  <div className="absolute right-0 top-full mt-2 w-64 bg-[#532E60] border-2 border-white/60 rounded-3xl p-3 shadow-2xl z-50 animate-in fade-in zoom-in-95 duration-150 text-white">
+                    <div className="p-3 border-b border-white/20 mb-2 flex items-center gap-3">
+                      <img
+                        src={currentUser.avatarUrl}
+                        alt={currentUser.displayName}
+                        className="w-10 h-10 rounded-full object-cover border-2 border-white shadow"
+                      />
+                      <div className="min-w-0 flex-1">
+                        <div className="font-black text-sm text-white truncate">
+                          {currentUser.displayName}
+                        </div>
+                        <div className="font-mono text-xs text-[#E8DCF8] truncate">
+                          @{currentUser.username}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="space-y-1">
+                      <Link
+                        to="/settings"
+                        onClick={() => setIsUserMenuOpen(false)}
+                        className="flex items-center gap-2.5 p-2.5 rounded-xl hover:bg-[#613B6E] text-sm font-bold text-white transition-colors"
+                      >
+                        <Settings size={16} className="text-[#C4B4E2]" />
+                        <span>Profile & Settings</span>
+                      </Link>
+
+                      <Link
+                        to="/auth?mode=register&force=true"
+                        onClick={() => setIsUserMenuOpen(false)}
+                        className="flex items-center gap-2.5 p-2.5 rounded-xl hover:bg-[#613B6E] text-sm font-bold text-white transition-colors"
+                      >
+                        <User size={16} className="text-[#C4B4E2]" />
+                        <span>Switch / Register New</span>
+                      </Link>
+
+                      <button
+                        type="button"
+                        onClick={handleLogout}
+                        className="w-full flex items-center gap-2.5 p-2.5 rounded-xl hover:bg-rose-500/20 text-rose-300 hover:text-rose-200 text-sm font-bold transition-colors text-left cursor-pointer"
+                      >
+                        <LogOut size={16} />
+                        <span>Sign Out</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
           </div>
 
         </div>

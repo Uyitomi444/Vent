@@ -5,7 +5,7 @@ import { useJournalStore } from '../store/journalStore';
 import { useLanguageStore } from '../i18n';
 import MascotPose from '../components/MascotPose';
 import { generateWeeklyWellnessDigest, type WeeklyWellnessDigest } from '../services/ai';
-import { Sparkles, Brain, CheckCircle2, ShieldAlert, Award } from 'lucide-react';
+import { Brain, CheckCircle2, ShieldAlert, Award, Heart, FileText } from 'lucide-react';
 import { soundEngine } from '../services/soundEngine';
 
 const MOOD_SCORES = {
@@ -124,7 +124,7 @@ export default function ProgressPage() {
             disabled={isGeneratingDigest}
             className="px-5 py-2.5 bg-[#C4B4E2] hover:bg-white text-[#532E60] font-black text-xs sm:text-sm rounded-full shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer shrink-0"
           >
-            <Sparkles size={16} />
+            <FileText size={16} />
             <span>{isGeneratingDigest ? 'Synthesizing Patterns...' : (digest ? 'Regenerate Digest' : 'Generate AI Digest')}</span>
           </button>
         </div>
@@ -177,7 +177,7 @@ export default function ProgressPage() {
 
             {/* Mascot Advice */}
             <div className="p-4 bg-purple-950/40 border border-purple-300/30 rounded-2xl flex items-center gap-3 text-xs sm:text-sm font-bold text-white">
-              <Sparkles size={20} className="text-[#C4B4E2] shrink-0" />
+              <Heart size={20} className="text-[#C4B4E2] shrink-0" />
               <span>Itoura's Focus for Next Week: {digest.wellnessAdvice}</span>
             </div>
           </div>

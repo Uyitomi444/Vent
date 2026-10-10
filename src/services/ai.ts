@@ -107,7 +107,6 @@ export async function sendMessageToAI(
   if (profile) {
     finalSystemPrompt += `\n\nUser Profile Context:
 - User's name: ${profile.name}${profile.nickname ? ` (preferred nickname: "${profile.nickname}")` : ''}. Address them warmly and naturally.
-${profile.pronouns ? `- User pronouns: ${profile.pronouns}` : ''}
 ${profile.bio ? `- Personal mantra/note: "${profile.bio}"` : ''}
 ${profile.goals?.length ? `- Wellbeing focus areas: ${profile.goals.join(', ')}` : ''}
 - Desired Companion Tone: ${

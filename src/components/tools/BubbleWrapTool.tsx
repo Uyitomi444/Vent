@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles, RotateCcw, ArrowLeft, Zap } from 'lucide-react';
+import { CheckCircle2, RotateCcw, ArrowLeft, Zap } from 'lucide-react';
 import { soundEngine } from '../../services/soundEngine';
 
 interface BubbleWrapToolProps {
@@ -155,7 +155,7 @@ export default function BubbleWrapTool({ onClose }: BubbleWrapToolProps) {
           animate={{ opacity: 1, y: 0 }}
           className="mt-6 p-4 bg-emerald-500/20 border border-emerald-400/60 rounded-2xl text-center flex items-center justify-center gap-2 text-emerald-200 text-sm font-black"
         >
-          <Sparkles size={18} className="text-amber-300" />
+          <CheckCircle2 size={18} className="text-emerald-300" />
           <span>Sheet Cleared! Feeling more grounded? Refresh for another round.</span>
         </motion.div>
       )}
