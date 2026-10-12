@@ -246,7 +246,10 @@ export default function AuthPage() {
       <div className="absolute bottom-10 right-10 w-96 h-96 bg-[#532E60]/10 rounded-full blur-3xl pointer-events-none -z-0" />
 
       {/* Top Bar with Logo & Back Link */}
-      <header className="w-full px-6 py-4 flex items-center justify-between max-w-5xl mx-auto relative z-50">
+      <header 
+        style={{ paddingTop: 'calc(1rem + env(safe-area-inset-top, 0px))' }}
+        className="w-full px-6 pb-4 flex items-center justify-between max-w-5xl mx-auto relative z-50"
+      >
         <Link 
           to="/" 
           className="flex items-center gap-2 group text-[#532E60] hover:text-[#3D2048] font-black text-sm transition-transform"
@@ -717,7 +720,10 @@ export default function AuthPage() {
       </main>
 
       {/* Footer */}
-      <footer className="w-full py-4 text-center text-xs font-bold text-[#532E60]/80 z-10">
+      <footer 
+        style={{ paddingBottom: 'calc(1rem + env(safe-area-inset-bottom, 0px))' }}
+        className="w-full pt-4 text-center text-xs font-bold text-[#532E60]/80 z-10"
+      >
         © {new Date().getFullYear()} Itoura. All thoughts remain strictly confidential.
       </footer>
     </div>

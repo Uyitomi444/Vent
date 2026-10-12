@@ -11,6 +11,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@capacitor/cli": "^8.5.3",
+    "@capacitor/core": "^8.5.3",
+    "@capacitor/ios": "^8.5.3",
     "@mlc-ai/web-llm": "^0.2.84",
     "cors": "^2.8.5",
     "express": "^4.21.2",
@@ -18,6 +21,7 @@
     "framer-motion": "^12.42.2",
     "lucide-react": "^1.24.0",
     "mqtt": "^5.15.2",
+    "native-run": "^2.0.3",
     "peerjs": "^1.5.5",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",

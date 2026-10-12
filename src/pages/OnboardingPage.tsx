@@ -18,7 +18,10 @@ export default function OnboardingPage() {
     <div className="min-h-screen bg-[#C4B4E2] font-sans text-[#532E60] overflow-x-hidden selection:bg-[#532E60] selection:text-white">
       
       {/* TOP HEADER / BAR */}
-      <header className="w-full bg-[#532E60] border-b-2 border-white/20 px-4 sm:px-8 py-3.5 shadow-md relative z-50">
+      <header 
+        style={{ paddingTop: 'calc(0.875rem + env(safe-area-inset-top, 0px))' }}
+        className="w-full bg-[#532E60] border-b-2 border-white/20 px-4 sm:px-8 pb-3.5 shadow-md relative z-50"
+      >
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2 group">
             <img 
@@ -227,7 +230,10 @@ export default function OnboardingPage() {
       </section>
 
       {/* 5. FOOTER */}
-      <footer className="bg-[#3A1F45] text-[#E8DCF8] py-16 px-6 border-t border-[#532E60]">
+      <footer 
+        style={{ paddingBottom: 'calc(4rem + env(safe-area-inset-bottom, 0px))' }}
+        className="bg-[#3A1F45] text-[#E8DCF8] pt-16 px-6 border-t border-[#532E60]"
+      >
         <div className="max-w-6xl mx-auto grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
           <div className="col-span-2 md:col-span-2">
             <h3 className="font-serif text-3xl text-white font-black mb-4">Itoura</h3>

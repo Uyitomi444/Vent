@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useOceanStore, type BottledMessage } from '../../store/oceanStore';
 import { Send, Waves, Check, RefreshCw } from 'lucide-react';
 import { soundEngine } from '../../services/soundEngine';
+import purpleOceanBottle from '../../assets/ABLE/purple-ocean-bottle.jpg';
 
 export default function BottledMessagesView() {
   const { myCastBottles, communityBottles, castBottle, reactToBottle, fishBottle } = useOceanStore();
@@ -115,8 +116,12 @@ export default function BottledMessagesView() {
                     className="w-full max-w-lg bg-[#FAF7EE] text-[#2C243B] p-6 sm:p-8 rounded-3xl shadow-2xl border-2 border-[#C4B4E2]/80 text-left space-y-4 relative"
                   >
                     <div className="flex items-center justify-between border-b border-purple-900/10 pb-3">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xl">🍾</span>
+                      <div className="flex items-center gap-2.5">
+                        <img 
+                          src={purpleOceanBottle} 
+                          alt="Bottle" 
+                          className="w-10 h-10 rounded-full object-cover border-2 border-[#C4B4E2] shadow-sm shrink-0" 
+                        />
                         <div>
                           <div className="text-xs font-black text-[#532E60]">
                             Bottle from a {currentFishedBottle.senderTag}
@@ -187,16 +192,26 @@ export default function BottledMessagesView() {
                   </motion.div>
                 ) : (
                   <div className="flex flex-col items-center space-y-4">
-                    {/* Animated Floating Bottle */}
+                    {/* Animated Floating Bottle with Purple Ocean */}
                     <motion.div
                       animate={{
                         y: [-8, 8, -8],
-                        rotate: [-4, 4, -4],
+                        rotate: [-3, 3, -3],
                       }}
-                      transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                      className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-[#613B6E] border-2 border-white/30 flex items-center justify-center text-4xl sm:text-5xl shadow-xl"
+                      transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
+                      className="relative w-44 h-44 sm:w-56 sm:h-56 rounded-3xl overflow-hidden border-2 border-white/40 shadow-2xl bg-[#613B6E]/60 backdrop-blur-sm group"
                     >
-                      🍾
+                      <img 
+                        src={purpleOceanBottle} 
+                        alt="Message in a bottle floating at sea" 
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#532E60]/85 via-transparent to-transparent pointer-events-none" />
+                      <div className="absolute bottom-2.5 inset-x-0 text-center">
+                        <span className="text-[10px] sm:text-xs font-black uppercase tracking-wider text-[#E8DCF8] bg-[#532E60]/85 px-3 py-1 rounded-full border border-white/30 backdrop-blur-md">
+                          Drifting Letter
+                        </span>
+                      </div>
                     </motion.div>
 
                     <button
@@ -267,7 +282,9 @@ export default function BottledMessagesView() {
           <div className="space-y-4">
             {myCastBottles.length === 0 ? (
               <div className="text-center py-16 bg-[#532E60] border-2 border-white/40 rounded-[2.5rem] p-8 text-white space-y-3">
-                <div className="text-5xl mb-2">🍾</div>
+                <div className="w-20 h-20 mx-auto rounded-2xl overflow-hidden border-2 border-white/40 shadow-lg mb-2">
+                  <img src={purpleOceanBottle} alt="Bottle" className="w-full h-full object-cover" />
+                </div>
                 <h3 className="text-2xl font-serif font-black">No bottles cast yet</h3>
                 <p className="text-xs sm:text-sm text-[#E8DCF8] font-bold max-w-md mx-auto">
                   Write your first anonymous letter in the "Cast a Bottle" tab and watch it float into the community sea.
@@ -287,8 +304,8 @@ export default function BottledMessagesView() {
                     className="bg-[#532E60] border-2 border-white/40 p-6 rounded-3xl shadow-xl text-white space-y-3"
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-black text-white/90 flex items-center gap-1.5">
-                        <span>🍾</span>
+                      <span className="text-xs font-black text-white/90 flex items-center gap-2">
+                        <img src={purpleOceanBottle} alt="Bottle" className="w-6 h-6 rounded-full object-cover border border-white/40 shrink-0" />
                         <span>Cast by you</span>
                       </span>
                       <span className="text-[10px] text-[#E8DCF8] font-bold">

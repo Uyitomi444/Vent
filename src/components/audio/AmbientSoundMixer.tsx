@@ -1,11 +1,10 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Volume2, VolumeX, Sliders, X, Music } from 'lucide-react';
+import { Volume2, VolumeX, Sliders, X } from 'lucide-react';
 import { useSoundStore } from '../../store/soundStore';
 
 export default function AmbientSoundMixer() {
   const {
     isMixerOpen,
-    isPlayingAll,
     masterVolume,
     tracks,
     toggleMixer,
@@ -20,32 +19,6 @@ export default function AmbientSoundMixer() {
 
   return (
     <>
-      {/* Floating Ambient Toggle Dock Button (Bottom Left) */}
-      <div className="fixed bottom-5 left-5 z-40">
-        <button
-          onClick={toggleMixer}
-          className={`flex items-center gap-2.5 px-4 py-3 rounded-full shadow-2xl border-2 transition-all cursor-pointer backdrop-blur-md ${
-            isPlayingAll && activeTrackCount > 0
-              ? 'bg-[#532E60] border-emerald-400 text-white shadow-emerald-500/20'
-              : 'bg-[#532E60]/90 border-white/40 text-white hover:bg-[#532E60]'
-          }`}
-          title="Ambient Soundscape Mixer"
-        >
-          {isPlayingAll && activeTrackCount > 0 ? (
-            <div className="flex items-center gap-1">
-              <span className="w-1.5 h-3 bg-emerald-400 rounded-full animate-bounce [animation-delay:-0.3s]" />
-              <span className="w-1.5 h-4 bg-emerald-300 rounded-full animate-bounce [animation-delay:-0.15s]" />
-              <span className="w-1.5 h-2.5 bg-emerald-400 rounded-full animate-bounce" />
-            </div>
-          ) : (
-            <Music size={18} className="text-[#C4B4E2]" />
-          )}
-          <span className="text-xs font-black hidden sm:inline">
-            {activeTrackCount > 0 ? `${activeTrackCount} Sounds Active` : 'Soundscapes'}
-          </span>
-        </button>
-      </div>
-
       {/* Slide-Over Mixer Drawer */}
       <AnimatePresence>
         {isMixerOpen && (
@@ -63,7 +36,10 @@ export default function AmbientSoundMixer() {
               className="w-full max-w-md h-full bg-[#532E60] border-l-2 border-white/40 shadow-2xl flex flex-col text-white z-10"
             >
               {/* Pinned Permanent Header - Never scrolls away */}
-              <div className="flex items-center justify-between p-5 sm:p-6 bg-[#532E60] border-b border-white/20 shrink-0 z-20">
+              <div 
+                style={{ paddingTop: 'calc(1.25rem + env(safe-area-inset-top, 0px))' }}
+                className="flex items-center justify-between p-5 sm:p-6 bg-[#532E60] border-b border-white/20 shrink-0 z-20"
+              >
                 <div className="flex items-center gap-3">
                   <div className="p-2.5 bg-[#613B6E] rounded-2xl border border-white/30 text-[#C4B4E2]">
                     <Sliders size={22} />
@@ -223,7 +199,10 @@ export default function AmbientSoundMixer() {
               </div>
 
               {/* Permanent Bottom Footer Bar */}
-              <div className="p-4 bg-[#4A2656] border-t border-white/20 shrink-0 flex items-center justify-between gap-3">
+              <div 
+                style={{ paddingBottom: 'calc(1rem + env(safe-area-inset-bottom, 0px))' }}
+                className="p-4 bg-[#4A2656] border-t border-white/20 shrink-0 flex items-center justify-between gap-3"
+              >
                 <span className="text-xs text-[#E8DCF8] font-bold">
                   {activeTrackCount > 0 ? `${activeTrackCount} track(s) playing` : 'No sound playing'}
                 </span>

@@ -6,8 +6,9 @@ import { useAuthStore } from '../../store/authStore';
 import PaywallModal from '../paywall/PaywallModal';
 import DailyMessagePopup from '../DailyMessagePopup';
 import AmbientSoundMixer from '../audio/AmbientSoundMixer';
+import { useSoundStore } from '../../store/soundStore';
 import itouraLogo from '../../assets/ABLE/logo.png';
-import { ChevronDown, LogOut, Settings, User } from 'lucide-react';
+import { ChevronDown, LogOut, Settings, User, Music } from 'lucide-react';
 
 export default function MainLayout() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -20,6 +21,8 @@ export default function MainLayout() {
   const { t } = useLanguageStore();
   const { status, responseCount, maxFreeResponses } = useSubscriptionStore();
   const { currentUser, logout, isAuthenticated } = useAuthStore();
+  const { isPlayingAll, tracks, toggleMixer } = useSoundStore();
+  const activeTrackCount = tracks.filter((t) => t.isPlaying).length;
 
   if (!isAuthenticated || !currentUser?.username || !currentUser?.email) {
     return <Navigate to={`/auth?redirect=${encodeURIComponent(location.pathname)}`} replace />;
@@ -70,7 +73,7 @@ export default function MainLayout() {
     {
       path: '/progress',
       label: t('nav.progress'),
-      description: '7-day mood trends, Weekly AI Digest, & reflection',
+      description: '7-day mood trends, insights & reflection',
     },
     {
       path: '/journal',
@@ -104,7 +107,10 @@ export default function MainLayout() {
       <AmbientSoundMixer />
 
       {/* Top Header - Permanent Flex Child */}
-      <header className="w-full shrink-0 relative z-50 px-2.5 sm:px-6 md:px-12 py-2 sm:py-3.5 bg-[#532E60] border-b-2 border-white/20 shadow-xl">
+      <header 
+        style={{ paddingTop: 'calc(0.5rem + env(safe-area-inset-top, 0px))' }}
+        className="w-full shrink-0 relative z-50 px-2.5 sm:px-6 md:px-12 pb-2 sm:pb-3.5 bg-[#532E60] border-b-2 border-white/20 shadow-xl"
+      >
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-2">
           
           {/* Logo & Category Dropdown */}
@@ -181,6 +187,32 @@ export default function MainLayout() {
                 {t('paywall.replies_left', { count: remainingResponses })}
               </span>
             )}
+
+            {/* Ambient Soundscapes Header Button */}
+            <button
+              type="button"
+              onClick={toggleMixer}
+              className={`flex items-center gap-1.5 p-1.5 sm:px-3 sm:py-2 rounded-full border transition-all cursor-pointer shadow-md ${
+                isPlayingAll && activeTrackCount > 0
+                  ? 'bg-[#613B6E] border-emerald-400 text-white shadow-emerald-500/20'
+                  : 'bg-[#613B6E] hover:bg-[#6c427b] border-white/30 text-white'
+              }`}
+              title="Ambient Soundscape Mixer"
+              aria-label="Ambient Soundscape Mixer"
+            >
+              {isPlayingAll && activeTrackCount > 0 ? (
+                <div className="flex items-center gap-0.5 px-0.5">
+                  <span className="w-1 h-2.5 bg-emerald-400 rounded-full animate-bounce [animation-delay:-0.3s]" />
+                  <span className="w-1 h-3.5 bg-emerald-300 rounded-full animate-bounce [animation-delay:-0.15s]" />
+                  <span className="w-1 h-2 bg-emerald-400 rounded-full animate-bounce" />
+                </div>
+              ) : (
+                <Music size={16} className="text-[#C4B4E2]" />
+              )}
+              <span className="hidden md:inline font-black text-xs text-[#E8DCF8]">
+                {activeTrackCount > 0 ? `${activeTrackCount} Active` : 'Soundscapes'}
+              </span>
+            </button>
 
             {/* User Account Button & Dropdown */}
             {currentUser && (
@@ -260,7 +292,11 @@ export default function MainLayout() {
       </header>
 
       {/* Main Page Body Container - Internal Scroll Only */}
-      <main className="flex-1 w-full max-w-7xl mx-auto p-2 sm:p-6 md:p-8 flex flex-col overflow-y-auto min-h-0">
+      <main 
+        id="main-scroll-container"
+        style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom, 0px))' }}
+        className="flex-1 w-full max-w-7xl mx-auto p-2 sm:p-6 md:p-8 flex flex-col overflow-y-auto min-h-0"
+      >
         <Outlet />
       </main>
     </div>

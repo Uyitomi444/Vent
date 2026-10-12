@@ -3,7 +3,7 @@ import { useChatStore } from '../../store/chatStore';
 import { useMemoryStore } from '../../store/memoryStore';
 import { useLanguageStore } from '../../i18n';
 import { generateSessionSummary } from '../../services/ai';
-import { Send, AlertCircle, Mic, MicOff, Save, Shield, AudioWaveform } from 'lucide-react';
+import { Send, AlertCircle, Mic, MicOff, Save, Shield } from 'lucide-react';
 import itouraMascot from '../../assets/ABLE/itoura-mascot.jpeg';
 import chatBg from '../../assets/ABLE/chat-bg.jpg';
 import VoiceNoteModal from './VoiceNoteModal';
@@ -136,10 +136,11 @@ export default function ChatInterface() {
           <button
             onClick={() => setIsVoiceNoteOpen(true)}
             className="px-3 py-1.5 bg-[#613B6E] hover:bg-[#724582] text-white font-black text-xs rounded-full border border-white/30 shadow-sm transition-all flex items-center gap-1.5 cursor-pointer"
-            title="Voice Note Mode"
+            title="Voice Note Recording"
+            aria-label="Voice Note Recording"
           >
-            <AudioWaveform size={13} className="text-[#C4B4E2]" />
-            <span className="hidden sm:inline">Audio</span>
+            <Mic size={14} className="text-[#C4B4E2]" />
+            <span className="hidden sm:inline">Voice Note</span>
           </button>
 
           {messages.length >= 3 && (

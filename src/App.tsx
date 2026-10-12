@@ -12,13 +12,17 @@ import GroupSessionPage from './pages/GroupSessionPage';
 import OceanPage from './pages/OceanPage';
 import AuthPage from './pages/AuthPage';
 import AuthGuard from './components/auth/AuthGuard';
+import { useAuthStore } from './store/authStore';
 
 function App() {
+  const { isAuthenticated, currentUser } = useAuthStore();
+  const isAuthed = Boolean(isAuthenticated && currentUser?.username && currentUser?.email);
+
   return (
     <BrowserRouter>
       <Routes>
-        {/* Welcome Page */}
-        <Route path="/" element={<OnboardingPage />} />
+        {/* Welcome / Root Page */}
+        <Route path="/" element={isAuthed ? <Navigate to="/chat" replace /> : <OnboardingPage />} />
         <Route path="/welcome" element={<OnboardingPage />} />
         
         {/* Authentication Routes (Register / Sign In) */}
@@ -35,6 +39,7 @@ function App() {
             </AuthGuard>
           }
         >
+          <Route path="/home" element={<HomePage />} />
           <Route path="/chat" element={<HomePage />} />
           <Route path="/group" element={<GroupSessionPage />} />
           <Route path="/ocean" element={<OceanPage />} />

@@ -24,3 +24,7 @@ dist-ssr
 *.sw?
 .env
 .vercel
+
+# Capacitor iOS build artifacts
+ios/DerivedData
+ios/App/App/public

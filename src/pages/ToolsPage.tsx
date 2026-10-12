@@ -6,11 +6,17 @@ import BreakTool from '../components/tools/BreakTool';
 import BurnWorryTool from '../components/tools/BurnWorryTool';
 import BubbleWrapTool from '../components/tools/BubbleWrapTool';
 import { motion, AnimatePresence } from 'framer-motion';
-import SpriteIcon from '../components/SpriteIcon';
-import FourIcons from '../assets/Four_icons.jpeg';
 import { useLanguageStore } from '../i18n';
 import { useSoundStore } from '../store/soundStore';
-import { Flame, CircleDot, Music } from 'lucide-react';
+import { TextEffect } from '../components/ui/TextEffect';
+
+import burnWorryImg from '../assets/tools/burn-worry.jpg';
+import bubbleWrapImg from '../assets/tools/bubble-wrap.jpg';
+import soundscapeImg from '../assets/tools/soundscape.jpg';
+import boxBreathingImg from '../assets/tools/box-breathing.jpg';
+import groundingImg from '../assets/tools/grounding.jpg';
+import mindfulMomentImg from '../assets/tools/mindful-moment.jpg';
+import takeABreakImg from '../assets/tools/take-a-break.jpg';
 
 export default function ToolsPage() {
   const [activeTool, setActiveTool] = useState<string | null>(null);
@@ -22,7 +28,7 @@ export default function ToolsPage() {
       id: 'breathe',
       title: t('tools.breathe_title'),
       description: t('tools.breathe_desc'),
-      spriteIndex: 0,
+      image: boxBreathingImg,
       duration: '1-5 mins',
       tag: 'Mindfulness'
     },
@@ -30,7 +36,7 @@ export default function ToolsPage() {
       id: 'grounding',
       title: t('tools.grounding_title'),
       description: t('tools.grounding_desc'),
-      spriteIndex: 1,
+      image: groundingImg,
       duration: '3 mins',
       tag: 'Reset'
     },
@@ -38,7 +44,7 @@ export default function ToolsPage() {
       id: 'meditation',
       title: t('tools.meditation_title'),
       description: t('tools.meditation_desc'),
-      spriteIndex: 2,
+      image: mindfulMomentImg,
       duration: '5 mins',
       tag: 'Focus'
     },
@@ -46,7 +52,7 @@ export default function ToolsPage() {
       id: 'break',
       title: t('tools.break_title'),
       description: t('tools.break_desc'),
-      spriteIndex: 3,
+      image: takeABreakImg,
       duration: '10 mins',
       tag: 'Rest'
     }
@@ -55,25 +61,25 @@ export default function ToolsPage() {
   const VENT_LAB_TOOLS = [
     {
       id: 'burn',
-      title: '🔥 Burn Your Worry',
+      title: 'Burn Your Worry',
       description: 'Write down toxic thoughts, grievances, or heavy burdens and watch them incinerate into ash.',
-      icon: <Flame size={32} className="text-amber-400" />,
+      image: burnWorryImg,
       duration: '2 mins',
       badge: 'Cathartic'
     },
     {
       id: 'bubble',
-      title: '🫧 Tactile Bubble Wrap',
+      title: 'Tactile Bubble Wrap',
       description: 'Squishy sensory popping board with realistic ASMR audio feedback and haptic tension release.',
-      icon: <CircleDot size={32} className="text-[#C4B4E2]" />,
+      image: bubbleWrapImg,
       duration: 'Instant',
       badge: 'De-Stress'
     },
     {
       id: 'soundscape',
-      title: '🌧️ Ambient Soundscape Mixer',
+      title: 'Ambient Soundscape Mixer',
       description: 'Layered procedural rain, warm campfire, forest wind, lo-fi chords, and singing bowls you can mix while exploring.',
-      icon: <Music size={32} className="text-emerald-300" />,
+      image: soundscapeImg,
       duration: 'Ongoing',
       badge: 'Audio Lab',
       onClick: () => toggleMixer()
@@ -103,10 +109,22 @@ export default function ToolsPage() {
     <div className="p-2 sm:p-4 md:p-8 max-w-5xl mx-auto space-y-8 pb-16">
       {/* Header */}
       <header className="space-y-2">
-        <h1 className="font-serif text-3xl md:text-4xl font-black text-[#532E60]">{t('tools.title')}</h1>
-        <p className="text-[#532E60]/80 font-bold text-sm md:text-base">
+        <TextEffect
+          as="h1"
+          preset="fade"
+          per="word"
+          className="font-serif text-3xl md:text-4xl font-black text-[#532E60]"
+        >
+          {t('tools.title')}
+        </TextEffect>
+        <TextEffect
+          as="p"
+          preset="slide"
+          delay={0.1}
+          className="text-[#532E60]/80 font-bold text-sm md:text-base"
+        >
           Interactive exercises, cathartic release tools, and sensory relaxation.
-        </p>
+        </TextEffect>
       </header>
 
       <AnimatePresence mode="wait">
@@ -150,9 +168,17 @@ export default function ToolsPage() {
                     className="flex flex-col text-left p-6 bg-[#532E60] rounded-[2rem] border-2 border-white/40 hover:bg-[#613B6E] hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 group relative overflow-hidden shadow-xl cursor-pointer"
                   >
                     <div className="flex justify-between items-start w-full mb-4 relative z-10">
-                      <div className="p-3 bg-[#613B6E] rounded-2xl shadow-inner border border-white/30 group-hover:-rotate-3 transition-transform duration-300">
-                        {tool.icon}
-                      </div>
+                      {tool.image ? (
+                        <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl overflow-hidden border border-white/30 shadow-md bg-[#532E60] p-1 flex items-center justify-center shrink-0 group-hover:scale-105 group-hover:border-white/60 transition-all duration-300">
+                          <img
+                            src={tool.image}
+                            alt={tool.title}
+                            className="w-full h-full object-contain rounded-xl"
+                          />
+                        </div>
+                      ) : (
+                        <div />
+                      )}
                       <span className="text-[11px] font-black text-[#532E60] bg-[#C4B4E2] px-3 py-1 rounded-full border border-white shadow-md">
                         {tool.badge}
                       </span>
@@ -190,14 +216,17 @@ export default function ToolsPage() {
                     className="flex flex-col text-left p-6 sm:p-8 bg-[#532E60] rounded-[2rem] border-2 border-white/40 hover:bg-[#613B6E] hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 group relative overflow-hidden shadow-xl cursor-pointer"
                   >
                     <div className="flex justify-between items-start w-full mb-6 relative z-10">
-                      <div className="p-3.5 bg-[#613B6E] rounded-3xl shadow-inner border border-white/30 group-hover:-rotate-3 transition-transform duration-300">
-                        <SpriteIcon 
-                          imageSrc={FourIcons} 
-                          totalIcons={4} 
-                          index={tool.spriteIndex} 
-                          size={56} 
-                        />
-                      </div>
+                      {tool.image ? (
+                        <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden border border-white/30 shadow-md bg-[#532E60] p-1 flex items-center justify-center shrink-0 group-hover:scale-105 group-hover:border-white/60 transition-all duration-300">
+                          <img
+                            src={tool.image}
+                            alt={tool.title}
+                            className="w-full h-full object-contain rounded-xl"
+                          />
+                        </div>
+                      ) : (
+                        <div />
+                      )}
                       <span className="text-xs font-black text-[#532E60] bg-[#C4B4E2] px-3.5 py-1.5 rounded-full border border-white shadow-md">
                         {tool.duration}
                       </span>
