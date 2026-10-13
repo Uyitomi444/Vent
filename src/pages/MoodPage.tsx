@@ -6,7 +6,7 @@ import { useMemoryStore } from '../store/memoryStore';
 import { useJournalStore } from '../store/journalStore';
 import { useLanguageStore } from '../i18n';
 import SpriteIcon from '../components/SpriteIcon';
-import FiveIcons from '../assets/Five_icons.jpeg';
+import FiveIcons from '../assets/Five_icons_cropped.jpeg';
 
 export default function MoodPage() {
   const { entries, addEntry, deleteEntry } = useMoodStore();
@@ -93,13 +93,20 @@ export default function MoodPage() {
                       : 'bg-[#613B6E] border border-white/30 hover:bg-[#6D427C] text-[#E8DCF8]'
                   }`}
                 >
-                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                  <motion.div 
+                    whileHover={{ scale: 1.05 }} 
+                    whileTap={{ scale: 0.95 }}
+                    className={`w-11 h-11 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center transition-all ${
+                      isSelected 
+                        ? 'bg-white shadow-md' 
+                        : 'bg-white/90 shadow-sm'
+                    }`}
+                  >
                     <SpriteIcon 
                       imageSrc={FiveIcons} 
                       totalIcons={5} 
                       index={spriteIndex} 
-                      size={60}
-                      className={isSelected ? 'scale-110 transition-transform' : ''}
+                      size={36}
                     />
                   </motion.div>
                   <span className={`text-xs md:text-sm font-extrabold mt-2 ${isSelected ? 'text-[#532E60]' : 'text-[#E8DCF8]'}`}>
@@ -184,7 +191,7 @@ export default function MoodPage() {
                           imageSrc={FiveIcons} 
                           totalIcons={5} 
                           index={moodConfig.spriteIndex} 
-                          size={48}
+                          size={36}
                         />
                       )}
                     </div>

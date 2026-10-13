@@ -10,13 +10,12 @@ import { useLanguageStore } from '../i18n';
 import { useSoundStore } from '../store/soundStore';
 import { TextEffect } from '../components/ui/TextEffect';
 
+import SpriteIcon from '../components/SpriteIcon';
+import FourIcons from '../assets/Four_icons_cropped.jpeg';
+
 import burnWorryImg from '../assets/tools/burn-worry.jpg';
 import bubbleWrapImg from '../assets/tools/bubble-wrap.jpg';
 import soundscapeImg from '../assets/tools/soundscape.jpg';
-import boxBreathingImg from '../assets/tools/box-breathing.jpg';
-import groundingImg from '../assets/tools/grounding.jpg';
-import mindfulMomentImg from '../assets/tools/mindful-moment.jpg';
-import takeABreakImg from '../assets/tools/take-a-break.jpg';
 
 export default function ToolsPage() {
   const [activeTool, setActiveTool] = useState<string | null>(null);
@@ -28,7 +27,7 @@ export default function ToolsPage() {
       id: 'breathe',
       title: t('tools.breathe_title'),
       description: t('tools.breathe_desc'),
-      image: boxBreathingImg,
+      spriteIndex: 0,
       duration: '1-5 mins',
       tag: 'Mindfulness'
     },
@@ -36,7 +35,7 @@ export default function ToolsPage() {
       id: 'grounding',
       title: t('tools.grounding_title'),
       description: t('tools.grounding_desc'),
-      image: groundingImg,
+      spriteIndex: 1,
       duration: '3 mins',
       tag: 'Reset'
     },
@@ -44,7 +43,7 @@ export default function ToolsPage() {
       id: 'meditation',
       title: t('tools.meditation_title'),
       description: t('tools.meditation_desc'),
-      image: mindfulMomentImg,
+      spriteIndex: 2,
       duration: '5 mins',
       tag: 'Focus'
     },
@@ -52,7 +51,7 @@ export default function ToolsPage() {
       id: 'break',
       title: t('tools.break_title'),
       description: t('tools.break_desc'),
-      image: takeABreakImg,
+      spriteIndex: 3,
       duration: '10 mins',
       tag: 'Rest'
     }
@@ -216,17 +215,14 @@ export default function ToolsPage() {
                     className="flex flex-col text-left p-6 sm:p-8 bg-[#532E60] rounded-[2rem] border-2 border-white/40 hover:bg-[#613B6E] hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 group relative overflow-hidden shadow-xl cursor-pointer"
                   >
                     <div className="flex justify-between items-start w-full mb-6 relative z-10">
-                      {tool.image ? (
-                        <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden border border-white/30 shadow-md bg-[#532E60] p-1 flex items-center justify-center shrink-0 group-hover:scale-105 group-hover:border-white/60 transition-all duration-300">
-                          <img
-                            src={tool.image}
-                            alt={tool.title}
-                            className="w-full h-full object-contain rounded-xl"
-                          />
-                        </div>
-                      ) : (
-                        <div />
-                      )}
+                      <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl overflow-hidden border border-white/40 shadow-lg bg-white/95 p-1 flex items-center justify-center shrink-0 group-hover:scale-105 group-hover:border-white transition-all duration-300">
+                        <SpriteIcon
+                          imageSrc={FourIcons}
+                          totalIcons={4}
+                          index={tool.spriteIndex}
+                          size={52}
+                        />
+                      </div>
                       <span className="text-xs font-black text-[#532E60] bg-[#C4B4E2] px-3.5 py-1.5 rounded-full border border-white shadow-md">
                         {tool.duration}
                       </span>

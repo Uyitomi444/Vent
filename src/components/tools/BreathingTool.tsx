@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X, Play, Square } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { ArrowLeft, Play, Square } from 'lucide-react';
 
 export default function BreathingTool({ onClose }: { onClose: () => void }) {
   const [isActive, setIsActive] = useState(false);
@@ -61,76 +61,80 @@ export default function BreathingTool({ onClose }: { onClose: () => void }) {
   };
 
   return (
-    <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.95 }}
-        className="bg-itoura-dark text-white rounded-3xl p-8 relative overflow-hidden"
-      >
-        <button 
+    <div className="bg-[#532E60] border-2 border-white/40 rounded-[2.5rem] p-6 md:p-10 shadow-2xl text-white relative overflow-hidden min-h-[520px] flex flex-col">
+      {/* Top Header */}
+      <div className="flex items-center justify-between border-b border-white/20 pb-4 mb-6">
+        <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 hover:bg-white/10 rounded-full transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-[#613B6E] text-white rounded-full font-black text-xs hover:bg-[#3D2048] transition-colors border border-white/30 cursor-pointer"
         >
-          <X className="w-5 h-5" />
+          <ArrowLeft size={16} />
+          <span>Back to Tools</span>
         </button>
 
-        <div className="text-center mb-12">
-          <h3 className="font-serif text-2xl mb-2">Box Breathing</h3>
-          <p className="text-white/60 text-sm">Follow the circle to regulate your nervous system.</p>
-        </div>
+        <span className="px-3.5 py-1.5 bg-[#613B6E] text-[#E8DCF8] rounded-full text-xs font-black border border-white/20">
+          Mindfulness
+        </span>
+      </div>
 
-        <div className="flex flex-col items-center justify-center py-12">
-          <div className="relative w-48 h-48 flex items-center justify-center">
-            {/* Background pulsating ring */}
-            {isActive && (
-              <motion.div
-                className="absolute inset-0 rounded-full border border-itoura-primary/30"
-                animate={{ scale: [1, 2], opacity: [0.5, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-              />
-            )}
-            
-            {/* The Breathing Circle */}
+      <div className="text-center mb-8">
+        <h3 className="font-serif text-2xl md:text-3xl font-black text-white mb-2">Box Breathing</h3>
+        <p className="text-[#E8DCF8] text-sm font-bold">Follow the circle to regulate your nervous system.</p>
+      </div>
+
+      <div className="flex-1 flex flex-col items-center justify-center py-8">
+        <div className="relative w-48 h-48 flex items-center justify-center">
+          {/* Background pulsating ring */}
+          {isActive && (
             <motion.div
-              className="absolute bg-gradient-to-tr from-itoura-primary to-[#FF905A] rounded-full flex items-center justify-center shadow-[0_0_40px_rgba(255,115,71,0.3)]"
-              initial={{ width: 120, height: 120 }}
-              animate={{ 
-                scale: getScale(),
-                opacity: isActive ? 1 : 0.8
-              }}
-              transition={{ 
-                duration: 4, 
-                ease: "easeInOut" 
-              }}
-              style={{ width: 120, height: 120 }}
+              className="absolute inset-0 rounded-full border border-[#C4B4E2]/40"
+              animate={{ scale: [1, 2], opacity: [0.5, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
             />
-            
-            <span className="relative z-10 text-xl font-medium tracking-wide drop-shadow-md">
-              {getMessage()}
-            </span>
-          </div>
+          )}
+          
+          {/* The Breathing Circle */}
+          <motion.div
+            className="absolute bg-gradient-to-tr from-[#C4B4E2] to-[#E8DCF8] rounded-full flex items-center justify-center shadow-[0_0_40px_rgba(196,180,226,0.4)]"
+            initial={{ width: 120, height: 120 }}
+            animate={{ 
+              scale: getScale(),
+              opacity: isActive ? 1 : 0.8
+            }}
+            transition={{ 
+              duration: 4, 
+              ease: "easeInOut" 
+            }}
+            style={{ width: 120, height: 120 }}
+          />
+          
+          <span className="relative z-10 text-xl font-black tracking-wide drop-shadow-md text-[#532E60]">
+            {getMessage()}
+          </span>
         </div>
+      </div>
 
-        <div className="flex justify-center mt-8">
-          <button
-            onClick={() => setIsActive(!isActive)}
-            className="flex items-center gap-2 px-6 py-3 bg-white/10 hover:bg-white/20 rounded-full transition-colors font-medium"
-          >
-            {isActive ? (
-              <>
-                <Square className="w-4 h-4 fill-current" />
-                Stop Exercise
-              </>
-            ) : (
-              <>
-                <Play className="w-4 h-4 fill-current" />
-                Start Breathing
-              </>
-            )}
-          </button>
-        </div>
-      </motion.div>
-    </AnimatePresence>
+      <div className="flex justify-center mt-8">
+        <button
+          onClick={() => setIsActive(!isActive)}
+          className="flex items-center gap-2 px-8 py-3.5 bg-[#C4B4E2] hover:bg-white text-[#532E60] rounded-full transition-colors font-black shadow-xl cursor-pointer border border-white"
+        >
+          {isActive ? (
+            <>
+              <Square className="w-4 h-4 fill-current" />
+              Stop Exercise
+            </>
+          ) : (
+            <>
+              <Play className="w-4 h-4 fill-current" />
+              Start Breathing
+            </>
+          )}
+        </button>
+      </div>
+
+      {/* Background decoration */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#3D2048]/30 pointer-events-none rounded-[2.5rem]" />
+    </div>
   );
 }

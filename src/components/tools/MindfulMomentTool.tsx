@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, RefreshCw, Heart } from 'lucide-react';
+import { ArrowLeft, RefreshCw, Heart } from 'lucide-react';
 
 const PROMPTS = [
   "What is a childhood memory that always makes you smile?",
@@ -25,17 +25,25 @@ export default function MindfulMomentTool({ onClose }: { onClose: () => void }) 
   };
 
   return (
-    <div className="bg-[#FAF9F6] border border-itoura-beige rounded-3xl p-8 relative overflow-hidden min-h-[400px] flex flex-col shadow-sm">
-      <button 
-        onClick={onClose}
-        className="absolute top-4 right-4 p-2 hover:bg-gray-100 rounded-full transition-colors z-10"
-      >
-        <X className="w-5 h-5 text-gray-400" />
-      </button>
+    <div className="bg-[#532E60] border-2 border-white/40 rounded-[2.5rem] p-6 md:p-10 shadow-2xl text-white relative overflow-hidden min-h-[520px] flex flex-col">
+      {/* Top Header */}
+      <div className="flex items-center justify-between border-b border-white/20 pb-4 mb-6">
+        <button
+          onClick={onClose}
+          className="flex items-center gap-2 px-4 py-2 bg-[#613B6E] text-white rounded-full font-black text-xs hover:bg-[#3D2048] transition-colors border border-white/30 cursor-pointer"
+        >
+          <ArrowLeft size={16} />
+          <span>Back to Tools</span>
+        </button>
 
-      <div className="text-center mb-8 relative z-10">
-        <h3 className="font-serif text-2xl mb-2 text-itoura-dark">Mindful Moment</h3>
-        <p className="text-gray-500 text-sm">Guided reflection to process complex emotions.</p>
+        <span className="px-3.5 py-1.5 bg-[#613B6E] text-[#E8DCF8] rounded-full text-xs font-black border border-white/20">
+          Focus
+        </span>
+      </div>
+
+      <div className="text-center mb-8">
+        <h3 className="font-serif text-2xl md:text-3xl font-black text-white mb-2">Mindful Moment</h3>
+        <p className="text-[#E8DCF8] text-sm font-bold">Guided reflection to process complex emotions.</p>
       </div>
 
       <div className="flex-1 flex flex-col items-center justify-center relative z-10">
@@ -47,20 +55,20 @@ export default function MindfulMomentTool({ onClose }: { onClose: () => void }) 
             exit={{ opacity: 0, y: -10 }}
             className="text-center max-w-md w-full"
           >
-            <div className="mb-6 flex justify-center">
-              <div className="w-16 h-16 bg-amber-50 rounded-full flex items-center justify-center">
-                <Heart className="w-8 h-8 text-amber-500" />
+            <div className="mb-8 flex justify-center">
+              <div className="w-16 h-16 bg-[#613B6E] rounded-full flex items-center justify-center border-2 border-[#C4B4E2] shadow-xl">
+                <Heart className="w-8 h-8 text-[#C4B4E2]" />
               </div>
             </div>
             
-            <h4 className="text-xl md:text-2xl font-serif text-itoura-dark leading-relaxed mb-10">
+            <h4 className="text-xl md:text-2xl font-serif font-black text-white leading-relaxed mb-10 px-4">
               "{PROMPTS[promptIndex]}"
             </h4>
 
             <div className="flex justify-center gap-4">
               <button
                 onClick={handleNextPrompt}
-                className="flex items-center gap-2 px-6 py-3 bg-white border border-gray-200 text-gray-600 rounded-full font-medium hover:bg-gray-50 transition-colors shadow-sm"
+                className="flex items-center gap-2 px-8 py-3.5 bg-[#C4B4E2] text-[#532E60] rounded-full font-black hover:bg-white transition-colors shadow-xl cursor-pointer border border-white"
               >
                 <RefreshCw className="w-4 h-4" />
                 New Prompt
@@ -69,6 +77,9 @@ export default function MindfulMomentTool({ onClose }: { onClose: () => void }) 
           </motion.div>
         </AnimatePresence>
       </div>
+
+      {/* Background decoration */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#3D2048]/30 pointer-events-none rounded-[2.5rem]" />
     </div>
   );
 }
