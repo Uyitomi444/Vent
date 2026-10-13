@@ -106,7 +106,7 @@ export default function ToolsPage() {
   };
 
   return (
-    <div className="p-2 sm:p-4 md:p-8 max-w-5xl mx-auto space-y-8 pb-16">
+    <div className="p-2 sm:p-4 md:p-8 w-full max-w-5xl mx-auto space-y-8 pb-16 overflow-x-hidden">
       {/* Header */}
       <header className="space-y-2">
         <TextEffect

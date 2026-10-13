@@ -291,7 +291,7 @@ export default function MainLayout() {
       <main 
         id="main-scroll-container"
         style={{ paddingBottom: 'calc(0.75rem + env(safe-area-inset-bottom, 0px))' }}
-        className="flex-1 w-full max-w-7xl mx-auto p-2 sm:p-6 md:p-8 flex flex-col overflow-y-auto min-h-0"
+        className="flex-1 w-full max-w-7xl mx-auto p-2 sm:p-6 md:p-8 flex flex-col overflow-y-auto overflow-x-hidden min-h-0"
       >
         <Outlet />
       </main>
