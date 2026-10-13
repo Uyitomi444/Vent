@@ -26,7 +26,7 @@ export default function AmbientSoundMixer() {
             onClick={(e) => {
               if (e.target === e.currentTarget) toggleMixer();
             }}
-            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex justify-end"
+            className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex justify-end"
           >
             <motion.div
               initial={{ x: '100%' }}
@@ -59,7 +59,7 @@ export default function AmbientSoundMixer() {
               </div>
 
               {/* Scrollable Content Body */}
-              <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-6 min-h-0">
+              <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-6 min-h-0 touch-pan-y overscroll-contain [-webkit-overflow-scrolling:touch]">
                 {/* Master Volume Bar */}
                 <div className="bg-[#613B6E] p-4 rounded-2xl border border-white/20 space-y-2">
                   <div className="flex items-center justify-between">

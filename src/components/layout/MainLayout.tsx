@@ -102,10 +102,6 @@ export default function MainLayout() {
 
   return (
     <div className="h-screen h-[100dvh] w-full flex flex-col bg-[#C4B4E2] relative font-sans text-[#532E60] selection:bg-[#532E60] selection:text-white overflow-hidden touch-manipulation">
-      <DailyMessagePopup />
-      <PaywallModal />
-      <AmbientSoundMixer />
-
       {/* Top Header - Permanent Flex Child */}
       <header 
         style={{ paddingTop: 'calc(0.5rem + env(safe-area-inset-top, 0px))' }}
@@ -299,6 +295,11 @@ export default function MainLayout() {
       >
         <Outlet />
       </main>
+
+      {/* Global Modals & Slide-Over Drawers */}
+      <AmbientSoundMixer />
+      <PaywallModal />
+      <DailyMessagePopup />
     </div>
   );
 }
