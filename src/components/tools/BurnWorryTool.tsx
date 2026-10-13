@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Flame, RotateCcw, ArrowLeft, CheckCircle2 } from 'lucide-react';
 import { soundEngine } from '../../services/soundEngine';
+import PurpleFlames from './PurpleFlames';
 
 interface BurnWorryToolProps {
   onClose: () => void;
@@ -12,7 +13,7 @@ export default function BurnWorryTool({ onClose }: BurnWorryToolProps) {
   const [stage, setStage] = useState<'write' | 'destroying' | 'released'>('write');
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // Particles animation for burning embers
+  // Particles animation for burning embers (purple/lilac ash)
   useEffect(() => {
     if (stage !== 'destroying') return;
 
@@ -34,15 +35,15 @@ export default function BurnWorryTool({ onClose }: BurnWorryToolProps) {
       color: string;
     }> = [];
 
-    const colors = ['#ff4500', '#ff8c00', '#ffd700', '#ff6347', '#ffffe0'];
+    const colors = ['#C4B4E2', '#E8DCF8', '#A855F7', '#D8B4FE', '#FFFFFF', '#9333EA'];
 
-    for (let i = 0; i < 160; i++) {
+    for (let i = 0; i < 100; i++) {
       particles.push({
         x: Math.random() * canvas.width,
-        y: canvas.height * 0.7 + Math.random() * (canvas.height * 0.3),
-        vx: (Math.random() - 0.5) * 3,
-        vy: -(Math.random() * 4 + 2),
-        size: Math.random() * 6 + 2,
+        y: canvas.height * 0.8 + Math.random() * (canvas.height * 0.2),
+        vx: (Math.random() - 0.5) * 2.5,
+        vy: -(Math.random() * 5 + 3),
+        size: Math.random() * 4 + 1.5,
         alpha: 1,
         color: colors[Math.floor(Math.random() * colors.length)],
       });
@@ -120,6 +121,9 @@ export default function BurnWorryTool({ onClose }: BurnWorryToolProps) {
         </span>
       </div>
 
+      {/* Dynamic Purple Flame Roar matching user reference illustration */}
+      {stage === 'destroying' && <PurpleFlames isSurging={true} />}
+
       {/* Main Content Areas */}
       <div className="flex-1 flex flex-col justify-center relative z-20">
         <AnimatePresence mode="wait">
@@ -173,30 +177,31 @@ export default function BurnWorryTool({ onClose }: BurnWorryToolProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="flex flex-col items-center justify-center text-center space-y-6 max-w-lg mx-auto"
+              className="flex flex-col items-center justify-center text-center space-y-6 max-w-lg mx-auto relative z-20"
             >
               <motion.div
                 animate={{
-                  scale: [1, 1.05, 0.9, 0.4, 0],
-                  opacity: [1, 1, 0.8, 0.3, 0],
+                  scale: [1, 1.05, 0.9, 0.35, 0],
+                  opacity: [1, 1, 0.85, 0.3, 0],
+                  y: [0, -10, -25, -45, -70],
                   rotate: [0, 2, -2, 5, 0],
                   filter: [
                     'brightness(1)',
-                    'brightness(1.5) saturate(2)',
-                    'brightness(2) contrast(2)',
-                    'brightness(0.2)',
+                    'brightness(1.4) drop-shadow(0 0 20px rgba(168,85,247,0.85))',
+                    'brightness(1.8) contrast(1.6) drop-shadow(0 0 35px rgba(196,180,226,1))',
+                    'brightness(0.2) contrast(2)',
                   ],
                 }}
-                transition={{ duration: 2.6, ease: 'easeInOut' }}
-                className="bg-[#FAF7EE] text-[#2C243B] p-6 rounded-2xl shadow-2xl border-4 border-amber-500 w-80 text-left relative overflow-hidden"
+                transition={{ duration: 2.8, ease: 'easeInOut' }}
+                className="bg-[#FAF7EE] text-[#2C243B] p-6 rounded-2xl shadow-2xl border-2 border-[#C4B4E2] w-80 text-left relative overflow-hidden"
               >
-                <div className="absolute inset-0 bg-gradient-to-t from-orange-600/60 via-amber-500/30 to-transparent" />
-                <p className="font-serif font-bold text-sm line-clamp-4 relative z-10">{worryText}</p>
+                <div className="absolute inset-0 bg-gradient-to-t from-[#2A0845]/90 via-[#7C3AED]/40 to-transparent" />
+                <p className="font-serif font-bold text-sm line-clamp-4 relative z-10 text-[#2C243B]">{worryText}</p>
               </motion.div>
 
-              <p className="text-base font-black text-[#E8DCF8] animate-pulse flex items-center gap-2">
-                <Flame size={18} className="text-amber-400" />
-                <span>Releasing and letting go...</span>
+              <p className="text-base font-black text-[#E8DCF8] animate-pulse flex items-center gap-2 relative z-30">
+                <Flame size={18} className="text-[#C4B4E2]" />
+                <span>Incinerating in purple flame...</span>
               </p>
             </motion.div>
           )}
