@@ -269,31 +269,31 @@ export default function BreakTool({ onClose }: { onClose: () => void }) {
   const isMovieActivity = activity === "Watch a Feel-Good Movie 🎬";
 
   return (
-    <div className="bg-[#532E60] border-2 border-white/40 rounded-[2.5rem] p-6 md:p-10 shadow-2xl text-white relative overflow-hidden flex flex-col">
+    <div className="bg-[#532E60] border-2 border-white/40 rounded-[2rem] sm:rounded-[2.5rem] p-4 sm:p-6 md:p-10 shadow-2xl text-white relative overflow-x-hidden overflow-y-visible flex flex-col">
       {/* Top Header */}
-      <div className="flex items-center justify-between border-b border-white/20 pb-4 mb-6">
+      <div className="flex items-center justify-between border-b border-white/20 pb-3 sm:pb-4 mb-4 sm:mb-6 gap-2">
         <button
           onClick={onClose}
-          className="flex items-center gap-2 px-4 py-2 bg-[#613B6E] text-white rounded-full font-black text-xs hover:bg-[#3D2048] transition-colors border border-white/30 cursor-pointer shadow-sm"
+          className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 bg-[#613B6E] text-white rounded-full font-black text-[10px] sm:text-xs hover:bg-[#3D2048] transition-colors border border-white/30 cursor-pointer shadow-sm flex-shrink-0"
         >
-          <ArrowLeft size={16} />
-          <span>Back to Tools</span>
+          <ArrowLeft size={14} />
+          <span>Back</span>
         </button>
 
-        <span className="px-3.5 py-1.5 bg-[#613B6E] text-[#E8DCF8] rounded-full text-xs font-black border border-white/20">
+        <span className="px-2.5 sm:px-3.5 py-1 sm:py-1.5 bg-[#613B6E] text-[#E8DCF8] rounded-full text-[10px] sm:text-xs font-black border border-white/20 flex-shrink-0">
           Mindful Rest
         </span>
       </div>
 
-      <div className="text-center mb-8">
-        <h3 className="font-serif text-2xl md:text-3xl font-black text-white mb-2">Take a Mindful Break</h3>
-        <p className="text-[#E8DCF8] text-sm font-bold">Disconnect and rest your mind away from the noise.</p>
+      <div className="text-center mb-5 sm:mb-8">
+        <h3 className="font-serif text-xl sm:text-2xl md:text-3xl font-black text-white mb-1.5">Take a Mindful Break</h3>
+        <p className="text-[#E8DCF8] text-xs sm:text-sm font-bold">Disconnect and rest your mind away from the noise.</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start relative z-10 mb-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 items-start relative z-10 mb-4 sm:mb-6">
         
         {/* Left side: Acronym */}
-        <div className="space-y-4 bg-[#613B6E]/40 p-5 md:p-6 rounded-2xl border border-white/10">
+        <div className="space-y-3 sm:space-y-4 bg-[#613B6E]/40 p-4 sm:p-5 md:p-6 rounded-xl sm:rounded-2xl border border-white/10">
           <h4 className="font-black text-white mb-4 border-b border-white/20 pb-2 flex items-center justify-between">
             <span>The B.R.E.A.K. Method</span>
             <span className="text-xs text-[#E8DCF8] font-medium">5 Slow Steps</span>
@@ -316,7 +316,7 @@ export default function BreakTool({ onClose }: { onClose: () => void }) {
         </div>
 
         {/* Right side: Activities Generator */}
-        <div className="bg-[#613B6E] p-6 rounded-2xl flex flex-col items-center justify-center text-center min-h-[280px] border border-white/20 shadow-inner">
+        <div className="bg-[#613B6E] p-4 sm:p-6 rounded-xl sm:rounded-2xl flex flex-col items-center justify-center text-center min-h-[240px] sm:min-h-[280px] border border-white/20 shadow-inner">
           <div className="w-12 h-12 bg-[#532E60] rounded-full flex items-center justify-center mb-4 border border-[#C4B4E2] shadow-md">
             {isMovieActivity ? (
               <Clapperboard className="w-6 h-6 text-[#C4B4E2]" />
@@ -340,13 +340,13 @@ export default function BreakTool({ onClose }: { onClose: () => void }) {
             )}
           </AnimatePresence>
 
-          <div className="flex flex-col gap-2.5 w-full">
+          <div className="flex flex-col gap-2 sm:gap-2.5 w-full">
             <button
               onClick={suggestActivity}
-              className="flex items-center gap-2 px-6 py-3 bg-[#C4B4E2] text-[#532E60] rounded-full font-black hover:bg-white transition-colors shadow-xl w-full justify-center cursor-pointer border border-white"
+              className="flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-[#C4B4E2] text-[#532E60] rounded-full font-black text-sm hover:bg-white transition-colors shadow-xl w-full justify-center cursor-pointer border border-white"
             >
-              <RotateCcw className="w-4 h-4" />
-              {activity ? 'Give me another idea' : 'Suggest an Activity'}
+              <RotateCcw className="w-4 h-4 flex-shrink-0" />
+              <span className="truncate">{activity ? 'Give me another idea' : 'Suggest an Activity'}</span>
             </button>
 
             <button
@@ -356,10 +356,10 @@ export default function BreakTool({ onClose }: { onClose: () => void }) {
                   setActivity("Watch a Feel-Good Movie 🎬");
                 }
               }}
-              className="flex items-center gap-2 px-4 py-2 bg-[#532E60]/80 text-[#E8DCF8] hover:text-white rounded-full font-black text-xs hover:bg-[#3D2048] transition-colors border border-white/20 w-full justify-center cursor-pointer"
+              className="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 bg-[#532E60]/80 text-[#E8DCF8] hover:text-white rounded-full font-black text-[11px] sm:text-xs hover:bg-[#3D2048] transition-colors border border-white/20 w-full justify-center cursor-pointer"
             >
-              <Film className="w-3.5 h-3.5 text-[#C4B4E2]" />
-              <span>{showMovies ? 'Hide Movie Suggestions' : 'Browse Feel-Good Movies 🍿'}</span>
+              <Film className="w-3.5 h-3.5 text-[#C4B4E2] flex-shrink-0" />
+              <span className="truncate">{showMovies ? 'Hide Movies' : 'Browse Feel-Good Movies 🍿'}</span>
             </button>
           </div>
         </div>
@@ -374,55 +374,53 @@ export default function BreakTool({ onClose }: { onClose: () => void }) {
             animate={{ opacity: 1, height: 'auto', y: 0 }}
             exit={{ opacity: 0, height: 0, y: 15 }}
             transition={{ duration: 0.35, ease: 'easeOut' }}
-            className="border-t border-white/20 pt-6 mt-2 relative z-10"
+            className="border-t border-white/20 pt-4 sm:pt-6 mt-2 relative z-10"
           >
             {/* Header & Controls */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="px-2.5 py-1 rounded-md bg-[#C4B4E2] text-[#532E60] text-xs font-black uppercase tracking-wider flex items-center gap-1">
-                    <Sparkles className="w-3 h-3" /> Feel-Good Picks
-                  </span>
-                  <span className="text-xs text-[#E8DCF8] font-bold">Scroll through comfort films</span>
-                </div>
-                <h4 className="text-xl font-serif font-black text-white mt-1">Suggested Feel-Good Movies</h4>
+            <div className="mb-3 sm:mb-4">
+              <div className="flex items-center gap-2 flex-wrap mb-1">
+                <span className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md bg-[#C4B4E2] text-[#532E60] text-[10px] sm:text-xs font-black uppercase tracking-wider flex items-center gap-1">
+                  <Sparkles className="w-3 h-3" /> Feel-Good Picks
+                </span>
+                <span className="text-[10px] sm:text-xs text-[#E8DCF8] font-bold">Scroll through comfort films</span>
               </div>
-
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={pickRandomMovie}
-                  className="px-3.5 py-1.5 bg-[#613B6E] text-white hover:bg-[#3D2048] border border-white/20 rounded-full text-xs font-black transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
-                >
-                  <Sparkles className="w-3.5 h-3.5 text-[#C4B4E2]" />
-                  <span>Pick For Me</span>
-                </button>
-
-                <div className="flex items-center gap-1 bg-[#613B6E] p-1 rounded-full border border-white/20">
+              <div className="flex items-center justify-between gap-2">
+                <h4 className="text-base sm:text-xl font-serif font-black text-white">Suggested Movies</h4>
+                <div className="flex items-center gap-1.5 flex-shrink-0">
                   <button
-                    onClick={scrollLeft}
-                    aria-label="Scroll movies left"
-                    className="w-7 h-7 rounded-full flex items-center justify-center text-white/80 hover:text-white hover:bg-[#532E60] transition-colors cursor-pointer"
+                    onClick={pickRandomMovie}
+                    className="px-2.5 sm:px-3.5 py-1 sm:py-1.5 bg-[#613B6E] text-white hover:bg-[#3D2048] border border-white/20 rounded-full text-[10px] sm:text-xs font-black transition-all flex items-center gap-1 cursor-pointer shadow-sm"
                   >
-                    <ChevronLeft size={16} />
+                    <Sparkles className="w-3 h-3 text-[#C4B4E2]" />
+                    <span>Pick For Me</span>
                   </button>
-                  <button
-                    onClick={scrollRight}
-                    aria-label="Scroll movies right"
-                    className="w-7 h-7 rounded-full flex items-center justify-center text-white/80 hover:text-white hover:bg-[#532E60] transition-colors cursor-pointer"
-                  >
-                    <ChevronRight size={16} />
-                  </button>
+                  <div className="hidden sm:flex items-center gap-1 bg-[#613B6E] p-1 rounded-full border border-white/20">
+                    <button
+                      onClick={scrollLeft}
+                      aria-label="Scroll movies left"
+                      className="w-7 h-7 rounded-full flex items-center justify-center text-white/80 hover:text-white hover:bg-[#532E60] transition-colors cursor-pointer"
+                    >
+                      <ChevronLeft size={16} />
+                    </button>
+                    <button
+                      onClick={scrollRight}
+                      aria-label="Scroll movies right"
+                      className="w-7 h-7 rounded-full flex items-center justify-center text-white/80 hover:text-white hover:bg-[#532E60] transition-colors cursor-pointer"
+                    >
+                      <ChevronRight size={16} />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* Category Filter Chips */}
-            <div className="flex items-center gap-2 overflow-x-auto pb-2 mb-4 scrollbar-none">
+            <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-2 mb-3 sm:mb-4 scrollbar-none -mx-1 px-1">
               {CATEGORIES.map(cat => (
                 <button
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id)}
-                  className={`px-3 py-1 rounded-full text-xs font-black whitespace-nowrap transition-all cursor-pointer border ${
+                  className={`px-2.5 sm:px-3 py-1 rounded-full text-[10px] sm:text-xs font-black whitespace-nowrap transition-all cursor-pointer border ${
                     selectedCategory === cat.id
                       ? 'bg-[#C4B4E2] text-[#532E60] border-white shadow-md'
                       : 'bg-[#613B6E]/70 text-[#E8DCF8] border-white/15 hover:bg-[#613B6E] hover:text-white'
@@ -436,7 +434,7 @@ export default function BreakTool({ onClose }: { onClose: () => void }) {
             {/* Horizontal Movie Carousel */}
             <div 
               ref={scrollContainerRef}
-              className="flex gap-4 overflow-x-auto pb-4 pt-1 snap-x scrollbar-thin scrollbar-thumb-white/20 scroll-smooth touch-pan-x"
+              className="flex gap-2.5 sm:gap-4 overflow-x-auto pb-3 sm:pb-4 pt-1 snap-x scrollbar-thin scrollbar-thumb-white/20 scroll-smooth touch-pan-x -mx-1 px-1"
             >
               {filteredMovies.map(movie => {
                 const isSelected = activeMovie?.id === movie.id;
@@ -446,13 +444,13 @@ export default function BreakTool({ onClose }: { onClose: () => void }) {
                     whileHover={{ scale: 1.04 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => setActiveMovie(movie)}
-                    className={`flex-shrink-0 w-36 sm:w-40 snap-start bg-[#613B6E] rounded-2xl p-2.5 cursor-pointer border transition-all text-left group shadow-lg ${
+                    className={`flex-shrink-0 w-28 sm:w-36 md:w-40 snap-start bg-[#613B6E] rounded-xl sm:rounded-2xl p-2 sm:p-2.5 cursor-pointer border transition-all text-left group shadow-lg ${
                       isSelected
                         ? 'border-[#C4B4E2] ring-2 ring-[#C4B4E2] bg-[#613B6E]'
                         : 'border-white/20 hover:border-white/50'
                     }`}
                   >
-                    <div className="relative aspect-[2/3] w-full rounded-xl overflow-hidden bg-[#532E60] mb-2.5 shadow-md">
+                    <div className="relative aspect-[2/3] w-full rounded-lg sm:rounded-xl overflow-hidden bg-[#532E60] mb-1.5 sm:mb-2.5 shadow-md">
                       <img
                         src={movie.cover}
                         alt={movie.title}
@@ -460,18 +458,18 @@ export default function BreakTool({ onClose }: { onClose: () => void }) {
                         loading="lazy"
                       />
                       {isSelected && (
-                        <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-[#532E60] text-[#C4B4E2] border border-[#C4B4E2] flex items-center justify-center shadow-md">
-                          <Check size={14} className="stroke-[3]" />
+                        <div className="absolute top-1 right-1 sm:top-2 sm:right-2 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-[#532E60] text-[#C4B4E2] border border-[#C4B4E2] flex items-center justify-center shadow-md">
+                          <Check size={12} className="stroke-[3]" />
                         </div>
                       )}
-                      <div className="absolute bottom-1.5 left-1.5 right-1.5">
-                        <span className="px-2 py-0.5 bg-[#532E60]/90 backdrop-blur-sm text-[#E8DCF8] text-[9px] font-black rounded-md border border-white/20 block truncate">
+                      <div className="absolute bottom-1 left-1 right-1 sm:bottom-1.5 sm:left-1.5 sm:right-1.5">
+                        <span className="px-1.5 sm:px-2 py-0.5 bg-[#532E60]/90 backdrop-blur-sm text-[#E8DCF8] text-[8px] sm:text-[9px] font-black rounded-md border border-white/20 block truncate">
                           {movie.vibe}
                         </span>
                       </div>
                     </div>
 
-                    <h5 className="font-black text-white text-xs leading-snug truncate" title={movie.title}>
+                    <h5 className="font-black text-white text-[10px] sm:text-xs leading-snug truncate" title={movie.title}>
                       {movie.title}
                     </h5>
                   </motion.div>
@@ -485,26 +483,26 @@ export default function BreakTool({ onClose }: { onClose: () => void }) {
                 key={activeMovie.id}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mt-4 bg-[#613B6E]/90 p-4 md:p-5 rounded-2xl border border-[#C4B4E2]/40 flex flex-col sm:flex-row gap-4 items-center sm:items-start"
+                className="mt-3 sm:mt-4 bg-[#613B6E]/90 p-3 sm:p-4 md:p-5 rounded-xl sm:rounded-2xl border border-[#C4B4E2]/40 flex flex-row gap-3 sm:gap-4 items-start"
               >
                 <img
                   src={activeMovie.cover}
                   alt={activeMovie.title}
-                  className="w-20 h-28 object-cover rounded-xl shadow-lg border border-white/30 flex-shrink-0"
+                  className="w-14 h-20 sm:w-20 sm:h-28 object-cover rounded-lg sm:rounded-xl shadow-lg border border-white/30 flex-shrink-0"
                 />
-                <div className="flex-1 text-center sm:text-left">
-                  <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mb-1.5">
-                    <h5 className="text-lg font-serif font-black text-white">{activeMovie.title}</h5>
-                    <span className="px-2 py-0.5 rounded-full bg-[#532E60] text-[#C4B4E2] border border-white/20 text-[10px] font-black">
+                <div className="flex-1 min-w-0 text-left">
+                  <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-1">
+                    <h5 className="text-sm sm:text-lg font-serif font-black text-white truncate">{activeMovie.title}</h5>
+                    <span className="px-1.5 sm:px-2 py-0.5 rounded-full bg-[#532E60] text-[#C4B4E2] border border-white/20 text-[9px] sm:text-[10px] font-black flex-shrink-0">
                       {activeMovie.vibe}
                     </span>
                   </div>
-                  <p className="text-xs sm:text-sm text-[#E8DCF8] font-medium leading-relaxed mb-3">
+                  <p className="text-[11px] sm:text-sm text-[#E8DCF8] font-medium leading-relaxed mb-2 sm:mb-3 line-clamp-3 sm:line-clamp-none">
                     {activeMovie.blurb}
                   </p>
-                  <p className="text-[11px] text-[#C4B4E2] font-bold flex items-center justify-center sm:justify-start gap-1.5">
-                    <span>☕ Cozy Break Tip:</span>
-                    <span className="text-white/90">Grab a warm blanket, silence notifications, and sink into pure comfort.</span>
+                  <p className="text-[10px] sm:text-[11px] text-[#C4B4E2] font-bold flex flex-wrap items-start gap-1">
+                    <span className="flex-shrink-0">☕ Tip:</span>
+                    <span className="text-white/90">Grab a blanket & silence notifications.</span>
                   </p>
                 </div>
               </motion.div>
