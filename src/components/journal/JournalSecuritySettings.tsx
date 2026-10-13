@@ -85,8 +85,8 @@ export default function JournalSecuritySettings({ onClose }: JournalSecuritySett
         </div>
 
         {success && (
-          <div className="p-3.5 bg-emerald-500/20 border border-emerald-400 rounded-2xl text-emerald-200 text-sm font-black flex items-center gap-2">
-            <Check size={18} />
+          <div className="p-3.5 bg-[#613B6E] border-2 border-white/40 rounded-2xl text-[#E8DCF8] text-sm font-black flex items-center gap-2 shadow-md">
+            <Check size={18} className="text-[#C4B4E2]" />
             {success}
           </div>
         )}
@@ -96,7 +96,7 @@ export default function JournalSecuritySettings({ onClose }: JournalSecuritySett
             <div className="bg-[#613B6E] p-4 sm:p-5 rounded-2xl border border-white/20 flex items-center justify-between gap-4">
               <div className="space-y-1">
                 <span className="text-sm font-black text-white flex items-center gap-2">
-                  {pinHash ? <Lock size={16} className="text-emerald-400" /> : <Unlock size={16} className="text-amber-300" />}
+                  {pinHash ? <Lock size={16} className="text-[#C4B4E2]" /> : <Unlock size={16} className="text-[#E8DCF8]" />}
                   Vault Status: {pinHash ? 'Protected with 4-Digit PIN' : 'Unprotected (No PIN)'}
                 </span>
                 <p className="text-xs text-[#E8DCF8]">

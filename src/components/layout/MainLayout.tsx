@@ -179,7 +179,7 @@ export default function MainLayout() {
           <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
             {status === 'free' && (
               <span className="hidden lg:inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#613B6E] text-white text-xs font-black rounded-full border border-white/30 shadow-md">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="w-2 h-2 rounded-full bg-[#C4B4E2] animate-pulse" />
                 {t('paywall.replies_left', { count: remainingResponses })}
               </span>
             )}
@@ -190,7 +190,7 @@ export default function MainLayout() {
               onClick={toggleMixer}
               className={`flex items-center gap-1.5 p-1.5 sm:px-3 sm:py-2 rounded-full border transition-all cursor-pointer shadow-md ${
                 isPlayingAll && activeTrackCount > 0
-                  ? 'bg-[#613B6E] border-emerald-400 text-white shadow-emerald-500/20'
+                  ? 'bg-[#613B6E] border-white text-white shadow-lg shadow-[#532E60]/50'
                   : 'bg-[#613B6E] hover:bg-[#6c427b] border-white/30 text-white'
               }`}
               title="Ambient Soundscape Mixer"
@@ -198,9 +198,9 @@ export default function MainLayout() {
             >
               {isPlayingAll && activeTrackCount > 0 ? (
                 <div className="flex items-center gap-0.5 px-0.5">
-                  <span className="w-1 h-2.5 bg-emerald-400 rounded-full animate-bounce [animation-delay:-0.3s]" />
-                  <span className="w-1 h-3.5 bg-emerald-300 rounded-full animate-bounce [animation-delay:-0.15s]" />
-                  <span className="w-1 h-2 bg-emerald-400 rounded-full animate-bounce" />
+                  <span className="w-1 h-2.5 bg-[#C4B4E2] rounded-full animate-bounce [animation-delay:-0.3s]" />
+                  <span className="w-1 h-3.5 bg-white rounded-full animate-bounce [animation-delay:-0.15s]" />
+                  <span className="w-1 h-2 bg-[#E8DCF8] rounded-full animate-bounce" />
                 </div>
               ) : (
                 <Music size={16} className="text-[#C4B4E2]" />

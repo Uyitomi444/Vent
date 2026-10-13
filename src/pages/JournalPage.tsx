@@ -183,7 +183,7 @@ export default function JournalPage() {
           <div className="flex items-center gap-2">
             <h1 className="font-serif text-3xl md:text-4xl font-black text-[#532E60] mb-1">{t('journal.title')}</h1>
             {pinHash ? (
-              <span className="inline-flex items-center gap-1 text-[11px] font-black bg-emerald-600 text-white px-2.5 py-0.5 rounded-full shadow-sm">
+              <span className="inline-flex items-center gap-1 text-[11px] font-black bg-[#613B6E] text-[#C4B4E2] border border-white/40 px-2.5 py-0.5 rounded-full shadow-sm">
                 <ShieldCheck size={12} /> Encrypted Vault
               </span>
             ) : null}
@@ -271,7 +271,7 @@ export default function JournalPage() {
                 <div className="mt-auto flex items-center justify-between text-xs text-[#C4B4E2] font-extrabold">
                   <span>{formatDate(entry.createdAt)}</span>
                   {entry.isEncrypted && (
-                    <span className="flex items-center gap-1 text-[11px] text-emerald-300">
+                    <span className="flex items-center gap-1 text-[11px] text-[#C4B4E2]">
                       <Lock size={12} /> Encrypted
                     </span>
                   )}

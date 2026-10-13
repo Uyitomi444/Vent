@@ -282,7 +282,7 @@ export default function AuthPage() {
                 exit={{ opacity: 0 }}
                 className="absolute inset-0 bg-[#532E60] z-50 flex flex-col items-center justify-center p-8 text-center space-y-4"
               >
-                <div className="w-20 h-20 rounded-full bg-emerald-500/20 text-emerald-300 border-2 border-emerald-400 flex items-center justify-center animate-bounce">
+                <div className="w-20 h-20 rounded-full bg-[#613B6E] text-[#C4B4E2] border-2 border-white flex items-center justify-center animate-bounce shadow-xl">
                   <CheckCircle2 size={44} />
                 </div>
                 <h3 className="text-3xl font-serif font-black text-white">
@@ -378,11 +378,11 @@ export default function AuthPage() {
                   {cleanUsername && (
                     <div className="text-xs font-bold flex items-center gap-1">
                       {!isUsernameValidLength ? (
-                        <span className="text-amber-300">Min 3 characters</span>
+                        <span className="text-[#C4B4E2]">Min 3 characters</span>
                       ) : !isUsernameSyntaxOk ? (
                         <span className="text-rose-300">Letters & numbers only</span>
                       ) : isAvailable ? (
-                        <span className="text-emerald-300 flex items-center gap-1">
+                        <span className="text-[#C4B4E2] flex items-center gap-1">
                           <CheckCircle2 size={13} /> Available
                         </span>
                       ) : (
@@ -580,7 +580,7 @@ export default function AuthPage() {
 
               {/* Privacy Footer */}
               <div className="flex items-center justify-center gap-2 text-xs font-bold text-[#E8DCF8] text-center pt-2">
-                <ShieldCheck size={16} className="text-emerald-300 shrink-0" />
+                <ShieldCheck size={16} className="text-[#C4B4E2] shrink-0" />
                 <span>{t('auth.privacy_note')}</span>
               </div>
             </form>
@@ -611,7 +611,7 @@ export default function AuthPage() {
                             className="w-10 h-10 rounded-full object-cover border border-white/30"
                           />
                           <div>
-                            <div className="font-black text-white text-sm group-hover:text-emerald-300 transition-colors">
+                            <div className="font-black text-white text-sm group-hover:text-[#C4B4E2] transition-colors">
                               {user.displayName}
                             </div>
                             <div className="text-xs text-[#E8DCF8] font-mono">

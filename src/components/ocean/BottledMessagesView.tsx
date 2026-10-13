@@ -255,8 +255,8 @@ export default function BottledMessagesView() {
             </div>
 
             {castSuccess && (
-              <div className="p-3.5 bg-emerald-500/20 border border-emerald-400 rounded-2xl text-emerald-200 text-xs sm:text-sm font-black flex items-center justify-center gap-2 animate-in fade-in">
-                <Check size={18} />
+              <div className="p-3.5 bg-[#613B6E] border-2 border-white/40 rounded-2xl text-[#E8DCF8] text-xs sm:text-sm font-black flex items-center justify-center gap-2 animate-in fade-in shadow-md">
+                <Check size={18} className="text-[#C4B4E2]" />
                 <span>Your bottle has sailed into the ocean tide!</span>
               </div>
             )}

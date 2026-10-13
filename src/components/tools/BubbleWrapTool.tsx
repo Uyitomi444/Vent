@@ -102,7 +102,7 @@ export default function BubbleWrapTool({ onClose }: BubbleWrapToolProps) {
           </div>
           <div className="h-7 w-px bg-white/20" />
           <div className="text-center">
-            <div className="text-xs font-black text-amber-300 uppercase tracking-wider flex items-center justify-center gap-1">
+            <div className="text-xs font-black text-[#C4B4E2] uppercase tracking-wider flex items-center justify-center gap-1">
               <Zap size={12} /> Combo
             </div>
             <div className="text-base font-mono font-black text-white">{combo}x</div>
@@ -113,7 +113,7 @@ export default function BubbleWrapTool({ onClose }: BubbleWrapToolProps) {
       {/* Progress Bar */}
       <div className="w-full bg-white/10 h-2 rounded-full mb-6 overflow-hidden border border-white/10">
         <motion.div
-          className="bg-gradient-to-r from-[#C4B4E2] to-emerald-400 h-full rounded-full"
+          className="bg-gradient-to-r from-[#C4B4E2] to-[#E8DCF8] h-full rounded-full"
           animate={{ width: `${progressPercent}%` }}
           transition={{ duration: 0.2 }}
         />
@@ -153,9 +153,9 @@ export default function BubbleWrapTool({ onClose }: BubbleWrapToolProps) {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mt-6 p-4 bg-emerald-500/20 border border-emerald-400/60 rounded-2xl text-center flex items-center justify-center gap-2 text-emerald-200 text-sm font-black"
+          className="mt-6 p-4 bg-[#613B6E] border-2 border-white/50 rounded-2xl text-center flex items-center justify-center gap-2 text-[#E8DCF8] text-sm font-black shadow-xl"
         >
-          <CheckCircle2 size={18} className="text-emerald-300" />
+          <CheckCircle2 size={18} className="text-[#C4B4E2]" />
           <span>Sheet Cleared! Feeling more grounded? Refresh for another round.</span>
         </motion.div>
       )}

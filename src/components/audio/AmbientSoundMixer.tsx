@@ -83,7 +83,7 @@ export default function AmbientSoundMixer() {
                 {/* Soothing Presets */}
                 <div className="space-y-2">
                   <span className="text-xs font-black uppercase tracking-wider text-[#E8DCF8] flex items-center gap-1.5">
-                    <Sliders size={14} className="text-amber-300" />
+                    <Sliders size={14} className="text-[#C4B4E2]" />
                     Instant Presets
                   </span>
                   <div className="grid grid-cols-2 gap-2">
